@@ -1,187 +1,91 @@
-// ws is an optional peer dependency for server-side ASR relay
-let WS_URL = "wss://openspeech.bytedance.com/api/v3/sauc/bigmodel";
-
-// ── Binary protocol (exact match with official Volcengine Python SDK) ──
-// Frame: header(4) + size(4) + payload
-// Header layout:
-//   [0] = 0x11 (protocol version)
-//   [1] = (msg_type << 4) | flags
-//         msg_type: 0x1=full-request(JSON), 0x2=audio(raw)
-//         flags for audio: 0x0=normal, 0x2=final
-//   [2] = (serialization << 4) | compression
-//         0x10 = JSON / no compression (for full request)
-//         0x00 = raw / no compression (for audio)
-//   [3] = reserved (0x00)
-
-function buildFullRequest(language: string): Buffer {
-  const payload = {
-    user: { uid: "tcm-clinic-user" },
-    audio: {
-      format: "pcm",
-      rate: 16000,
-      bits: 16,
-      channel: 1,
-      codec: "raw",
-      language,
-    },
-    request: {
-      model_name: "bigmodel",
-      language,
-      enable_itn: true,
-      enable_punc: true,
-      result_type: "single",
-      show_utterances: false,
-      vad: { vad_enable: true, end_window_size: 800 },
-    },
-  };
-  const json = Buffer.from(JSON.stringify(payload), "utf-8");
-  // Exact header from Python SDK: struct.pack(">BBBB", 0x11, 0x10, 0x10, 0x00)
-  const header = Buffer.from([0x11, 0x10, 0x10, 0x00]);
-  const size = Buffer.alloc(4);
-  size.writeUInt32BE(json.length, 0);
-  return Buffer.concat([header, size, json]);
-}
-
-function buildAudioChunk(pcm: Buffer, isFinal: boolean): Buffer {
-  const flags = isFinal ? 0x2 : 0x0;
-  const msgTypeFlags = (0x2 << 4) | flags;
-  // Audio header from Python SDK: [0x11, msgTypeFlags, 0x00, 0x00]
-  const header = Buffer.from([0x11, msgTypeFlags, 0x00, 0x00]);
-  const size = Buffer.alloc(4);
-  size.writeUInt32BE(pcm.length, 0);
-  if (pcm.length === 0) return Buffer.concat([header, size]);
-  return Buffer.concat([header, size, pcm]);
-}
-
-// ── Parse server response ──
-function parseResponse(data: Buffer): { text: string; isFinal: boolean } | { error: string } | null {
-  if (data.length < 12) return null;
-
-  const msgType = (data.readUInt8(1) >> 4) & 0x0f;
-  // Skip 4-byte header + 8-byte reserved = 12 bytes offset to JSON
-  let payload = data.subarray(12);
-
-  // Server sometimes prepends non-JSON bytes, find JSON start
-  const jsonStart = payload.indexOf(0x7b); // '{'
-  if (jsonStart > 0) payload = payload.subarray(jsonStart);
-
-  let json: Record<string, unknown>;
-  try { json = JSON.parse(payload.toString("utf-8")); } catch { return null; }
-
-  console.log("[ASR] Parsed JSON:", JSON.stringify(json).substring(0, 300));
-
-  // Error: type 0xF (0b1111) or JSON error
-  if (msgType === 0xf || json.type === "error") {
-    return { error: (json.error as string) || (json.header as Record<string, unknown>)?.["message"] as string || "ASR error" };
-  }
-
-  // Try nested payload_msg.result first (bigmodel v3 format), then json.result
-  const payloadMsg = json.payload_msg as Record<string, unknown> | undefined;
-  const result = payloadMsg?.result || json.result;
-  if (!result) return null;
-
-  const texts: string[] = [];
-  if (Array.isArray(result)) {
-    for (const r of result) {
-      if (typeof r === "string") texts.push(r);
-      else if (typeof r === "object" && r && "text" in r) texts.push(String(r.text));
-    }
-  } else if (typeof result === "object" && result && "text" in result) {
-    texts.push(String(result.text));
-  }
-
-  const text = texts.join("");
-  if (!text) return null;
-
-  // bigmodel v3 uses "final_result" or "speech_end" type, or payload_msg.type
-  const msgType2 = (json.type as string) || (payloadMsg?.type as string) || "";
-  const isFinal = msgType2 === "final" || msgType2 === "final_result" || msgType2 === "speech_end";
-
-  return { text, isFinal };
-}
+// Volcengine HTTP-based ASR (non-streaming) — works on Vercel serverless
+// Replaces the WebSocket approach which is incompatible with serverless runtimes.
 
 export async function recognizePcm(pcmData: Buffer, language: string): Promise<string> {
   const appId = process.env.VOLCENGINE_APP_ID;
   const accessToken = process.env.VOLCENGINE_ACCESS_TOKEN;
-  const secretKey = process.env.VOLCENGINE_SECRET_KEY || accessToken;
   if (!appId || !accessToken) throw new Error("语音服务未配置");
 
-  // Dynamic import — ws is an optional dependency
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let WebSocket: any;
-  try {
-    const m = await import("ws");
-    WebSocket = (m as Record<string, unknown>).default || m;
-  } catch { throw new Error("ws 依赖未安装"); }
+  console.log("[ASR] HTTP request — audio:", pcmData.length, "bytes, lang:", language);
 
-  console.log("[ASR] Connecting to Volcengine bigmodel v3...");
-  console.log("[ASR] Audio:", pcmData.length, "bytes, lang:", language);
+  // Build WAV from raw PCM
+  const wav = pcmToWav(pcmData, 16000);
 
-  return new Promise((resolve, reject) => {
-    const ws = new WebSocket(WS_URL, {
-      headers: {
-        "X-Api-App-Key": accessToken,
-        "X-Api-Access-Key": secretKey,
-        "X-Api-Resource-Id": "volc.bigasr.sauc.duration",
-        "X-Api-Connect-Id": `tcm-${Date.now()}`,
-      },
-    });
+  const form = new FormData();
+  form.set("appid", appId);
+  form.set("token", accessToken);
+  form.set("cluster", "volcengine_input_common");
+  form.set("format", "wav");
+  form.set("rate", "16000");
+  form.set("language", language);
+  form.set("bits", "16");
+  form.set("channel", "1");
+  form.set("audio", new Blob([new Uint8Array(wav)], { type: "audio/wav" }), "audio.wav");
 
-    const results: string[] = [];
-    let settled = false;
-
-    const finish = (err: Error | null, text?: string) => {
-      if (settled) return;
-      settled = true;
-      try { ws.close(); } catch { /* */ }
-      if (err) reject(err);
-      else resolve(text || results.join(""));
-    };
-
-    ws.on("open", () => {
-      console.log("[ASR] Connected, sending full request + audio...");
-      ws.send(buildFullRequest(language));
-
-      // Send audio in chunks
-      const CHUNK = 128 * 1024;
-      for (let i = 0; i < pcmData.length; i += CHUNK) {
-        const chunk = pcmData.subarray(i, i + CHUNK);
-        ws.send(buildAudioChunk(chunk, false));
-      }
-
-      // Final empty frame signals end of audio
-      ws.send(buildAudioChunk(Buffer.alloc(0), true));
-      console.log("[ASR] Audio sent, waiting for result...");
-    });
-
-    ws.on("message", (data: Buffer) => {
-      // Binary flags: bit 0x1 = has data, bit 0x2 = final
-      const flags = data.length >= 2 ? data.readUInt8(1) & 0x0f : 0;
-      const isFinalFromFlags = (flags & 0x2) !== 0;
-      console.log("[ASR] Raw response:", data.length, "bytes, flags:", flags.toString(16), "hex:", data.subarray(0, Math.min(16, data.length)).toString("hex"));
-
-      const r = parseResponse(data);
-      if (!r) {
-        if (isFinalFromFlags) finish(null);
-        return;
-      }
-
-      if ("error" in r) {
-        finish(new Error(r.error));
-        return;
-      }
-
-      console.log("[ASR] Text:", r.text, "final:", r.isFinal, "flagsFinal:", isFinalFromFlags);
-      if (r.text) results.push(r.text);
-      if (r.isFinal || isFinalFromFlags) finish(null);
-    });
-
-    ws.on("close", (code: number) => {
-      console.log("[ASR] Connection closed, code:", code);
-      if (!settled) finish(null);
-    });
-    ws.on("error", (err: Error) => finish(new Error(`连接错误: ${err.message}`)));
-
-    setTimeout(() => finish(new Error("识别超时")), 50000);
+  const res = await fetch("https://openspeech.bytedance.com/api/v1/asr", {
+    method: "POST",
+    body: form,
+    signal: AbortSignal.timeout(8000),
   });
+
+  if (!res.ok) {
+    const errText = await res.text().catch(() => "");
+    console.error("[ASR] HTTP error:", res.status, errText);
+    throw new Error(`语音识别失败 (${res.status})`);
+  }
+
+  const data = await res.json();
+  console.log("[ASR] Raw response:", JSON.stringify(data).substring(0, 300));
+
+  // Parse response — format: { result: [{ text: "..." }], ... } or { text: "..." }
+  if (data.result) {
+    if (Array.isArray(data.result)) {
+      const texts = data.result.map((r: { text?: string }) => r.text || "").filter(Boolean);
+      return texts.join("");
+    }
+    if (typeof data.result === "string") return data.result;
+  }
+  if (data.text && typeof data.text === "string") return data.text;
+  if (data.response && typeof data.response === "string") return data.response;
+
+  // Try nested paths
+  const text = data?.result?.text || data?.payload_msg?.result?.[0]?.text || "";
+  if (text) return text;
+
+  console.error("[ASR] Unexpected response format:", JSON.stringify(data));
+  throw new Error("语音识别未返回有效文本");
+}
+
+function pcmToWav(pcm: Buffer, sampleRate: number): Buffer {
+  const numChannels = 1;
+  const bitsPerSample = 16;
+  const byteRate = sampleRate * numChannels * bitsPerSample / 8;
+  const blockAlign = numChannels * bitsPerSample / 8;
+  const dataSize = pcm.length;
+  const headerSize = 44;
+  const totalSize = headerSize + dataSize;
+
+  const buf = Buffer.alloc(totalSize);
+
+  // RIFF header
+  buf.write("RIFF", 0);
+  buf.writeUInt32LE(totalSize - 8, 4);
+  buf.write("WAVE", 8);
+  // fmt chunk
+  buf.write("fmt ", 12);
+  buf.writeUInt32LE(16, 16);       // chunk size
+  buf.writeUInt16LE(1, 20);        // PCM
+  buf.writeUInt16LE(numChannels, 22);
+  buf.writeUInt32LE(sampleRate, 24);
+  buf.writeUInt32LE(byteRate, 28);
+  buf.writeUInt16LE(blockAlign, 32);
+  buf.writeUInt16LE(bitsPerSample, 34);
+  // data chunk
+  buf.write("data", 36);
+  buf.writeUInt32LE(dataSize, 40);
+
+  // PCM data
+  pcm.copy(buf, 44);
+
+  return buf;
 }

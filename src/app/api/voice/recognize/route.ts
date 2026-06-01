@@ -21,17 +21,18 @@ export async function POST(request: NextRequest) {
 
     const buf = Buffer.from(await file.arrayBuffer());
 
-    // Strip WAV header (44 bytes) to extract raw PCM
-    const pcm = buf.length > 44 && buf.toString("utf-8", 0, 4) === "RIFF"
-      ? buf.subarray(44)
-      : buf;
-
-    if (pcm.length === 0) {
+    if (buf.length === 0) {
       return NextResponse.json({ error: "音频数据为空" }, { status: 400 });
     }
 
     const lang = request.nextUrl.searchParams.get("lang") || "zh-CN";
-    console.log(`[Voice] Received ${pcm.length} bytes PCM, lang=${lang}, duration≈${(pcm.length / 32000).toFixed(1)}s`);
+
+    // Extract PCM from WAV (browser sends WAV, Volcengine HTTP API expects PCM)
+    const pcm = buf.length > 44 && buf.subarray(0, 4).toString() === "RIFF"
+      ? buf.subarray(44)
+      : buf;
+
+    console.log(`[Voice] Received ${buf.length} bytes, PCM ${pcm.length} bytes, lang=${lang}, duration≈${(pcm.length / 32000).toFixed(1)}s`);
 
     const text = await recognizePcm(pcm, lang);
     console.log(`[Voice] Result: ${text}`);
