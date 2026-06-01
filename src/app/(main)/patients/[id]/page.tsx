@@ -134,7 +134,7 @@ export default function PatientDetailPage() {
                 编辑
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-2xl">
+            <DialogContent className="max-w-full sm:max-w-2xl">
               <DialogHeader>
                 <DialogTitle>编辑患者信息</DialogTitle>
               </DialogHeader>

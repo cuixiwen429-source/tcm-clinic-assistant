@@ -16,6 +16,7 @@ import { useConsultationStore } from "@/stores/consultation-store";
 import { toast } from "sonner";
 import { Search, Plus, User, Loader2, ChevronRight, ArrowRight, FileText } from "lucide-react";
 import { VoiceInput } from "@/components/consultations/VoiceInput";
+import { ImageUpload } from "@/components/consultations/ImageUpload";
 
 export default function NewConsultationPage() {
   const router = useRouter();
@@ -34,7 +35,7 @@ export default function NewConsultationPage() {
     const patientId = searchParams.get("patientId");
     if (patientId) {
       store.setPatientId(patientId);
-      store.setStep("transcribe");
+      store.setStep("tongue");
     }
   }, [searchParams, store]);
 
@@ -91,7 +92,7 @@ export default function NewConsultationPage() {
       if (!res.ok) { toast.error("创建就诊失败"); return; }
       const consultation = await res.json();
       store.setConsultationId(consultation.id);
-      store.setStep("transcribe");
+      store.setStep("tongue");
     } catch {
       toast.error("网络错误");
     } finally {
@@ -104,7 +105,7 @@ export default function NewConsultationPage() {
     await createConsultation(patientId);
   };
 
-  // Step 2: Transcribe
+  // Step 4: Transcribe
   const handleTranscribe = async () => {
     if (!store.rawText.trim() || store.rawText.trim().length < 10) {
       toast.error("请输入至少10个字符的问诊内容");
@@ -112,10 +113,14 @@ export default function NewConsultationPage() {
     }
     store.setIsTranscribing(true);
     try {
+      const body: Record<string, unknown> = { rawText: store.rawText };
+      // Include tongue/face analysis as additional context for AI
+      if (store.tongueAnalysis) body.tongueAnalysis = store.tongueAnalysis;
+      if (store.faceAnalysis) body.faceAnalysis = store.faceAnalysis;
       const res = await fetch(`/api/consultations/${store.consultationId}/transcribe`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ rawText: store.rawText }),
+        body: JSON.stringify(body),
       });
       if (!res.ok) {
         const data = await res.json();
@@ -133,19 +138,24 @@ export default function NewConsultationPage() {
     }
   };
 
-  // Step 3: Confirm history → go to AI
+  // Step 5: Confirm history → go to AI
   const handleConfirmHistory = async () => {
     if (!store.consultationId || !store.structuredHistory) return;
     try {
+      const body: Record<string, unknown> = {
+        editedHistory: JSON.stringify(store.structuredHistory),
+        chiefComplaint: (store.structuredHistory as Record<string, unknown>).chief_complaint,
+        presentIllness: (store.structuredHistory as Record<string, unknown>).present_illness,
+        status: "AI_ASSISTED",
+        ...(store.tongueImage ? { tongueImage: store.tongueImage } : {}),
+        ...(store.faceImage ? { faceImage: store.faceImage } : {}),
+        ...(store.tongueAnalysis ? { tongueAnalysis: JSON.stringify(store.tongueAnalysis) } : {}),
+        ...(store.faceAnalysis ? { faceAnalysis: JSON.stringify(store.faceAnalysis) } : {}),
+      };
       await fetch(`/api/consultations/${store.consultationId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          editedHistory: JSON.stringify(store.structuredHistory),
-          chiefComplaint: (store.structuredHistory as Record<string, unknown>).chief_complaint,
-          presentIllness: (store.structuredHistory as Record<string, unknown>).present_illness,
-          status: "AI_ASSISTED",
-        }),
+        body: JSON.stringify(body),
       });
       router.push(`/consultations/${store.consultationId}/ai`);
     } catch {
@@ -210,10 +220,11 @@ export default function NewConsultationPage() {
                             </p>
                           </div>
                         </div>
-                        <div className="flex items-center gap-2 flex-shrink-0 ml-2">
+                        <div className="flex items-center gap-1.5 flex-shrink-0 ml-2">
                           <Button
                             variant="outline"
                             size="sm"
+                            className="hidden sm:flex"
                             onClick={(e) => { e.stopPropagation(); router.push(`/patients/${p.id}`); }}
                           >
                             查看历史
@@ -261,13 +272,358 @@ export default function NewConsultationPage() {
     );
   }
 
-  // STEP 2: Transcribe
-  if (store.step === "transcribe") {
+  // STEP 2: Tongue Image
+  if (store.step === "tongue") {
+    const analysis = store.tongueAnalysis as Record<string, Record<string, unknown>> | null;
+    const analyzed = analysis !== null;
+
+    const handleAnalyzeTongue = async () => {
+      if (!store.consultationId || !store.tongueImage) return;
+      store.setIsAnalyzingTongue(true);
+      try {
+        // Fetch the uploaded image as a blob, then POST to vision API
+        const imgRes = await fetch(store.tongueImage);
+        const blob = await imgRes.blob();
+        const form = new FormData();
+        form.set("image", blob, "tongue.jpg");
+        form.set("consultationId", store.consultationId);
+        const res = await fetch("/api/vision/tongue", { method: "POST", body: form });
+        if (!res.ok) {
+          const err = await res.json();
+          throw new Error(err.error || "分析失败");
+        }
+        const data = await res.json();
+        store.setTongueAnalysis(data.analysis);
+        toast.success("舌象分析完成");
+      } catch (err) {
+        toast.error(err instanceof Error ? err.message : "舌象分析失败");
+      } finally {
+        store.setIsAnalyzingTongue(false);
+      }
+    };
+
+    const handleConfirmTongue = async () => {
+      if (!store.consultationId) return;
+      try {
+        await fetch(`/api/consultations/${store.consultationId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            tongueImage: store.tongueImage,
+            tongueAnalysis: JSON.stringify(store.tongueAnalysis),
+          }),
+        });
+        toast.success("舌象分析已确认");
+        store.setStep("face");
+      } catch {
+        toast.error("保存失败");
+      }
+    };
+
     return (
-      <div className="mx-auto max-w-4xl space-y-6">
+      <div className="mx-auto max-w-full md:max-w-4xl space-y-6">
         <div>
           <h1 className="text-2xl font-bold">新建就诊</h1>
-          <p className="text-muted-foreground">第2步：录入问诊内容</p>
+          <p className="text-muted-foreground">第2步：上传舌苔照片并AI分析</p>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">舌诊信息采集</CardTitle>
+            <CardDescription>
+              上传患者舌苔照片，AI将按照中医舌诊标准进行专业分析。支持拍摄或从相册选择。
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <ImageUpload
+              title="舌苔照片"
+              description="请拍摄自然光下的舌面照片，舌尖微翘，舌体自然伸出"
+              currentImage={store.tongueImage}
+              onImageChange={(url) => { store.setTongueImage(url); store.setTongueAnalysis(null); }}
+              disabled={store.isAnalyzingTongue}
+            />
+
+            {store.tongueImage && !analyzed && (
+              <Button onClick={handleAnalyzeTongue} disabled={store.isAnalyzingTongue}>
+                {store.isAnalyzingTongue ? (
+                  <><Loader2 className="mr-2 h-4 w-4 animate-spin" />AI舌象分析中...</>
+                ) : (
+                  <><ArrowRight className="mr-2 h-4 w-4" />开始舌象分析</>
+                )}
+              </Button>
+            )}
+
+            {analyzed && analysis && (
+              <Card className="border-green-200 bg-green-50">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base text-green-800">舌象分析结果</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3 text-sm">
+                  {analysis.tongue_body && (
+                    <div>
+                      <p className="font-medium text-green-900">舌质</p>
+                      <p className="text-green-800">
+                        舌色：{(analysis.tongue_body as Record<string, unknown>).color as string || "-"}；
+                        舌形：{((analysis.tongue_body as Record<string, unknown>).shape as string[])?.join("、") || "-"}；
+                        舌态：{(analysis.tongue_body as Record<string, unknown>).mobility as string || "-"}
+                      </p>
+                      {((analysis.tongue_body as Record<string, unknown>).sublingual_veins as string) && (
+                        <p className="text-green-800">舌下络脉：{(analysis.tongue_body as Record<string, unknown>).sublingual_veins as string}</p>
+                      )}
+                    </div>
+                  )}
+                  {analysis.tongue_coating && (
+                    <div>
+                      <p className="font-medium text-green-900">舌苔</p>
+                      <p className="text-green-800">
+                        苔色：{(analysis.tongue_coating as Record<string, unknown>).color as string || "-"}；
+                        苔质：{((analysis.tongue_coating as Record<string, unknown>).coating_type as string[])?.join("、") || "-"}
+                      </p>
+                    </div>
+                  )}
+                  {analysis.syndrome_analysis && (
+                    <div>
+                      <p className="font-medium text-green-900">辨证分析</p>
+                      <p className="text-green-800">
+                        {(analysis.syndrome_analysis as Record<string, unknown>).overall_description as string || "-"}
+                      </p>
+                      <p className="text-green-800 mt-1">
+                        寒热：{(analysis.syndrome_analysis as Record<string, unknown>).cold_heat as string || "-"}；
+                        虚实：{(analysis.syndrome_analysis as Record<string, unknown>).deficiency_excess as string || "-"}；
+                        六经：{(analysis.syndrome_analysis as Record<string, unknown>).six_channel as string || "-"}
+                      </p>
+                      {((analysis.syndrome_analysis as Record<string, unknown>).likely_patterns as string[])?.length > 0 && (
+                        <p className="text-green-800 mt-1">
+                          可能证型：{((analysis.syndrome_analysis as Record<string, unknown>).likely_patterns as string[])?.join("、") || "-"}
+                        </p>
+                      )}
+                      <p className="text-green-800 mt-1">
+                        治则：{(analysis.syndrome_analysis as Record<string, unknown>).treatment_principle as string || "-"}
+                      </p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )}
+
+            <div className="flex justify-between">
+              <Button variant="ghost" onClick={() => store.setStep("patient")}>
+                返回选择患者
+              </Button>
+              <div className="flex gap-2">
+                {analyzed && (
+                  <>
+                    <Button variant="outline" onClick={handleAnalyzeTongue} disabled={store.isAnalyzingTongue}>
+                      {store.isAnalyzingTongue ? <Loader2 className="mr-1 h-4 w-4 animate-spin" /> : null}
+                      重新分析
+                    </Button>
+                    <Button onClick={handleConfirmTongue} className="bg-green-600 hover:bg-green-700">
+                      确认舌象分析，进入面相 <ChevronRight className="ml-1 h-4 w-4" />
+                    </Button>
+                  </>
+                )}
+                {!analyzed && store.tongueImage && (
+                  <Button variant="ghost" onClick={() => store.setStep("face")}>
+                    跳过，直接进入面相 <ChevronRight className="ml-1 h-4 w-4" />
+                  </Button>
+                )}
+                {!store.tongueImage && (
+                  <Button variant="ghost" onClick={() => store.setStep("face")}>
+                    跳过，直接进入面相 <ChevronRight className="ml-1 h-4 w-4" />
+                  </Button>
+                )}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // STEP 3: Face Image
+  if (store.step === "face") {
+    const analysis = store.faceAnalysis as Record<string, Record<string, unknown>> | null;
+    const analyzed = analysis !== null;
+
+    const handleAnalyzeFace = async () => {
+      if (!store.consultationId || !store.faceImage) return;
+      store.setIsAnalyzingFace(true);
+      try {
+        const imgRes = await fetch(store.faceImage);
+        const blob = await imgRes.blob();
+        const form = new FormData();
+        form.set("image", blob, "face.jpg");
+        form.set("consultationId", store.consultationId);
+        const res = await fetch("/api/vision/face", { method: "POST", body: form });
+        if (!res.ok) {
+          const err = await res.json();
+          throw new Error(err.error || "分析失败");
+        }
+        const data = await res.json();
+        store.setFaceAnalysis(data.analysis);
+        toast.success("面相分析完成");
+      } catch (err) {
+        toast.error(err instanceof Error ? err.message : "面相分析失败");
+      } finally {
+        store.setIsAnalyzingFace(false);
+      }
+    };
+
+    const handleConfirmFace = async () => {
+      if (!store.consultationId) return;
+      try {
+        await fetch(`/api/consultations/${store.consultationId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            faceImage: store.faceImage,
+            faceAnalysis: JSON.stringify(store.faceAnalysis),
+          }),
+        });
+        toast.success("面相分析已确认");
+        store.setStep("transcribe");
+      } catch {
+        toast.error("保存失败");
+      }
+    };
+
+    return (
+      <div className="mx-auto max-w-full md:max-w-4xl space-y-6">
+        <div>
+          <h1 className="text-2xl font-bold">新建就诊</h1>
+          <p className="text-muted-foreground">第3步：上传面相照片并AI分析</p>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">面诊信息采集</CardTitle>
+            <CardDescription>
+              上传患者面部正面照片，AI将按照中医面诊标准进行专业分析。支持拍摄或从相册选择。
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <ImageUpload
+              title="面相照片"
+              description="请拍摄自然光下的面部正面照片，表情自然，勿化妆遮挡"
+              currentImage={store.faceImage}
+              onImageChange={(url) => { store.setFaceImage(url); store.setFaceAnalysis(null); }}
+              disabled={store.isAnalyzingFace}
+            />
+
+            {store.faceImage && !analyzed && (
+              <Button onClick={handleAnalyzeFace} disabled={store.isAnalyzingFace}>
+                {store.isAnalyzingFace ? (
+                  <><Loader2 className="mr-2 h-4 w-4 animate-spin" />AI面相分析中...</>
+                ) : (
+                  <><ArrowRight className="mr-2 h-4 w-4" />开始面相分析</>
+                )}
+              </Button>
+            )}
+
+            {analyzed && analysis && (
+              <Card className="border-blue-200 bg-blue-50">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base text-blue-800">面相分析结果</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3 text-sm">
+                  {analysis.facial_color && (
+                    <div>
+                      <p className="font-medium text-blue-900">面色</p>
+                      <p className="text-blue-800">
+                        整体面色：{(analysis.facial_color as Record<string, unknown>).overall_color as string || "-"}；
+                        光泽：{(analysis.facial_color as Record<string, unknown>).luster as string || "-"}；
+                        分布：{(analysis.facial_color as Record<string, unknown>).distribution as string || "-"}
+                      </p>
+                    </div>
+                  )}
+                  {analysis.facial_morphology && (
+                    <div>
+                      <p className="font-medium text-blue-900">面部形态</p>
+                      <p className="text-blue-800">
+                        整体：{(analysis.facial_morphology as Record<string, unknown>).overall as string || "-"}；
+                        眼部：{(analysis.facial_morphology as Record<string, unknown>).eyes as string || "-"}；
+                        口唇：{(analysis.facial_morphology as Record<string, unknown>).lips as string || "-"}
+                      </p>
+                    </div>
+                  )}
+                  {analysis.five_organ_face && (
+                    <div>
+                      <p className="font-medium text-blue-900">五脏面部对应</p>
+                      <p className="text-blue-800">
+                        额(心)：{(analysis.five_organ_face as Record<string, unknown>).forehead_heart as string || "-"}；
+                        鼻(脾)：{(analysis.five_organ_face as Record<string, unknown>).nose_spleen as string || "-"}；
+                        颧(肺)：{(analysis.five_organ_face as Record<string, unknown>).cheeks_lung as string || "-"}；
+                        颞(肝)：{(analysis.five_organ_face as Record<string, unknown>).temples_liver as string || "-"}；
+                        颌(肾)：{(analysis.five_organ_face as Record<string, unknown>).chin_kidney as string || "-"}
+                      </p>
+                    </div>
+                  )}
+                  {analysis.syndrome_analysis && (
+                    <div>
+                      <p className="font-medium text-blue-900">辨证分析</p>
+                      <p className="text-blue-800">
+                        {(analysis.syndrome_analysis as Record<string, unknown>).overall_impression as string || "-"}
+                      </p>
+                      <p className="text-blue-800 mt-1">
+                        寒热：{(analysis.syndrome_analysis as Record<string, unknown>).cold_heat as string || "-"}；
+                        虚实：{(analysis.syndrome_analysis as Record<string, unknown>).deficiency_excess as string || "-"}；
+                        脏腑：{(analysis.syndrome_analysis as Record<string, unknown>).zangfu_differentiation as string || "-"}
+                      </p>
+                      {((analysis.syndrome_analysis as Record<string, unknown>).likely_patterns as string[])?.length > 0 && (
+                        <p className="text-blue-800 mt-1">
+                          可能证型：{((analysis.syndrome_analysis as Record<string, unknown>).likely_patterns as string[])?.join("、") || "-"}
+                        </p>
+                      )}
+                      <p className="text-blue-800 mt-1">
+                        治则：{(analysis.syndrome_analysis as Record<string, unknown>).treatment_principle as string || "-"}
+                      </p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )}
+
+            <div className="flex justify-between">
+              <Button variant="ghost" onClick={() => store.setStep("tongue")}>
+                返回舌诊
+              </Button>
+              <div className="flex gap-2">
+                {analyzed && (
+                  <>
+                    <Button variant="outline" onClick={handleAnalyzeFace} disabled={store.isAnalyzingFace}>
+                      {store.isAnalyzingFace ? <Loader2 className="mr-1 h-4 w-4 animate-spin" /> : null}
+                      重新分析
+                    </Button>
+                    <Button onClick={handleConfirmFace} className="bg-blue-600 hover:bg-blue-700">
+                      确认面相分析，进入问诊 <ChevronRight className="ml-1 h-4 w-4" />
+                    </Button>
+                  </>
+                )}
+                {!analyzed && store.faceImage && (
+                  <Button variant="ghost" onClick={() => store.setStep("transcribe")}>
+                    跳过，直接进入问诊 <ChevronRight className="ml-1 h-4 w-4" />
+                  </Button>
+                )}
+                {!store.faceImage && (
+                  <Button variant="ghost" onClick={() => store.setStep("transcribe")}>
+                    跳过，直接进入问诊 <ChevronRight className="ml-1 h-4 w-4" />
+                  </Button>
+                )}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // STEP 4: Transcribe
+  if (store.step === "transcribe") {
+    return (
+      <div className="mx-auto max-w-full md:max-w-4xl space-y-6">
+        <div>
+          <h1 className="text-2xl font-bold">新建就诊</h1>
+          <p className="text-muted-foreground">第4步：录入问诊内容</p>
         </div>
         <AIDisclaimer />
         <Card>
@@ -298,8 +654,8 @@ export default function NewConsultationPage() {
               </p>
             </div>
             <div className="flex justify-between">
-              <Button variant="ghost" onClick={() => store.setStep("patient")}>
-                返回选择患者
+              <Button variant="ghost" onClick={() => store.setStep("face")}>
+                返回面诊
               </Button>
               <Button onClick={handleTranscribe} disabled={store.isTranscribing}>
                 {store.isTranscribing ? (
@@ -321,21 +677,21 @@ export default function NewConsultationPage() {
     );
   }
 
-  // STEP 3: Review History
+  // STEP 5: Review History
   if (store.step === "history" && store.structuredHistory) {
     const h = store.structuredHistory as Record<string, unknown>;
     const symptomSummary = h.symptom_summary as Record<string, string> || {};
     const missingInfo = h.missing_information as string[] || [];
 
     return (
-      <div className="mx-auto max-w-4xl space-y-6">
+      <div className="mx-auto max-w-full md:max-w-4xl space-y-6">
         <div>
           <h1 className="text-2xl font-bold">确认病史</h1>
-          <p className="text-muted-foreground">第3步：检查并确认AI提炼的病史</p>
+          <p className="text-muted-foreground">第5步：检查并确认AI提炼的病史</p>
         </div>
         <AIDisclaimer />
 
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
           {/* Left: Raw text */}
           <Card>
             <CardHeader>

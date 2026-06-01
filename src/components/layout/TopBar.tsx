@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { LogOut, User } from "lucide-react";
+import { LogOut, Menu } from "lucide-react";
 
 const ROLE_LABELS: Record<string, string> = {
   ADMIN: "管理员",
@@ -20,7 +20,11 @@ const ROLE_LABELS: Record<string, string> = {
   ASSISTANT: "医馆助理",
 };
 
-export function TopBar() {
+interface TopBarProps {
+  onMenuClick?: () => void;
+}
+
+export function TopBar({ onMenuClick }: TopBarProps) {
   const { user, logout } = useAuthStore();
   const router = useRouter();
 
@@ -34,14 +38,24 @@ export function TopBar() {
   };
 
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center justify-end border-b bg-card px-6">
+    <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b bg-card px-4 md:px-6">
+      <Button
+        variant="ghost"
+        size="icon"
+        className="md:hidden"
+        onClick={onMenuClick}
+      >
+        <Menu className="h-5 w-5" />
+        <span className="sr-only">菜单</span>
+      </Button>
+      <div className="flex-1 md:flex-none" />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="flex items-center gap-2">
             <Avatar className="h-8 w-8">
               <AvatarFallback className="text-xs">{initials}</AvatarFallback>
             </Avatar>
-            <div className="text-left text-sm">
+            <div className="hidden sm:block text-left text-sm">
               <p className="font-medium">{user.name}</p>
               <p className="text-xs text-muted-foreground">{ROLE_LABELS[user.role] || user.role}</p>
             </div>

@@ -98,7 +98,7 @@ export default function PatientsPage() {
               新增患者
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-2xl">
+          <DialogContent className="max-w-full sm:max-w-2xl">
             <DialogHeader>
               <DialogTitle>新增患者</DialogTitle>
             </DialogHeader>

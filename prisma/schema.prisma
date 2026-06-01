@@ -57,6 +57,10 @@ model Consultation {
   liKeAnalysis        String?
   doctorFinalPattern String?
   doctorFinalPathogenesis String?
+  tongueImage     String?
+  faceImage       String?
+  tongueAnalysis  String?
+  faceAnalysis    String?
   status             String    @default("DRAFT")
   archivedAt         DateTime?
   createdAt          DateTime  @default(now())

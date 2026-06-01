@@ -89,7 +89,7 @@ export default function DashboardPage() {
         <p className="text-muted-foreground">欢迎回来，{user?.name}医师</p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-3 grid-cols-2 lg:grid-cols-4">
         {cards.map((card) => {
           const Icon = card.icon;
           return (
@@ -112,9 +112,9 @@ export default function DashboardPage() {
         })}
       </div>
 
-      <div className="flex gap-4">
-        <Button onClick={() => router.push("/consultations/new")}>新建就诊</Button>
-        <Button variant="outline" onClick={() => router.push("/patients")}>患者管理</Button>
+      <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
+        <Button onClick={() => router.push("/consultations/new")} className="w-full sm:w-auto">新建就诊</Button>
+        <Button variant="outline" onClick={() => router.push("/patients")} className="w-full sm:w-auto">患者管理</Button>
       </div>
 
       <Card>

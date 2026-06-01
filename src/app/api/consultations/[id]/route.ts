@@ -44,6 +44,7 @@ export async function PUT(
     "constitution", "editedHistory", "status",
     "huXishuAnalysis", "zhangXichunAnalysis", "niHaixiaAnalysis", "liKeAnalysis",
     "doctorFinalPattern", "doctorFinalPathogenesis",
+    "tongueImage", "faceImage", "tongueAnalysis", "faceAnalysis",
   ];
 
   const data: Record<string, unknown> = {};

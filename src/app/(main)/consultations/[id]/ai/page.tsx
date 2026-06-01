@@ -199,6 +199,78 @@ export default function AIAssistancePage() {
       </div>
       <AIDisclaimer />
 
+      {/* Tongue Image & Analysis Display */}
+      {(consultation?.tongueImage as string || consultation?.tongueAnalysis as string) && (
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base">舌诊信息</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {(consultation?.tongueImage as string) && (
+              <img
+                src={consultation?.tongueImage as string}
+                alt="舌苔照片"
+                className="h-48 w-48 rounded-lg border object-cover cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => window.open(consultation?.tongueImage as string, "_blank")}
+              />
+            )}
+            {(() => {
+              try {
+                const ta = consultation?.tongueAnalysis as string;
+                if (!ta) return null;
+                const t = JSON.parse(ta);
+                const sa = t?.syndrome_analysis as Record<string, unknown> | undefined;
+                return (
+                  <div className="text-sm space-y-1 text-muted-foreground">
+                    {t?.tongue_body && <p>舌质：{((t.tongue_body as Record<string, unknown>).color as string) || "？"}，{((t.tongue_body as Record<string, unknown>).shape as string[])?.join("、") || ""}</p>}
+                    {t?.tongue_coating && <p>舌苔：{((t.tongue_coating as Record<string, unknown>).color as string) || "？"}，{((t.tongue_coating as Record<string, unknown>).coating_type as string[])?.join("、") || ""}</p>}
+                    {sa && <p>辨证：{sa.overall_description as string || ""}</p>}
+                    {sa?.likely_patterns && <p>证型：{(sa.likely_patterns as string[])?.join("、")}</p>}
+                    {sa?.treatment_principle && <p>治则：{sa.treatment_principle as string}</p>}
+                  </div>
+                );
+              } catch { return null; }
+            })()}
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Face Image & Analysis Display */}
+      {(consultation?.faceImage as string || consultation?.faceAnalysis as string) && (
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base">面诊信息</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {(consultation?.faceImage as string) && (
+              <img
+                src={consultation?.faceImage as string}
+                alt="面相照片"
+                className="h-48 w-48 rounded-lg border object-cover cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => window.open(consultation?.faceImage as string, "_blank")}
+              />
+            )}
+            {(() => {
+              try {
+                const fa = consultation?.faceAnalysis as string;
+                if (!fa) return null;
+                const f = JSON.parse(fa);
+                const sa = f?.syndrome_analysis as Record<string, unknown> | undefined;
+                return (
+                  <div className="text-sm space-y-1 text-muted-foreground">
+                    {f?.facial_color && <p>面色：{((f.facial_color as Record<string, unknown>).overall_color as string) || "？"}，{((f.facial_color as Record<string, unknown>).luster as string) || ""}</p>}
+                    {f?.facial_morphology && <p>形态：{((f.facial_morphology as Record<string, unknown>).overall as string) || ""}</p>}
+                    {sa && <p>辨证：{sa.overall_impression as string || ""}</p>}
+                    {sa?.likely_patterns && <p>证型：{(sa.likely_patterns as string[])?.join("、")}</p>}
+                    {sa?.treatment_principle && <p>治则：{sa.treatment_principle as string}</p>}
+                  </div>
+                );
+              } catch { return null; }
+            })()}
+          </CardContent>
+        </Card>
+      )}
+
       {/* Supplement Info Card */}
       {!supplementOpen ? (
         <div className="flex justify-end">
@@ -302,7 +374,7 @@ export default function AIAssistancePage() {
       ) : (
         <>
           <Tabs defaultValue="huXishu">
-            <TabsList className="grid w-full grid-cols-4">
+            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4">
               <TabsTrigger value="huXishu">胡希恕·六经辨证</TabsTrigger>
               <TabsTrigger value="zhangXichun">张锡纯·衷中参西</TabsTrigger>
               <TabsTrigger value="niHaixia">倪海厦·人纪</TabsTrigger>
@@ -465,14 +537,14 @@ export default function AIAssistancePage() {
                 })}
               </div>
 
-              <div className="flex gap-3">
+              <div className="flex flex-col sm:flex-row gap-3">
                 <Input
                   value={finalPattern}
                   onChange={(e) => setFinalPattern(e.target.value)}
                   placeholder="确认或填写最终中医诊断，如：太阳阳明合病，葛根汤证"
                   className="flex-1"
                 />
-                <Button onClick={handleSaveFinalPattern} disabled={savingPattern}>
+                <Button onClick={handleSaveFinalPattern} disabled={savingPattern} className="w-full sm:w-auto">
                   {savingPattern ? <Loader2 className="mr-2 h-3 w-3 animate-spin" /> : <CheckCircle className="mr-2 h-3 w-3" />}
                   确认诊断
                 </Button>

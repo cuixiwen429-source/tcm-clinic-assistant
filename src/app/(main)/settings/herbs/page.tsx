@@ -80,7 +80,7 @@ export default function HerbsSettingsPage() {
           <DialogTrigger asChild>
             <Button><Plus className="mr-2 h-4 w-4" />添加药材</Button>
           </DialogTrigger>
-          <DialogContent className="max-w-lg">
+          <DialogContent className="max-w-full sm:max-w-lg">
             <DialogHeader>
               <DialogTitle>{editingHerb ? "编辑药材" : "添加药材"}</DialogTitle>
             </DialogHeader>

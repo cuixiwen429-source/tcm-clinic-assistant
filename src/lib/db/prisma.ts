@@ -26,7 +26,16 @@ function ensureDbFile() {
 async function initSchema(prisma: PrismaClient) {
   try {
     await prisma.$executeRaw`SELECT 1 FROM User LIMIT 1`;
-    return; // already initialized
+    // Run incremental migrations for existing databases
+    const migrations = [
+      "ALTER TABLE Consultation ADD COLUMN faceImage TEXT",
+      "ALTER TABLE Consultation ADD COLUMN tongueAnalysis TEXT",
+      "ALTER TABLE Consultation ADD COLUMN faceAnalysis TEXT",
+    ];
+    for (const m of migrations) {
+      try { await prisma.$executeRawUnsafe(m); } catch { /* column may already exist */ }
+    }
+    return;
   } catch {
     console.log("[DB] Creating schema...");
   }

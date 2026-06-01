@@ -24,7 +24,11 @@ const navItems: NavItem[] = [
   { href: "/settings/rules", label: "规则配置", icon: Shield, roles: ["ADMIN"] },
 ];
 
-export function Sidebar() {
+interface SidebarProps {
+  onNavClick?: () => void;
+}
+
+export function Sidebar({ onNavClick }: SidebarProps) {
   const pathname = usePathname();
   const { user } = useAuthStore();
 
@@ -33,9 +37,13 @@ export function Sidebar() {
   );
 
   return (
-    <aside className="fixed left-0 top-0 z-40 h-screen w-56 border-r bg-card">
+    <div className="flex h-full flex-col">
       <div className="flex h-14 items-center border-b px-4">
-        <Link href="/dashboard" className="flex items-center gap-2 font-semibold text-primary">
+        <Link
+          href="/dashboard"
+          className="flex items-center gap-2 font-semibold text-primary"
+          onClick={onNavClick}
+        >
           <PenTool className="h-5 w-5" />
           <span className="text-sm">经方辅助诊疗系统</span>
         </Link>
@@ -48,6 +56,7 @@ export function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
+              onClick={onNavClick}
               className={cn(
                 "flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors",
                 isActive
@@ -61,6 +70,6 @@ export function Sidebar() {
           );
         })}
       </nav>
-    </aside>
+    </div>
   );
 }

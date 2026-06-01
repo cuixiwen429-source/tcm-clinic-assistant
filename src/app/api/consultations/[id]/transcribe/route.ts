@@ -13,7 +13,7 @@ export async function POST(
   if (!session) return NextResponse.json({ error: "未登录" }, { status: 401 });
 
   const { id } = await params;
-  const { rawText } = await request.json();
+  const { rawText, tongueAnalysis, faceAnalysis } = await request.json();
 
   if (!rawText || rawText.trim().length < 10) {
     return NextResponse.json({ error: "问诊文本过短，请输入至少10个字符" }, { status: 400 });
@@ -29,7 +29,19 @@ export async function POST(
   }
 
   try {
-    const userMessage = `患者信息：姓名${consultation.patient.name}，性别${consultation.patient.gender || "未知"}，年龄${consultation.patient.age || "未知"}。\n\n已知过敏史：${consultation.patient.allergies || "无"}。\n已知基础病史：${consultation.patient.chronicDisease || "无"}。\n\n原始问诊文本：\n${rawText}`;
+    let analysisCtx = "";
+    if (tongueAnalysis) {
+      const t = tongueAnalysis as Record<string, unknown>;
+      const sa = t.syndrome_analysis as Record<string, unknown> | undefined;
+      analysisCtx += `\n\n【舌象AI分析结果】\n舌体：${JSON.stringify(t.tongue_body)}，\n舌苔：${JSON.stringify(t.tongue_coating)}，\n辨证：寒热${sa?.cold_heat || "？"}，虚实${sa?.deficiency_excess || "？"}，病位${sa?.disease_location || "？"}，六经${sa?.six_channel || "？"}，可能证型${JSON.stringify(sa?.likely_patterns || [])}，治则${sa?.treatment_principle || "？"}`;
+    }
+    if (faceAnalysis) {
+      const f = faceAnalysis as Record<string, unknown>;
+      const sa = f.syndrome_analysis as Record<string, unknown> | undefined;
+      analysisCtx += `\n\n【面象AI分析结果】\n面色：${JSON.stringify(f.facial_color)}，\n面部形态：${JSON.stringify(f.facial_morphology)}，\n五脏对应：${JSON.stringify(f.five_organ_face)}，\n辨证：寒热${sa?.cold_heat || "？"}，虚实${sa?.deficiency_excess || "？"}，脏腑${sa?.zangfu_differentiation || "？"}，可能证型${JSON.stringify(sa?.likely_patterns || [])}，治则${sa?.treatment_principle || "？"}`;
+    }
+
+    const userMessage = `患者信息：姓名${consultation.patient.name}，性别${consultation.patient.gender || "未知"}，年龄${consultation.patient.age || "未知"}。\n\n已知过敏史：${consultation.patient.allergies || "无"}。\n已知基础病史：${consultation.patient.chronicDisease || "无"}。${analysisCtx}\n\n原始问诊文本：\n${rawText}`;
 
     const result = await callDeepSeekJson({
       systemPrompt: TRANSCRIBE_PROMPT,

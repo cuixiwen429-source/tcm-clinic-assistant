@@ -21,7 +21,9 @@ export interface FormulaDraft {
   doctor_checkpoints: string[];
 }
 
-type WizardStep = "patient" | "transcribe" | "history" | "differentiate" | "formula" | "prescription";
+type WizardStep =
+  | "patient" | "tongue" | "face" | "transcribe" | "history"
+  | "differentiate" | "formula" | "prescription";
 
 interface ConsultationState {
   // Wizard state
@@ -43,6 +45,14 @@ interface ConsultationState {
   selectedFormula: FormulaDraft | null;
   isGeneratingFormula: boolean;
 
+  // Tongue & Face
+  tongueImage: string | null;
+  faceImage: string | null;
+  tongueAnalysis: Record<string, unknown> | null;
+  faceAnalysis: Record<string, unknown> | null;
+  isAnalyzingTongue: boolean;
+  isAnalyzingFace: boolean;
+
   // Actions
   setStep: (step: WizardStep) => void;
   setConsultationId: (id: string) => void;
@@ -55,6 +65,12 @@ interface ConsultationState {
   setFormulas: (f: FormulaDraft[] | null) => void;
   setSelectedFormula: (f: FormulaDraft | null) => void;
   setIsGeneratingFormula: (v: boolean) => void;
+  setTongueImage: (url: string | null) => void;
+  setFaceImage: (url: string | null) => void;
+  setTongueAnalysis: (a: Record<string, unknown> | null) => void;
+  setFaceAnalysis: (a: Record<string, unknown> | null) => void;
+  setIsAnalyzingTongue: (v: boolean) => void;
+  setIsAnalyzingFace: (v: boolean) => void;
   reset: () => void;
 }
 
@@ -70,6 +86,12 @@ const initialState = {
   formulas: null,
   selectedFormula: null,
   isGeneratingFormula: false,
+  tongueImage: null,
+  faceImage: null,
+  tongueAnalysis: null,
+  faceAnalysis: null,
+  isAnalyzingTongue: false,
+  isAnalyzingFace: false,
 };
 
 export const useConsultationStore = create<ConsultationState>((set) => ({
@@ -85,5 +107,11 @@ export const useConsultationStore = create<ConsultationState>((set) => ({
   setFormulas: (f) => set({ formulas: f }),
   setSelectedFormula: (f) => set({ selectedFormula: f }),
   setIsGeneratingFormula: (v) => set({ isGeneratingFormula: v }),
+  setTongueImage: (url) => set({ tongueImage: url }),
+  setFaceImage: (url) => set({ faceImage: url }),
+  setTongueAnalysis: (a) => set({ tongueAnalysis: a }),
+  setFaceAnalysis: (a) => set({ faceAnalysis: a }),
+  setIsAnalyzingTongue: (v) => set({ isAnalyzingTongue: v }),
+  setIsAnalyzingFace: (v) => set({ isAnalyzingFace: v }),
   reset: () => set(initialState),
 }));

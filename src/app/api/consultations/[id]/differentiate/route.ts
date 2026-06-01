@@ -31,7 +31,22 @@ export async function POST(
     );
   }
 
-  const userMessage = `患者：${consultation.patient.name}，${consultation.patient.gender || ""}，${consultation.patient.age || ""}岁。\n体质：${consultation.patient.constitution || "未知"}。\n\n结构化病史：\n${consultation.editedHistory}`;
+  // Include tongue/face analysis if available
+  let analysisCtx = "";
+  if (consultation.tongueAnalysis) {
+    try {
+      const t = JSON.parse(consultation.tongueAnalysis);
+      analysisCtx += `\n\n【舌象AI分析】${JSON.stringify(t)}`;
+    } catch { /* ignore */ }
+  }
+  if (consultation.faceAnalysis) {
+    try {
+      const f = JSON.parse(consultation.faceAnalysis);
+      analysisCtx += `\n\n【面象AI分析】${JSON.stringify(f)}`;
+    } catch { /* ignore */ }
+  }
+
+  const userMessage = `患者：${consultation.patient.name}，${consultation.patient.gender || ""}，${consultation.patient.age || ""}岁。\n体质：${consultation.patient.constitution || "未知"}。${analysisCtx}\n\n结构化病史：\n${consultation.editedHistory}`;
 
   const systems = [
     { name: "huXishu", prompt: DIFFERENTIATE_HU_XISHU_PROMPT },
