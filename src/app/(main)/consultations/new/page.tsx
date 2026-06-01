@@ -34,7 +34,11 @@ function NewConsultationContent() {
   // If patientId is in URL, auto-select and create consultation before showing any step
   const urlPatientId = searchParams.get("patientId");
   useEffect(() => {
-    if (!urlPatientId) return;
+    if (!urlPatientId) {
+      // Fresh entry — reset all state from previous session
+      store.reset();
+      return;
+    }
     store.setPatientId(urlPatientId);
     setCreatingConsultation(true);
 
