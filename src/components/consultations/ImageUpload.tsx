@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Camera, Upload, X, Loader2, FileImage } from "lucide-react";
+import { toast } from "sonner";
 
 interface ImageUploadProps {
   title: string;
@@ -22,15 +23,22 @@ export function ImageUpload({ title, description, currentImage, onImageChange, d
       const form = new FormData();
       form.set("file", file);
       const res = await fetch("/api/upload", { method: "POST", body: form });
-      if (!res.ok) throw new Error("上传失败");
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({ error: "上传失败" }));
+        toast.error(data.error || "上传失败");
+        return;
+      }
       const data = await res.json();
       onImageChange(data.url);
     } catch {
-      // silently fail - user can retry
+      toast.error("网络错误，请重试");
     } finally {
       setUploading(false);
     }
   };
+
+  const isMobile = typeof navigator !== "undefined" &&
+    /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
   return (
     <div className="space-y-2">
@@ -41,6 +49,7 @@ export function ImageUpload({ title, description, currentImage, onImageChange, d
         ref={fileRef}
         type="file"
         accept="image/jpeg,image/png,image/webp"
+        capture={isMobile ? "environment" : undefined}
         className="hidden"
         onChange={(e) => {
           const file = e.target.files?.[0];
@@ -69,7 +78,21 @@ export function ImageUpload({ title, description, currentImage, onImageChange, d
         </div>
       ) : (
         <div className="flex gap-2">
-          {/* Camera capture */}
+          {/* Camera capture (mobile) or file picker (desktop) */}
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={disabled || uploading}
+            onClick={() => fileRef.current?.click()}
+          >
+            {uploading ? (
+              <Loader2 className="h-4 w-4 mr-1 animate-spin" />
+            ) : (
+              <Camera className="h-4 w-4 mr-1" />
+            )}
+            {isMobile ? "拍摄" : "拍照"}
+          </Button>
+          {/* Album picker */}
           <Button
             variant="outline"
             size="sm"
@@ -77,25 +100,10 @@ export function ImageUpload({ title, description, currentImage, onImageChange, d
             onClick={() => {
               const input = fileRef.current;
               if (input) {
-                input.setAttribute("capture", "environment");
-                input.click();
                 input.removeAttribute("capture");
+                input.click();
               }
             }}
-          >
-            {uploading ? (
-              <Loader2 className="h-4 w-4 mr-1 animate-spin" />
-            ) : (
-              <Camera className="h-4 w-4 mr-1" />
-            )}
-            拍摄
-          </Button>
-          {/* Album picker */}
-          <Button
-            variant="outline"
-            size="sm"
-            disabled={disabled || uploading}
-            onClick={() => fileRef.current?.click()}
           >
             {uploading ? (
               <Loader2 className="h-4 w-4 mr-1 animate-spin" />

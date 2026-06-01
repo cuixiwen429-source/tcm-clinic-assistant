@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
   if (!session) return NextResponse.json({ error: "未登录" }, { status: 401 });
 
   const formData = await request.formData();
-  const file = formData.get("image") as File | null;
+  const file = (formData.get("image") || formData.get("file")) as File | null;
   if (!file) return NextResponse.json({ error: "未上传文件" }, { status: 400 });
   if (!ALLOWED.includes(file.type)) return NextResponse.json({ error: "仅支持 JPG/PNG/WebP 图片" }, { status: 400 });
   if (file.size > MAX_SIZE) return NextResponse.json({ error: "图片不能超过 5MB" }, { status: 400 });

@@ -290,7 +290,7 @@ export default function AIAssistancePage() {
             <div className="flex items-center justify-between">
               <span className="text-sm text-muted-foreground">补充信息</span>
               <VoiceInput
-                onAppend={(text) => setSupplementText(supplementText + text)}
+                onAppend={(text) => setSupplementText(prev => prev + text)}
                 disabled={supplementing}
               />
             </div>

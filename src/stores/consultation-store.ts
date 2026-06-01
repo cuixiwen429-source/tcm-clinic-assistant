@@ -57,7 +57,7 @@ interface ConsultationState {
   setStep: (step: WizardStep) => void;
   setConsultationId: (id: string) => void;
   setPatientId: (id: string) => void;
-  setRawText: (text: string) => void;
+  setRawText: (textOrFn: string | ((prev: string) => string)) => void;
   setStructuredHistory: (history: Record<string, unknown> | null) => void;
   setIsTranscribing: (v: boolean) => void;
   setDifferentiations: (d: Record<string, unknown> | null) => void;
@@ -99,7 +99,7 @@ export const useConsultationStore = create<ConsultationState>((set) => ({
   setStep: (step) => set({ step }),
   setConsultationId: (id) => set({ consultationId: id }),
   setPatientId: (id) => set({ patientId: id }),
-  setRawText: (text) => set({ rawText: text }),
+  setRawText: (textOrFn: string | ((prev: string) => string)) => set((state) => ({ rawText: typeof textOrFn === "function" ? textOrFn(state.rawText) : textOrFn })),
   setStructuredHistory: (history) => set({ structuredHistory: history }),
   setIsTranscribing: (v) => set({ isTranscribing: v }),
   setDifferentiations: (d) => set({ differentiations: d }),

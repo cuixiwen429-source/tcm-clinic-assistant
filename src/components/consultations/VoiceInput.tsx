@@ -31,11 +31,14 @@ export function VoiceInput({ onAppend, disabled }: VoiceInputProps) {
   const [elapsed, setElapsed] = useState(0);
   const [level, setLevel] = useState(0);
   const [interim, setInterim] = useState("");
+  const [restarting, setRestarting] = useState(false);
 
   const recRef = useRef<SR | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const levelRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const onAppendRef = useRef(onAppend);
+  const stoppedByUser = useRef(false);
+  const restartCount = useRef(0);
   onAppendRef.current = onAppend;
 
   useEffect(() => {
@@ -62,14 +65,25 @@ export function VoiceInput({ onAppend, disabled }: VoiceInputProps) {
   }, []);
 
   const stopListening = useCallback(() => {
+    stoppedByUser.current = true;
+    restartCount.current = 0;
     stopAll();
     setListening(false);
     setElapsed(0);
     setLevel(0);
     setInterim("");
+    setRestarting(false);
   }, [stopAll]);
 
-  const createHandlers = useCallback((rec: SR) => {
+  const startRecognition = useCallback((language: string) => {
+    const rec = getCtor();
+    if (!rec) return null;
+
+    rec.lang = language;
+    rec.interimResults = true;
+    rec.continuous = true;
+    rec.maxAlternatives = 1;
+
     rec.onresult = (event: {
       resultIndex: number;
       results: Array<Array<{ transcript: string }> & { isFinal: boolean }>;
@@ -91,46 +105,72 @@ export function VoiceInput({ onAppend, disabled }: VoiceInputProps) {
     };
 
     rec.onend = () => {
-      if (recRef.current === rec) {
-        recRef.current = null;
-        stopAll();
-        setListening(false);
-        setElapsed(0);
-        setLevel(0);
-        // Flush any remaining interim on natural end
-        setInterim("");
+      if (recRef.current !== rec) return;
+      recRef.current = null;
+      if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
+      if (levelRef.current) { clearInterval(levelRef.current); levelRef.current = null; }
+
+      // Auto-restart if browser stopped us (not user-initiated)
+      if (!stoppedByUser.current && restartCount.current < 10) {
+        restartCount.current++;
+        setRestarting(true);
+        const nextRec = startRecognition(language);
+        if (nextRec) {
+          recRef.current = nextRec;
+          try { nextRec.start(); } catch { /* */ }
+          const resumeTime = Date.now();
+          timerRef.current = setInterval(() => {
+            setElapsed((Date.now() - resumeTime) / 1000);
+          }, 100);
+          levelRef.current = setInterval(() => {
+            setLevel(0.2 + Math.random() * 0.8);
+          }, 120);
+          setRestarting(false);
+        } else {
+          setListening(false);
+          setElapsed(0);
+          setLevel(0);
+          setRestarting(false);
+        }
+        return;
       }
+
+      setListening(false);
+      setElapsed(0);
+      setLevel(0);
+      setInterim("");
+      setRestarting(false);
     };
-  }, [stopAll]);
-
-  const startListening = useCallback(() => {
-    const rec = getCtor();
-    if (!rec) return;
-
-    rec.lang = lang;
-    rec.interimResults = true;
-    rec.continuous = true;
-    rec.maxAlternatives = 1;
-    createHandlers(rec);
-    recRef.current = rec;
 
     try { rec.start(); } catch { /* already started */ }
+    return rec;
+  }, []);
+
+  const startListening = useCallback(() => {
+    stoppedByUser.current = false;
+    restartCount.current = 0;
+
+    const rec = startRecognition(lang);
+    if (!rec) return;
+    recRef.current = rec;
 
     const startTime = Date.now();
     timerRef.current = setInterval(() => {
       setElapsed((Date.now() - startTime) / 1000);
     }, 100);
 
-    // Simulated audio level animation
     levelRef.current = setInterval(() => {
       setLevel(0.2 + Math.random() * 0.8);
     }, 120);
 
     setListening(true);
-  }, [lang, createHandlers]);
+  }, [lang, startRecognition]);
 
   // Cleanup on unmount
-  useEffect(() => () => stopAll(), [stopAll]);
+  useEffect(() => () => {
+    stoppedByUser.current = true;
+    stopAll();
+  }, [stopAll]);
 
   if (supported === null) {
     return <Button variant="outline" size="sm" disabled><MicOff className="h-4 w-4 mr-1" />检测中…</Button>;
@@ -169,7 +209,7 @@ export function VoiceInput({ onAppend, disabled }: VoiceInputProps) {
                 className="w-1 rounded-full transition-all duration-100"
                 style={{
                   height: `${8 + (level > t ? 12 : 0)}px`,
-                  backgroundColor: level > t ? "#ef4444" : "#fca5a5",
+                  backgroundColor: restarting ? "#f59e0b" : level > t ? "#ef4444" : "#fca5a5",
                 }}
               />
             ))}
@@ -181,6 +221,9 @@ export function VoiceInput({ onAppend, disabled }: VoiceInputProps) {
             <span className="text-xs text-red-400 italic truncate max-w-[140px] sm:max-w-[240px]">
               {interim}
             </span>
+          )}
+          {restarting && (
+            <span className="text-xs text-amber-500 animate-pulse">重连中…</span>
           )}
           <Button variant="ghost" size="icon" className="h-7 w-7 text-red-600 hover:bg-red-100" onClick={stopListening}>
             <Square className="h-4 w-4" />

@@ -90,7 +90,11 @@ function NewConsultationContent() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ patientId }),
       });
-      if (!res.ok) { toast.error("创建就诊失败"); return; }
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({ error: "创建就诊失败" }));
+        toast.error(errData.error || "创建就诊失败");
+        return;
+      }
       const consultation = await res.json();
       store.setConsultationId(consultation.id);
       store.setStep("tongue");
@@ -639,7 +643,7 @@ function NewConsultationContent() {
               <div className="flex items-center justify-between">
                 <Label htmlFor="rawText">问诊文本</Label>
                 <VoiceInput
-                  onAppend={(text) => store.setRawText(store.rawText + text)}
+                  onAppend={(text) => store.setRawText((prev: string) => prev + text)}
                   disabled={store.isTranscribing}
                 />
               </div>
