@@ -17,6 +17,12 @@ if [ ! -d "${APP_NAME}.app" ]; then
   exit 1
 fi
 
+# Fix permissions (lost when transferring from Windows)
+echo "=== Fixing permissions ==="
+chmod +x "${APP_NAME}.app/Contents/MacOS/launcher"
+xattr -cr "${APP_NAME}.app" 2>/dev/null || true
+echo "[OK]"
+
 cp -R "${APP_NAME}.app" "$STAGING/"
 ln -s /Applications "$STAGING/Applications"
 
