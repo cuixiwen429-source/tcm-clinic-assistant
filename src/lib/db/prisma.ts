@@ -167,7 +167,7 @@ function triggerInit() {
 function createLazyProxy<T extends object>(target: T): T {
   return new Proxy(target, {
     get(t, prop: string | symbol) {
-      if (typeof prop === "string" && (prop === "$on" || prop === "$connect" || prop === "$disconnect" || prop === "$use" || prop === "then")) {
+      if (typeof prop === "string" && (prop === "$on" || prop === "$connect" || prop === "$disconnect" || prop === "$use" || prop === "then" || prop[0] === "$")) {
         return (t as Record<string | symbol, unknown>)[prop];
       }
 
