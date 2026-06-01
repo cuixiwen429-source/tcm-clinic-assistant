@@ -2,7 +2,8 @@
 
 import { useState, useRef, useCallback, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Mic, MicOff, Square } from "lucide-react";
+import { Mic, MicOff, Square, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 interface VoiceInputProps {
   onAppend: (text: string) => void;
@@ -21,8 +22,47 @@ function formatTime(seconds: number): string {
   return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type SR = any;
+function encodeWav(pcm: Int16Array, sampleRate: number): ArrayBuffer {
+  const numChannels = 1;
+  const bitsPerSample = 16;
+  const byteRate = sampleRate * numChannels * bitsPerSample / 8;
+  const blockAlign = numChannels * bitsPerSample / 8;
+  const dataSize = pcm.length * 2;
+  const headerSize = 44;
+  const buf = new ArrayBuffer(headerSize + dataSize);
+  const view = new DataView(buf);
+
+  // RIFF header
+  writeString(view, 0, "RIFF");
+  view.setUint32(4, 36 + dataSize, true);
+  writeString(view, 8, "WAVE");
+  // fmt chunk
+  writeString(view, 12, "fmt ");
+  view.setUint32(16, 16, true);
+  view.setUint16(20, 1, true);           // PCM
+  view.setUint16(22, numChannels, true);
+  view.setUint32(24, sampleRate, true);
+  view.setUint32(28, byteRate, true);
+  view.setUint16(32, blockAlign, true);
+  view.setUint16(34, bitsPerSample, true);
+  // data chunk
+  writeString(view, 36, "data");
+  view.setUint32(40, dataSize, true);
+
+  // PCM samples
+  const pcmView = new DataView(buf, 44);
+  for (let i = 0; i < pcm.length; i++) {
+    pcmView.setInt16(i * 2, pcm[i], true);
+  }
+
+  return buf;
+}
+
+function writeString(view: DataView, offset: number, str: string) {
+  for (let i = 0; i < str.length; i++) {
+    view.setUint8(offset + i, str.charCodeAt(i));
+  }
+}
 
 export function VoiceInput({ onAppend, disabled }: VoiceInputProps) {
   const [listening, setListening] = useState(false);
@@ -30,147 +70,154 @@ export function VoiceInput({ onAppend, disabled }: VoiceInputProps) {
   const [supported, setSupported] = useState<boolean | null>(null);
   const [elapsed, setElapsed] = useState(0);
   const [level, setLevel] = useState(0);
-  const [interim, setInterim] = useState("");
-  const [restarting, setRestarting] = useState(false);
+  const [processing, setProcessing] = useState(false);
 
-  const recRef = useRef<SR | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+  const ctxRef = useRef<AudioContext | null>(null);
+  const processorRef = useRef<ScriptProcessorNode | null>(null);
+  const chunksRef = useRef<Int16Array[]>([]);
+  const sampleCountRef = useRef(0);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const levelRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const startTimeRef = useRef(0);
   const onAppendRef = useRef(onAppend);
-  const stoppedByUser = useRef(false);
-  const restartCount = useRef(0);
   onAppendRef.current = onAppend;
 
   useEffect(() => {
-    const ok = typeof window !== "undefined" &&
-      ("SpeechRecognition" in window || "webkitSpeechRecognition" in window);
+    const ok = typeof navigator !== "undefined" &&
+      !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
     setSupported(ok);
   }, []);
 
-  const getCtor = (): SR | null => {
-    try {
-      const w = window as unknown as Record<string, unknown>;
-      const Ctor = (w.SpeechRecognition || w.webkitSpeechRecognition) as (new () => SR) | undefined;
-      return Ctor ? new Ctor() : null;
-    } catch { return null; }
-  };
-
-  const stopAll = useCallback(() => {
+  const cleanup = useCallback(() => {
     if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
     if (levelRef.current) { clearInterval(levelRef.current); levelRef.current = null; }
-    if (recRef.current) {
-      try { recRef.current.stop(); } catch { /* */ }
-      recRef.current = null;
-    }
+    try { processorRef.current?.disconnect(); } catch { /* */ }
+    processorRef.current = null;
+    try { ctxRef.current?.close(); } catch { /* */ }
+    ctxRef.current = null;
+    try { streamRef.current?.getTracks().forEach((t) => t.stop()); } catch { /* */ }
+    streamRef.current = null;
+    chunksRef.current = [];
+    sampleCountRef.current = 0;
   }, []);
 
-  const stopListening = useCallback(() => {
-    stoppedByUser.current = true;
-    restartCount.current = 0;
-    stopAll();
+  const sendToASR = useCallback(async () => {
+    const chunks = chunksRef.current;
+    if (chunks.length === 0) return;
+
+    const totalLength = chunks.reduce((sum, c) => sum + c.length, 0);
+    const merged = new Int16Array(totalLength);
+    let offset = 0;
+    for (const c of chunks) {
+      merged.set(c, offset);
+      offset += c.length;
+    }
+
+    const wav = encodeWav(merged, 16000);
+    const blob = new Blob([wav], { type: "audio/wav" });
+    const form = new FormData();
+    form.set("file", blob, "recording.wav");
+    form.set("lang", lang);
+
+    const res = await fetch("/api/voice/recognize?lang=" + encodeURIComponent(lang), {
+      method: "POST",
+      body: form,
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: "语音识别失败" }));
+      throw new Error(err.error || "语音识别失败");
+    }
+
+    const data = await res.json();
+    if (data.text) {
+      onAppendRef.current(data.text);
+    }
+  }, [lang]);
+
+  const stopListening = useCallback(async () => {
+    // Stop audio capture first
+    try { processorRef.current?.disconnect(); } catch { /* */ }
+    processorRef.current = null;
+    try { ctxRef.current?.close(); } catch { /* */ }
+    ctxRef.current = null;
+    try { streamRef.current?.getTracks().forEach((t) => t.stop()); } catch { /* */ }
+    streamRef.current = null;
+    if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
+    if (levelRef.current) { clearInterval(levelRef.current); levelRef.current = null; }
     setListening(false);
     setElapsed(0);
     setLevel(0);
-    setInterim("");
-    setRestarting(false);
-  }, [stopAll]);
 
-  const startRecognition = useCallback((language: string) => {
-    const rec = getCtor();
-    if (!rec) return null;
-
-    rec.lang = language;
-    rec.interimResults = true;
-    rec.continuous = true;
-    rec.maxAlternatives = 1;
-
-    rec.onresult = (event: {
-      resultIndex: number;
-      results: Array<Array<{ transcript: string }> & { isFinal: boolean }>;
-    }) => {
-      let finalText = "";
-      let interimText = "";
-      for (let i = event.resultIndex; i < event.results.length; i++) {
-        const r = event.results[i];
-        if (r.isFinal) { finalText += r[0].transcript; }
-        else { interimText += r[0].transcript; }
+    // Send captured audio to ASR
+    if (chunksRef.current.length > 0 && sampleCountRef.current > 8000) {
+      setProcessing(true);
+      try {
+        await sendToASR();
+      } catch (err) {
+        toast.error(err instanceof Error ? err.message : "语音识别失败");
+      } finally {
+        setProcessing(false);
       }
-      if (finalText) { onAppendRef.current(finalText); setInterim(""); }
-      else { setInterim(interimText); }
-    };
+    }
 
-    rec.onerror = (e: { error: string }) => {
-      if (e.error === "no-speech" || e.error === "aborted") return;
-      console.error("[Speech]", e.error);
-    };
+    chunksRef.current = [];
+    sampleCountRef.current = 0;
+  }, [sendToASR]);
 
-    rec.onend = () => {
-      if (recRef.current !== rec) return;
-      recRef.current = null;
-      if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
-      if (levelRef.current) { clearInterval(levelRef.current); levelRef.current = null; }
+  const startListening = useCallback(async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          sampleRate: 16000,
+          channelCount: 1,
+          echoCancellation: true,
+          noiseSuppression: true,
+        },
+      });
+      streamRef.current = stream;
 
-      // Auto-restart if browser stopped us (not user-initiated)
-      if (!stoppedByUser.current && restartCount.current < 10) {
-        restartCount.current++;
-        setRestarting(true);
-        const nextRec = startRecognition(language);
-        if (nextRec) {
-          recRef.current = nextRec;
-          try { nextRec.start(); } catch { /* */ }
-          const resumeTime = Date.now();
-          timerRef.current = setInterval(() => {
-            setElapsed((Date.now() - resumeTime) / 1000);
-          }, 100);
-          levelRef.current = setInterval(() => {
-            setLevel(0.2 + Math.random() * 0.8);
-          }, 120);
-          setRestarting(false);
-        } else {
-          setListening(false);
-          setElapsed(0);
-          setLevel(0);
-          setRestarting(false);
+      const ctx = new AudioContext({ sampleRate: 16000 });
+      ctxRef.current = ctx;
+
+      const source = ctx.createMediaStreamSource(stream);
+      const processor = ctx.createScriptProcessor(4096, 1, 1);
+      processorRef.current = processor;
+
+      processor.onaudioprocess = (e) => {
+        const input = e.inputBuffer.getChannelData(0);
+        const pcm = new Int16Array(input.length);
+        for (let i = 0; i < input.length; i++) {
+          const s = Math.max(-1, Math.min(1, input[i]));
+          pcm[i] = s < 0 ? s * 0x8000 : s * 0x7fff;
         }
-        return;
-      }
+        chunksRef.current.push(pcm);
+        sampleCountRef.current += input.length;
 
-      setListening(false);
-      setElapsed(0);
-      setLevel(0);
-      setInterim("");
-      setRestarting(false);
-    };
+        // Calculate audio level
+        let sum = 0;
+        for (let i = 0; i < input.length; i++) sum += Math.abs(input[i]);
+        setLevel(Math.min(1, (sum / input.length) * 5));
+      };
 
-    try { rec.start(); } catch { /* already started */ }
-    return rec;
+      source.connect(processor);
+      processor.connect(ctx.destination);
+
+      startTimeRef.current = Date.now();
+      timerRef.current = setInterval(() => {
+        setElapsed((Date.now() - startTimeRef.current) / 1000);
+      }, 100);
+
+      setListening(true);
+    } catch {
+      toast.error("无法访问麦克风，请检查浏览器权限");
+    }
   }, []);
 
-  const startListening = useCallback(() => {
-    stoppedByUser.current = false;
-    restartCount.current = 0;
-
-    const rec = startRecognition(lang);
-    if (!rec) return;
-    recRef.current = rec;
-
-    const startTime = Date.now();
-    timerRef.current = setInterval(() => {
-      setElapsed((Date.now() - startTime) / 1000);
-    }, 100);
-
-    levelRef.current = setInterval(() => {
-      setLevel(0.2 + Math.random() * 0.8);
-    }, 120);
-
-    setListening(true);
-  }, [lang, startRecognition]);
-
-  // Cleanup on unmount
   useEffect(() => () => {
-    stoppedByUser.current = true;
-    stopAll();
-  }, [stopAll]);
+    cleanup();
+  }, [cleanup]);
 
   if (supported === null) {
     return <Button variant="outline" size="sm" disabled><MicOff className="h-4 w-4 mr-1" />检测中…</Button>;
@@ -187,11 +234,11 @@ export function VoiceInput({ onAppend, disabled }: VoiceInputProps) {
           <button
             key={l.code}
             type="button"
-            disabled={listening || disabled}
+            disabled={listening || processing || disabled}
             onClick={() => setLang(l.code)}
             className={`px-2 py-1 text-xs transition-colors border-r last:border-r-0 ${
               lang === l.code ? "bg-primary text-primary-foreground" : "hover:bg-accent text-muted-foreground"
-            } ${(listening || disabled) ? "opacity-50 cursor-not-allowed" : ""}`}
+            } ${(listening || processing || disabled) ? "opacity-50 cursor-not-allowed" : ""}`}
           >
             <span className="hidden sm:inline">{l.label}</span>
             <span className="sm:hidden">{l.short}</span>
@@ -209,7 +256,7 @@ export function VoiceInput({ onAppend, disabled }: VoiceInputProps) {
                 className="w-1 rounded-full transition-all duration-100"
                 style={{
                   height: `${8 + (level > t ? 12 : 0)}px`,
-                  backgroundColor: restarting ? "#f59e0b" : level > t ? "#ef4444" : "#fca5a5",
+                  backgroundColor: level > t ? "#ef4444" : "#fca5a5",
                 }}
               />
             ))}
@@ -217,18 +264,15 @@ export function VoiceInput({ onAppend, disabled }: VoiceInputProps) {
           <span className="text-sm font-mono font-medium text-red-600 tabular-nums min-w-[40px]">
             {formatTime(elapsed)}
           </span>
-          {interim && (
-            <span className="text-xs text-red-400 italic truncate max-w-[140px] sm:max-w-[240px]">
-              {interim}
-            </span>
-          )}
-          {restarting && (
-            <span className="text-xs text-amber-500 animate-pulse">重连中…</span>
-          )}
           <Button variant="ghost" size="icon" className="h-7 w-7 text-red-600 hover:bg-red-100" onClick={stopListening}>
             <Square className="h-4 w-4" />
           </Button>
         </div>
+      ) : processing ? (
+        <Button variant="outline" size="sm" disabled>
+          <Loader2 className="h-4 w-4 mr-1 animate-spin" />
+          <span className="hidden sm:inline">识别中…</span>
+        </Button>
       ) : (
         <Button variant="outline" size="sm" onClick={startListening} disabled={disabled}>
           <Mic className="h-4 w-4 mr-1" />

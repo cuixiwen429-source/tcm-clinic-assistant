@@ -33,21 +33,12 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const prompt = `中医面诊专家。请直接观察面部特征并返回分析结果。${patientCtx}
-
-【分析要点】
-面色（五色、分布、光泽、浮沉）
-面部形态（整体、眼部、口唇、鼻部、其他特征）
-五脏面部分候（额-心、鼻-脾、颧-肺、颞-肝、颌-肾）
-辨证（寒热、虚实、脏腑、气血津液、证型）
-临床意义（病理、治则、预后）
-
-返回JSON（简洁扼要，每个字段控制在20字内）：
+    const prompt = `中医面诊。直接返回JSON（每字段≤15字）：
 {
   "facial_color": {"overall_color":"","distribution":"","luster":"","depth":""},
   "facial_morphology": {"overall":"","eyes":"","lips":"","nose":"","other_features":[]},
   "five_organ_face": {"forehead_heart":"","nose_spleen":"","cheeks_lung":"","temples_liver":"","chin_kidney":""},
-  "syndrome_analysis": {"overall_impression":"","primary_secondary_color":"","cold_heat":"","deficiency_excess":"","disease_location":"","organs_involved":[],"qi_blood_fluid":[],"zangfu_differentiation":"","likely_patterns":[],"pathological_significance":"","differential_points":"","treatment_principle":"","prognosis":""}
+  "syndrome_analysis": {"overall_impression":"","cold_heat":"","deficiency_excess":"","organs_involved":[],"qi_blood_fluid":[],"likely_patterns":[],"pathological_significance":"","treatment_principle":"","prognosis":""}
 }`;
 
     const result = await analyzeImage({ imageBase64, prompt });

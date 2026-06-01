@@ -103,6 +103,7 @@ function parseResponse(data: Buffer): { text: string; isFinal: boolean } | { err
 export async function recognizePcm(pcmData: Buffer, language: string): Promise<string> {
   const appId = process.env.VOLCENGINE_APP_ID;
   const accessToken = process.env.VOLCENGINE_ACCESS_TOKEN;
+  const secretKey = process.env.VOLCENGINE_SECRET_KEY || accessToken;
   if (!appId || !accessToken) throw new Error("语音服务未配置");
 
   // Dynamic import — ws is an optional dependency
@@ -119,8 +120,8 @@ export async function recognizePcm(pcmData: Buffer, language: string): Promise<s
   return new Promise((resolve, reject) => {
     const ws = new WebSocket(WS_URL, {
       headers: {
-        "X-Api-App-Key": appId,
-        "X-Api-Access-Key": accessToken,
+        "X-Api-App-Key": accessToken,
+        "X-Api-Access-Key": secretKey,
         "X-Api-Resource-Id": "volc.bigasr.sauc.duration",
         "X-Api-Connect-Id": `tcm-${Date.now()}`,
       },
