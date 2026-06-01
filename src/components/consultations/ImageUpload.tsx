@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Camera, Upload, X, Loader2, ImageIcon } from "lucide-react";
+import { Camera, Upload, X, Loader2, FileImage } from "lucide-react";
 
 interface ImageUploadProps {
   title: string;
@@ -100,7 +100,7 @@ export function ImageUpload({ title, description, currentImage, onImageChange, d
             {uploading ? (
               <Loader2 className="h-4 w-4 mr-1 animate-spin" />
             ) : (
-              <ImageIcon className="h-4 w-4 mr-1" />
+              <FileImage className="h-4 w-4 mr-1" />
             )}
             相册
           </Button>
