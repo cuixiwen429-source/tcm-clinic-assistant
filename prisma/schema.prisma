@@ -1,0 +1,206 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  password  String
+  name      String
+  role      String   @default("DOCTOR")
+  phone     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  consultations Consultation[]
+  editedPrescriptions Prescription[] @relation("PrescriptionEditor")
+  auditLogs     AuditLog[]
+}
+
+model Patient {
+  id            String   @id @default(cuid())
+  name          String
+  gender        String?
+  birthDate     DateTime?
+  age           Int?
+  phone         String?
+  allergies     String?
+  constitution  String?
+  chronicDisease String?
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  consultations Consultation[]
+}
+
+model Consultation {
+  id                 String    @id @default(cuid())
+  patientId          String
+  doctorId           String
+  visitDate          DateTime  @default(now())
+  chiefComplaint     String?
+  presentIllness     String?
+  pastHistory        String?
+  symptomSummary     String?
+  constitution       String?
+  rawTranscription   String?
+  editedHistory      String?
+  huXishuAnalysis    String?
+  zhangXichunAnalysis String?
+  niHaixiaAnalysis   String?
+  liKeAnalysis        String?
+  doctorFinalPattern String?
+  doctorFinalPathogenesis String?
+  status             String    @default("DRAFT")
+  archivedAt         DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  patient         Patient         @relation(fields: [patientId], references: [id])
+  doctor          User            @relation(fields: [doctorId], references: [id])
+  prescriptions   Prescription[]
+  riskPredictions RiskPrediction[]
+  adviceItems     Advice[]
+}
+
+model Prescription {
+  id              String   @id @default(cuid())
+  consultationId  String
+  version         Int      @default(1)
+  formulaName     String?
+  formulaClass    String?
+  source          String   @default("AI")
+  herbs           String   @default("[]")
+  totalDoses      Int      @default(7)
+  decoctionMethod String?
+  usageInstruction String?
+  precautions     String?
+  editorId        String?
+  changeDescription String?
+  isFinal         Boolean  @default(false)
+  isConfirmed     Boolean  @default(false)
+  confirmedAt     DateTime?
+  pdfPath         String?
+  createdAt       DateTime @default(now())
+
+  consultation     Consultation      @relation(fields: [consultationId], references: [id])
+  editor           User?             @relation("PrescriptionEditor", fields: [editorId], references: [id])
+  complianceChecks ComplianceCheck[]
+  costCalculations CostCalculation[]
+}
+
+model ComplianceCheck {
+  id             String   @id @default(cuid())
+  prescriptionId String
+  checkType      String
+  herbName       String?
+  conflictWith   String?
+  severity       String   @default("WARNING")
+  detail         String
+  resolved       Boolean  @default(false)
+  resolvedBy     String?
+  resolutionNote String?
+  createdAt      DateTime @default(now())
+
+  prescription Prescription @relation(fields: [prescriptionId], references: [id])
+}
+
+model RiskPrediction {
+  id              String   @id @default(cuid())
+  consultationId  String
+  predictedRisks  String
+  patientFriendlyText String?
+  doctorConfirmed Boolean  @default(false)
+  confirmedAt     DateTime?
+  confirmedBy     String?
+  createdAt       DateTime @default(now())
+
+  consultation Consultation @relation(fields: [consultationId], references: [id])
+}
+
+model Advice {
+  id              String   @id @default(cuid())
+  consultationId  String
+  category        String   @default("MEDICAL")
+  adviceContent   String
+  editedContent   String?
+  isApproved      Boolean  @default(false)
+  approvedAt      DateTime?
+  createdAt       DateTime @default(now())
+
+  consultation Consultation @relation(fields: [consultationId], references: [id])
+}
+
+model HerbReference {
+  id               String   @id @default(cuid())
+  name             String   @unique
+  pinyin           String?
+  pharmacopoeiaMin Float?
+  pharmacopoeiaMax Float?
+  unit             String   @default("g")
+  category         String?
+  nature           String?
+  taste            String?
+  meridian         String?
+  toxicity         String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  prices HerbPrice[]
+}
+
+model HerbPrice {
+  id            String   @id @default(cuid())
+  herbId        String
+  spec          String?
+  origin        String?
+  wholesalePrice Float?
+  retailPrice   Float?
+  unit          String   @default("g")
+  sourceNote    String?
+  updatedAt     DateTime @default(now())
+
+  herb HerbReference @relation(fields: [herbId], references: [id])
+}
+
+model ComplianceRule {
+  id          String   @id @default(cuid())
+  ruleType    String
+  herbA       String
+  herbB       String?
+  category    String?
+  severity    String   @default("WARNING")
+  description String
+  sourceNote  String?
+  createdAt   DateTime @default(now())
+}
+
+model CostCalculation {
+  id             String   @id @default(cuid())
+  prescriptionId String
+  totalCost      Float
+  breakdown      String
+  calculatedAt   DateTime @default(now())
+  calculatedBy   String?
+
+  prescription Prescription @relation(fields: [prescriptionId], references: [id])
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  userId     String
+  action     String
+  entityType String
+  entityId   String
+  detail     String
+  metadata   String?
+  createdAt  DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}

@@ -1,0 +1,50 @@
+# Dependencies
+node_modules/
+/.pnp
+.pnp.js
+
+# Next.js
+/.next/
+/out/
+
+# Production
+/build
+
+# Environment
+.env*.local
+.env
+
+# Database
+*.db
+*.db-journal
+
+# Prisma (migrations are committed for deployment)
+# prisma/migrations/
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Misc
+.DS_Store
+*.pem
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Uploads
+uploads/*
+!uploads/.gitkeep
+
+# PDF outputs
+pdf-outputs/*
+!pdf-outputs/.gitkeep
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts

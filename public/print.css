@@ -1,0 +1,167 @@
+/* A5 Prescription Print Stylesheet */
+
+@page {
+  size: A5 portrait;
+  margin: 8mm;
+}
+
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+}
+
+/* A5 Prescription Container (148mm x 210mm) */
+.print-prescription {
+  width: 148mm;
+  min-height: 210mm;
+  font-family: "SimSun", "STSong", "NSimSun", "FangSong", serif;
+  font-size: 11pt;
+  line-height: 1.8;
+  color: black;
+  background: white;
+  padding: 8mm;
+  box-sizing: border-box;
+}
+
+.print-prescription * {
+  font-family: "SimSun", "STSong", "NSimSun", serif !important;
+}
+
+.print-prescription .prescription-header {
+  text-align: center;
+  margin-bottom: 4mm;
+}
+
+.print-prescription .prescription-header .clinic-name {
+  font-size: 14pt;
+  font-weight: bold;
+  margin-bottom: 2mm;
+}
+
+.print-prescription .prescription-header .prescription-no {
+  font-size: 9pt;
+  color: #333;
+}
+
+.print-prescription .patient-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2mm 6mm;
+  margin-bottom: 4mm;
+  padding-bottom: 3mm;
+  border-bottom: 1px solid #ccc;
+  font-size: 10pt;
+}
+
+.print-prescription .patient-info .field {
+  display: flex;
+  gap: 1mm;
+}
+
+.print-prescription .patient-info .field-label {
+  white-space: nowrap;
+}
+
+.print-prescription .diagnosis-section {
+  margin-bottom: 4mm;
+  padding-bottom: 3mm;
+  border-bottom: 1px solid #ccc;
+}
+
+.print-prescription .diagnosis-section .label {
+  font-weight: bold;
+  margin-bottom: 1mm;
+}
+
+.print-prescription .herb-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 4mm;
+}
+
+.print-prescription .herb-table th {
+  border-bottom: 1px solid #333;
+  padding: 2mm 1mm;
+  text-align: left;
+  font-size: 10pt;
+}
+
+.print-prescription .herb-table td {
+  padding: 2mm 1mm;
+  border-bottom: 1px dotted #ccc;
+  font-size: 10pt;
+  vertical-align: top;
+}
+
+.print-prescription .herb-table .herb-name {
+  width: 25%;
+}
+
+.print-prescription .herb-table .herb-dose {
+  width: 15%;
+  text-align: right;
+}
+
+.print-prescription .herb-table .herb-note {
+  width: 60%;
+  color: #555;
+  font-size: 9pt;
+}
+
+.print-prescription .usage-section {
+  margin-bottom: 4mm;
+  padding-bottom: 3mm;
+  border-bottom: 1px solid #ccc;
+}
+
+.print-prescription .usage-section .label {
+  font-weight: bold;
+  margin-bottom: 1mm;
+}
+
+.print-prescription .advice-section {
+  margin-bottom: 4mm;
+  padding-bottom: 3mm;
+  border-bottom: 1px solid #ccc;
+}
+
+.print-prescription .advice-section .label {
+  font-weight: bold;
+  margin-bottom: 1mm;
+}
+
+.print-prescription .signature-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 2mm;
+  margin-top: 8mm;
+  font-size: 10pt;
+}
+
+.print-prescription .signature-section .sig-field {
+  text-align: center;
+}
+
+.print-prescription .signature-section .sig-line {
+  border-bottom: 1px solid #333;
+  margin-bottom: 1mm;
+  min-height: 8mm;
+}
+
+.print-prescription .validity-note {
+  font-size: 9pt;
+  margin-top: 4mm;
+  color: #555;
+}
