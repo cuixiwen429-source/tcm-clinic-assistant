@@ -1,6 +1,5 @@
-import WebSocket from "ws";
-
-const WS_URL = "wss://openspeech.bytedance.com/api/v3/sauc/bigmodel";
+// ws is an optional peer dependency for server-side ASR relay
+let WS_URL = "wss://openspeech.bytedance.com/api/v3/sauc/bigmodel";
 
 // ── Binary protocol (exact match with official Volcengine Python SDK) ──
 // Frame: header(4) + size(4) + payload
@@ -99,6 +98,14 @@ export async function recognizePcm(pcmData: Buffer, language: string): Promise<s
   const accessToken = process.env.VOLCENGINE_ACCESS_TOKEN;
   if (!appId || !accessToken) throw new Error("语音服务未配置");
 
+  // Dynamic import — ws is an optional dependency
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let WebSocket: any;
+  try {
+    const m = await import("ws");
+    WebSocket = (m as Record<string, unknown>).default || m;
+  } catch { throw new Error("ws 依赖未安装"); }
+
   console.log("[ASR] Connecting to Volcengine bigmodel v3...");
   console.log("[ASR] Audio:", pcmData.length, "bytes, lang:", language);
 
@@ -155,7 +162,7 @@ export async function recognizePcm(pcmData: Buffer, language: string): Promise<s
     });
 
     ws.on("close", () => finish(new Error("连接意外关闭")));
-    ws.on("error", (err) => finish(new Error(`连接错误: ${err.message}`)));
+    ws.on("error", (err: Error) => finish(new Error(`连接错误: ${err.message}`)));
 
     setTimeout(() => finish(new Error("识别超时")), 15000);
   });

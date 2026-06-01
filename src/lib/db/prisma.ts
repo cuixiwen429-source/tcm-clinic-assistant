@@ -27,13 +27,22 @@ async function initSchema(prisma: PrismaClient) {
   try {
     await prisma.$executeRaw`SELECT 1 FROM User LIMIT 1`;
     // Run incremental migrations for existing databases
-    const migrations = [
-      "ALTER TABLE Consultation ADD COLUMN faceImage TEXT",
-      "ALTER TABLE Consultation ADD COLUMN tongueAnalysis TEXT",
-      "ALTER TABLE Consultation ADD COLUMN faceAnalysis TEXT",
-    ];
-    for (const m of migrations) {
-      try { await prisma.$executeRawUnsafe(m); } catch { /* column may already exist */ }
+    const newColumns: Record<string, string> = {
+      faceImage: "TEXT",
+      tongueAnalysis: "TEXT",
+      faceAnalysis: "TEXT",
+    };
+    for (const [col, type] of Object.entries(newColumns)) {
+      try {
+        // Check if column already exists
+        const rows = await prisma.$queryRawUnsafe<Array<{ name: string }>>(
+          `PRAGMA table_info(Consultation)`
+        );
+        if (!rows.some((r) => r.name === col)) {
+          await prisma.$executeRawUnsafe(`ALTER TABLE Consultation ADD COLUMN "${col}" ${type}`);
+          console.log(`[DB] Added column: ${col}`);
+        }
+      } catch (e) { console.error(`[DB] Migration error for ${col}:`, e); }
     }
     return;
   } catch {
