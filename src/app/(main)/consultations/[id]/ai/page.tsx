@@ -97,6 +97,13 @@ export default function AIAssistancePage() {
       if (!res.ok) { toast.error("AI辨证失败"); return; }
       const data = await res.json();
       setDifferentiations(data);
+      // Also merge differentiation results into consultation state so formula step has them
+      setConsultation(prev => prev ? { ...prev,
+        huXishuAnalysis: data.huXishu ? JSON.stringify(data.huXishu) : prev.huXishuAnalysis,
+        zhangXichunAnalysis: data.zhangXichun ? JSON.stringify(data.zhangXichun) : prev.zhangXichunAnalysis,
+        niHaixiaAnalysis: data.niHaixia ? JSON.stringify(data.niHaixia) : prev.niHaixiaAnalysis,
+        liKeAnalysis: data.liKe ? JSON.stringify(data.liKe) : prev.liKeAnalysis,
+      } : null);
       toast.success("辨证完成");
     } catch { toast.error("网络错误"); }
     finally { setDifferentiating(false); }
@@ -106,6 +113,9 @@ export default function AIAssistancePage() {
     setGeneratingFormula(true);
     try {
       const patient = consultation?.patient as Record<string, unknown> | undefined;
+      // Use differentiation results from state (already rendered on page) — these are available
+      // regardless of whether the DB has them (cold start resilience)
+      const diffs = differentiations;
       const body: Record<string, unknown> = {
         patientName: patient?.name,
         patientGender: patient?.gender,
@@ -114,10 +124,10 @@ export default function AIAssistancePage() {
         tongueAnalysis: consultation?.tongueAnalysis,
         faceAnalysis: consultation?.faceAnalysis,
         editedHistory: consultation?.editedHistory,
-        huXishuAnalysis: consultation?.huXishuAnalysis,
-        zhangXichunAnalysis: consultation?.zhangXichunAnalysis,
-        niHaixiaAnalysis: consultation?.niHaixiaAnalysis,
-        liKeAnalysis: consultation?.liKeAnalysis,
+        huXishuAnalysis: diffs?.huXishu ? JSON.stringify(diffs.huXishu) : consultation?.huXishuAnalysis,
+        zhangXichunAnalysis: diffs?.zhangXichun ? JSON.stringify(diffs.zhangXichun) : consultation?.zhangXichunAnalysis,
+        niHaixiaAnalysis: diffs?.niHaixia ? JSON.stringify(diffs.niHaixia) : consultation?.niHaixiaAnalysis,
+        liKeAnalysis: diffs?.liKe ? JSON.stringify(diffs.liKe) : consultation?.liKeAnalysis,
         doctorFinalPattern: consultation?.doctorFinalPattern,
         doctorFinalPathogenesis: consultation?.doctorFinalPathogenesis,
         patientId: consultation?.patientId,
