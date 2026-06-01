@@ -50,3 +50,6 @@ pdf-outputs/*
 next-env.d.ts
 
 .vercel
+
+# macOS DMG build output
+build-output/

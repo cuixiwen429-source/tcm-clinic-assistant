@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  output: "standalone",
   // Allow pdfkit in server bundles
   serverExternalPackages: ["pdfkit", "@react-pdf/renderer"],
   experimental: {

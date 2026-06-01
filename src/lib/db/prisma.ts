@@ -12,7 +12,12 @@ const globalForPrisma = globalThis as unknown as {
 function getDbPath(): string {
   if (process.env.VERCEL) return "/tmp/dev.db";
   const url = (process.env.DATABASE_URL || "file:./dev.db").replace(/^"|"$/g, "");
-  return url.replace("file:", "");
+  let dbPath = url.replace("file:", "");
+  // Resolve relative paths against DATA_DIR (or cwd) for macOS app bundle support
+  if (!path.isAbsolute(dbPath)) {
+    dbPath = path.resolve(process.env.DATA_DIR || process.cwd(), dbPath);
+  }
+  return dbPath;
 }
 
 function ensureDbDir() {
@@ -50,8 +55,9 @@ async function initSchema(prisma: PrismaClient) {
   }
 
   console.log("[DB] Creating schema...");
-  const schemaPath = path.resolve(process.cwd(), "prisma/migrations/20260601043216_init/migration.sql");
-  if (!fs.existsSync(schemaPath)) { console.log("[DB] No migration file"); return; }
+  const rootDir = process.env.DATA_DIR || process.cwd();
+  const schemaPath = path.join(rootDir, "prisma/migrations/20260601043216_init/migration.sql");
+  if (!fs.existsSync(schemaPath)) { console.log("[DB] No migration file at", schemaPath); return; }
   const schema = fs.readFileSync(schemaPath, "utf8");
 
   // Execute each statement wrapped in BEGIN/COMMIT to avoid locking issues
@@ -65,7 +71,7 @@ async function initSchema(prisma: PrismaClient) {
   console.log("[DB] Schema created.");
 
   // Import herbs
-  const herbsPath = path.resolve(process.cwd(), "prisma/data/herbs.json");
+  const herbsPath = path.join(rootDir, "prisma/data/herbs.json");
   if (fs.existsSync(herbsPath)) {
     const herbs = JSON.parse(fs.readFileSync(herbsPath, "utf8"));
     console.log(`[DB] Importing ${herbs.length} herbs...`);
