@@ -30,14 +30,15 @@ export default function NewConsultationPage() {
   const [creatingPatient, setCreatingPatient] = useState(false);
   const [creatingConsultation, setCreatingConsultation] = useState(false);
 
-  // If patientId is in URL, auto-select
+  // If patientId is in URL, auto-select (only on mount / URL change)
+  const urlPatientId = searchParams.get("patientId");
   useEffect(() => {
-    const patientId = searchParams.get("patientId");
-    if (patientId) {
-      store.setPatientId(patientId);
+    if (urlPatientId) {
+      store.setPatientId(urlPatientId);
       store.setStep("tongue");
     }
-  }, [searchParams, store]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [urlPatientId]);
 
   // Patient search
   const searchPatients = useCallback(async (q: string) => {
