@@ -10,6 +10,7 @@ const globalForPrisma = globalThis as unknown as {
 };
 
 function getDbPath(): string {
+  if (process.env.VERCEL) return "/tmp/dev.db";
   const url = (process.env.DATABASE_URL || "file:./dev.db").replace(/^"|"$/g, "");
   return url.replace("file:", "");
 }
