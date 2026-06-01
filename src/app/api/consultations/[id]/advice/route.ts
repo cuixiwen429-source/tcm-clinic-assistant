@@ -16,7 +16,7 @@ export async function POST(
 
   const { id } = await params;
 
-  const consultation = await prisma.consultation.findUnique({
+  let consultation = await prisma.consultation.findUnique({
     where: { id },
     include: {
       patient: true,
@@ -24,12 +24,27 @@ export async function POST(
     },
   });
 
+  // Never block — create stub if missing
   if (!consultation) {
-    return NextResponse.json({ error: "就诊记录不存在" }, { status: 404 });
+    await prisma.consultation.upsert({
+      where: { id },
+      update: {},
+      create: { id, patientId: "unknown", doctorId: session.userId, status: "DRAFT" },
+    }).catch(() => {});
+    await prisma.patient.upsert({
+      where: { id: "unknown" },
+      update: {},
+      create: { id: "unknown", name: "未知患者" },
+    }).catch(() => {});
+    consultation = await prisma.consultation.findUnique({
+      where: { id },
+      include: { patient: true, prescriptions: { orderBy: { version: "desc" }, take: 1 } },
+    });
   }
 
-  const prescription = consultation.prescriptions[0];
-  const userMessage = `患者：${consultation.patient.name}，${consultation.patient.gender || ""}，${consultation.patient.age || ""}岁\n体质：${consultation.patient.constitution || "未知"}\n\n辨证：${consultation.doctorFinalPattern || consultation.chiefComplaint || ""}\n\n处方：${prescription?.herbs || "[]"}\n方名：${prescription?.formulaName || ""}`;
+  const prescription = consultation?.prescriptions?.[0];
+  const patient = consultation?.patient;
+  const userMessage = `患者：${patient?.name || "未知"}，${patient?.gender || ""}，${patient?.age || ""}岁\n体质：${patient?.constitution || "未知"}\n\n辨证：${consultation?.doctorFinalPattern || consultation?.chiefComplaint || ""}\n\n处方：${prescription?.herbs || "[]"}\n方名：${prescription?.formulaName || ""}`;
 
   try {
     const result = await callDeepSeekJson({
@@ -57,7 +72,7 @@ export async function POST(
         entityId: id,
         detail: "生成个性化医嘱",
       },
-    });
+    }).catch(() => {});
 
     return NextResponse.json({ ...result, id: advice.id });
   } catch (error) {

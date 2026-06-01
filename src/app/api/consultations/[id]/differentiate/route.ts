@@ -20,35 +20,49 @@ export async function POST(
   if (!session) return NextResponse.json({ error: "未登录" }, { status: 401 });
 
   const { id } = await params;
+  const body = await request.json().catch(() => ({})) as Record<string, unknown>;
 
-  const consultation = await prisma.consultation.findUnique({
+  const patientId = String(body.patientId || "unknown");
+  const patientName = String(body.patientName || "未知");
+  const patientGender = String(body.patientGender || "未知");
+  const patientAge = String(body.patientAge || "未知");
+  const patientConstitution = String(body.patientConstitution || "未知");
+
+  // Ensure patient + consultation exist — never block
+  await prisma.patient.upsert({
+    where: { id: patientId },
+    update: {},
+    create: {
+      id: patientId, name: patientName,
+      gender: patientGender || null,
+      age: typeof body.patientAge === "number" ? body.patientAge : null,
+      constitution: patientConstitution,
+    },
+  }).catch(() => {});
+
+  await prisma.consultation.upsert({
     where: { id },
-    include: { patient: true },
-  });
+    update: {},
+    create: {
+      id, patientId, doctorId: session.userId, status: "AI_ASSISTED",
+      editedHistory: typeof body.editedHistory === "string" ? body.editedHistory : undefined,
+      tongueAnalysis: typeof body.tongueAnalysis === "string" ? body.tongueAnalysis : undefined,
+      faceAnalysis: typeof body.faceAnalysis === "string" ? body.faceAnalysis : undefined,
+    },
+  }).catch(() => {});
 
-  if (!consultation || !consultation.editedHistory) {
-    return NextResponse.json(
-      { error: "请先完成病史结构化" },
-      { status: 400 }
-    );
-  }
+  // Build user message from request body (always available)
+  const editedHistory = (typeof body.editedHistory === "string" && body.editedHistory) ? body.editedHistory : JSON.stringify({ chief_complaint: "" });
 
-  // Include tongue/face analysis if available
   let analysisCtx = "";
-  if (consultation.tongueAnalysis) {
-    try {
-      const t = JSON.parse(consultation.tongueAnalysis);
-      analysisCtx += `\n\n【舌象AI分析】${JSON.stringify(t)}`;
-    } catch { /* ignore */ }
+  if (typeof body.tongueAnalysis === "string" && body.tongueAnalysis) {
+    try { analysisCtx += `\n\n【舌象AI分析】${JSON.stringify(JSON.parse(body.tongueAnalysis))}`; } catch { /* */ }
   }
-  if (consultation.faceAnalysis) {
-    try {
-      const f = JSON.parse(consultation.faceAnalysis);
-      analysisCtx += `\n\n【面象AI分析】${JSON.stringify(f)}`;
-    } catch { /* ignore */ }
+  if (typeof body.faceAnalysis === "string" && body.faceAnalysis) {
+    try { analysisCtx += `\n\n【面象AI分析】${JSON.stringify(JSON.parse(body.faceAnalysis))}`; } catch { /* */ }
   }
 
-  const userMessage = `患者：${consultation.patient.name}，${consultation.patient.gender || ""}，${consultation.patient.age || ""}岁。\n体质：${consultation.patient.constitution || "未知"}。${analysisCtx}\n\n结构化病史：\n${consultation.editedHistory}`;
+  const userMessage = `患者：${patientName}，${patientGender}，${patientAge}岁。\n体质：${patientConstitution}。${analysisCtx}\n\n结构化病史：\n${editedHistory}`;
 
   const systems = [
     { name: "huXishu", prompt: DIFFERENTIATE_HU_XISHU_PROMPT },
@@ -58,7 +72,6 @@ export async function POST(
   ];
 
   try {
-    // Run all 4 in parallel
     const results = await Promise.all(
       systems.map((s) =>
         callDeepSeekJson({
@@ -77,7 +90,6 @@ export async function POST(
 
     const [huXishu, zhangXichun, niHaixia, liKe] = results;
 
-    // Save to consultation
     await prisma.consultation.update({
       where: { id },
       data: {
@@ -86,7 +98,7 @@ export async function POST(
         niHaixiaAnalysis: JSON.stringify(niHaixia),
         liKeAnalysis: JSON.stringify(liKe),
       },
-    });
+    }).catch(() => {});
 
     await prisma.auditLog.create({
       data: {
@@ -96,7 +108,7 @@ export async function POST(
         entityId: id,
         detail: "四大体系AI辨证",
       },
-    });
+    }).catch(() => {});
 
     return NextResponse.json({ huXishu, zhangXichun, niHaixia, liKe });
   } catch (error) {

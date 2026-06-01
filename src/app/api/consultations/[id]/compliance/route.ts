@@ -10,7 +10,9 @@ export async function POST(
   if (!session) return NextResponse.json({ error: "未登录" }, { status: 401 });
 
   const { id } = await params;
-  const { prescriptionId, herbs } = await request.json();
+  const body = await request.json() as Record<string, unknown>;
+  const prescriptionId = body.prescriptionId as string | undefined;
+  const herbs = body.herbs as Array<{ name: string; dose: number }> | undefined;
 
   if (!herbs || !Array.isArray(herbs) || herbs.length === 0) {
     return NextResponse.json({ checks: [] });
@@ -21,12 +23,8 @@ export async function POST(
     include: { patient: true },
   });
 
-  if (!consultation) {
-    return NextResponse.json({ error: "就诊记录不存在" }, { status: 404 });
-  }
-
-  const patient = consultation.patient;
-  const herbNames = herbs.map((h: { name: string }) => h.name);
+  const patient = consultation?.patient;
+  const herbNames = herbs.map((h) => h.name);
   const checks: Array<{
     checkType: string;
     herbName: string;
@@ -45,7 +43,6 @@ export async function POST(
   });
 
   for (const rule of rules) {
-    // Only flag if both herbs are in the prescription
     if (rule.herbB && herbNames.includes(rule.herbB)) {
       checks.push({
         checkType: rule.ruleType,
@@ -58,7 +55,7 @@ export async function POST(
   }
 
   // 2. Check pregnancy contraindications
-  if (patient.gender === "女") {
+  if (patient && patient.gender === "女") {
     const pregnancyRules = await prisma.complianceRule.findMany({
       where: {
         ruleType: "PREGNANCY",
@@ -108,9 +105,7 @@ export async function POST(
 
   // Save checks to DB if prescriptionId provided
   if (prescriptionId) {
-    // Delete old checks
-    await prisma.complianceCheck.deleteMany({ where: { prescriptionId } });
-    // Create new checks
+    await prisma.complianceCheck.deleteMany({ where: { prescriptionId } }).catch(() => {});
     for (const check of checks) {
       await prisma.complianceCheck.create({
         data: {
@@ -121,7 +116,7 @@ export async function POST(
           severity: check.severity,
           detail: check.detail,
         },
-      });
+      }).catch(() => {});
     }
   }
 

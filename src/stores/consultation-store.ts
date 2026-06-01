@@ -31,6 +31,14 @@ interface ConsultationState {
   consultationId: string | null;
   patientId: string | null;
 
+  // Patient context (pass to API routes for Vercel cold-start resilience)
+  patientName: string;
+  patientGender: string | null;
+  patientAge: number | null;
+  patientAllergies: string;
+  patientChronicDisease: string;
+  patientConstitution: string;
+
   // Transcription
   rawText: string;
   structuredHistory: Record<string, unknown> | null;
@@ -57,6 +65,7 @@ interface ConsultationState {
   setStep: (step: WizardStep) => void;
   setConsultationId: (id: string) => void;
   setPatientId: (id: string) => void;
+  setPatientInfo: (info: { name: string; gender: string | null; age: number | null; allergies?: string; chronicDisease?: string; constitution?: string }) => void;
   setRawText: (textOrFn: string | ((prev: string) => string)) => void;
   setStructuredHistory: (history: Record<string, unknown> | null) => void;
   setIsTranscribing: (v: boolean) => void;
@@ -78,6 +87,12 @@ const initialState = {
   step: "patient" as WizardStep,
   consultationId: null,
   patientId: null,
+  patientName: "",
+  patientGender: null,
+  patientAge: null,
+  patientAllergies: "",
+  patientChronicDisease: "",
+  patientConstitution: "",
   rawText: "",
   structuredHistory: null,
   isTranscribing: false,
@@ -99,6 +114,14 @@ export const useConsultationStore = create<ConsultationState>((set) => ({
   setStep: (step) => set({ step }),
   setConsultationId: (id) => set({ consultationId: id }),
   setPatientId: (id) => set({ patientId: id }),
+  setPatientInfo: (info) => set({
+    patientName: info.name,
+    patientGender: info.gender,
+    patientAge: info.age,
+    patientAllergies: info.allergies || "",
+    patientChronicDisease: info.chronicDisease || "",
+    patientConstitution: info.constitution || "",
+  }),
   setRawText: (textOrFn: string | ((prev: string) => string)) => set((state) => ({ rawText: typeof textOrFn === "function" ? textOrFn(state.rawText) : textOrFn })),
   setStructuredHistory: (history) => set({ structuredHistory: history }),
   setIsTranscribing: (v) => set({ isTranscribing: v }),

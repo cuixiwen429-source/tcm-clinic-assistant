@@ -1,5 +1,8 @@
-// Volcengine HTTP-based ASR (non-streaming) — works on Vercel serverless
-// Replaces the WebSocket approach which is incompatible with serverless runtimes.
+// Volcengine ASR — 大模型录音文件极速版 (synchronous HTTP, Vercel serverless compatible)
+// POST /api/v3/auc/bigmodel/recognize/flash — base64 audio in JSON, header auth.
+// Docs: https://www.volcengine.com/docs/6561/1631584
+
+import { randomUUID } from "crypto";
 
 export async function recognizePcm(pcmData: Buffer, language: string): Promise<string> {
   const appId = process.env.VOLCENGINE_APP_ID;
@@ -8,51 +11,68 @@ export async function recognizePcm(pcmData: Buffer, language: string): Promise<s
 
   console.log("[ASR] HTTP request — audio:", pcmData.length, "bytes, lang:", language);
 
-  // Build WAV from raw PCM
+  // Build WAV from raw PCM, then base64-encode
   const wav = pcmToWav(pcmData, 16000);
+  const base64Audio = Buffer.from(wav).toString("base64");
 
-  const form = new FormData();
-  form.set("appid", appId);
-  form.set("token", accessToken);
-  form.set("cluster", "volcengine_input_common");
-  form.set("format", "wav");
-  form.set("rate", "16000");
-  form.set("language", language);
-  form.set("bits", "16");
-  form.set("channel", "1");
-  form.set("audio", new Blob([new Uint8Array(wav)], { type: "audio/wav" }), "audio.wav");
-
-  const res = await fetch("https://openspeech.bytedance.com/api/v1/asr", {
-    method: "POST",
-    body: form,
-    signal: AbortSignal.timeout(8000),
+  const body = JSON.stringify({
+    user: { uid: appId },
+    audio: { data: base64Audio },
+    request: { model_name: "bigmodel" },
   });
 
-  if (!res.ok) {
-    const errText = await res.text().catch(() => "");
-    console.error("[ASR] HTTP error:", res.status, errText);
-    throw new Error(`语音识别失败 (${res.status})`);
+  const t0 = performance.now();
+  let res: Response;
+  try {
+    res = await fetch("https://openspeech.bytedance.com/api/v3/auc/bigmodel/recognize/flash", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Api-App-Key": appId,
+        "X-Api-Access-Key": accessToken,
+        "X-Api-Resource-Id": "volc.bigasr.auc_turbo",
+        "X-Api-Request-Id": randomUUID(),
+        "X-Api-Sequence": "-1",
+      },
+      body,
+      signal: AbortSignal.timeout(300000),
+    });
+  } catch (err) {
+    const ms = (performance.now() - t0).toFixed(0);
+    console.error(`[ASR] Fetch failed after ${ms}ms:`, err);
+    throw new Error(`语音服务连接失败 (${err instanceof Error ? err.message : "网络错误"})`);
   }
 
-  const data = await res.json();
-  console.log("[ASR] Raw response:", JSON.stringify(data).substring(0, 300));
+  const ms = (performance.now() - t0).toFixed(0);
+  const statusCode = res.headers.get("X-Api-Status-Code");
+  const rawBody = await res.text().catch(() => "");
+  console.log(`[ASR] HTTP ${res.status} X-Api-Status-Code=${statusCode} time=${ms}ms`);
+  console.log("[ASR] Raw response:", rawBody.substring(0, 600));
 
-  // Parse response — format: { result: [{ text: "..." }], ... } or { text: "..." }
-  if (data.result) {
-    if (Array.isArray(data.result)) {
-      const texts = data.result.map((r: { text?: string }) => r.text || "").filter(Boolean);
-      return texts.join("");
+  let data: Record<string, unknown> = {};
+  try { data = JSON.parse(rawBody); } catch { /* not JSON */ }
+
+  if (!res.ok || (statusCode && !statusCode.startsWith("2000"))) {
+    const errMsg = (data as Record<string, unknown>)?.message
+      || (data as Record<string, unknown>)?.error
+      || `HTTP ${res.status} / ${statusCode}`;
+    console.error("[ASR] API error:", errMsg);
+    throw new Error(`语音识别失败: ${errMsg}`);
+  }
+
+  // Parse: { result: { text: "...", utterances: [...] } }
+  const result = (data as Record<string, unknown>)?.result;
+  if (result && typeof result === "object") {
+    const r = result as Record<string, unknown>;
+    if (typeof r.text === "string" && r.text) return r.text;
+    if (Array.isArray(r.utterances)) {
+      const joined = (r.utterances as Array<{ text?: string }>)
+        .map((u) => u.text || "").join("");
+      if (joined) return joined;
     }
-    if (typeof data.result === "string") return data.result;
   }
-  if (data.text && typeof data.text === "string") return data.text;
-  if (data.response && typeof data.response === "string") return data.response;
 
-  // Try nested paths
-  const text = data?.result?.text || data?.payload_msg?.result?.[0]?.text || "";
-  if (text) return text;
-
-  console.error("[ASR] Unexpected response format:", JSON.stringify(data));
+  console.error("[ASR] Unexpected response format:", rawBody.substring(0, 500));
   throw new Error("语音识别未返回有效文本");
 }
 

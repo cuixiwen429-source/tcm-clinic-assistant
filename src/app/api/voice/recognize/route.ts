@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/jwt";
 import { recognizePcm } from "@/lib/voice/doubao-server";
 
-export const maxDuration = 60;
+export const maxDuration = 300; // 5 minutes (requires Vercel Pro)
 
 export async function POST(request: NextRequest) {
   const session = await getSession();

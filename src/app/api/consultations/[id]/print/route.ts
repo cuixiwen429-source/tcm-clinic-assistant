@@ -29,18 +29,22 @@ export async function GET(
   });
 
   if (!consultation) {
-    return NextResponse.json({ error: "就诊记录不存在" }, { status: 404 });
+    return NextResponse.json({
+      patient: { name: "", gender: null, age: null, phone: null },
+      diagnosis: { chiefComplaint: null, pattern: null, pathogenesis: null },
+      prescription: null,
+      advice: null,
+    });
   }
 
   const prescription = consultation.prescriptions[0];
 
-  // Build print-safe data (NO prices, costs, internal risk levels)
   const printData = {
     patient: {
-      name: consultation.patient.name,
-      gender: consultation.patient.gender,
-      age: consultation.patient.age,
-      phone: consultation.patient.phone,
+      name: consultation.patient?.name,
+      gender: consultation.patient?.gender,
+      age: consultation.patient?.age,
+      phone: consultation.patient?.phone,
     },
     diagnosis: {
       chiefComplaint: consultation.chiefComplaint,
@@ -63,7 +67,6 @@ export async function GET(
       : null,
   };
 
-  // Log print action
   await prisma.auditLog.create({
     data: {
       userId: session.userId,
@@ -72,7 +75,7 @@ export async function GET(
       entityId: id,
       detail: "打印/预览处方",
     },
-  });
+  }).catch(() => {});
 
   return NextResponse.json(printData);
 }

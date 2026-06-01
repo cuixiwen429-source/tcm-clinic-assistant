@@ -29,16 +29,56 @@ function NewConsultationContent() {
   const [showNewPatient, setShowNewPatient] = useState(false);
   const [creatingPatient, setCreatingPatient] = useState(false);
   const [creatingConsultation, setCreatingConsultation] = useState(false);
+  const [autoCreating, setAutoCreating] = useState(!!searchParams.get("patientId"));
 
-  // If patientId is in URL, auto-select (only on mount / URL change)
+  // If patientId is in URL, auto-select and create consultation before showing any step
   const urlPatientId = searchParams.get("patientId");
   useEffect(() => {
-    if (urlPatientId) {
-      store.setPatientId(urlPatientId);
-      store.setStep("tongue");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [urlPatientId]);
+    if (!urlPatientId) return;
+    store.setPatientId(urlPatientId);
+    setCreatingConsultation(true);
+
+    // Fetch patient info first (needed for Vercel cold-start resilience in later steps)
+    fetch(`/api/patients/${urlPatientId}`)
+      .then(async (res) => {
+        if (res.ok) {
+          const p = await res.json();
+          store.setPatientInfo({
+            name: p.name, gender: p.gender, age: p.age,
+            allergies: p.allergies, chronicDisease: p.chronicDisease, constitution: p.constitution,
+          });
+        }
+      })
+      .catch(() => { /* non-critical */ })
+      .then(() =>
+        fetch("/api/consultations", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ patientId: urlPatientId }),
+        })
+      )
+      .then(async (res) => {
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({ error: "创建就诊失败" }));
+          throw new Error(errData.error || "创建就诊失败");
+        }
+        return res.json();
+      })
+      .then((consultation) => {
+        store.setConsultationId(consultation.id);
+        store.setStep("tongue");
+      })
+      .catch((err) => {
+        toast.error(err.message || "创建就诊失败");
+        store.setStep("patient");
+      })
+      .finally(() => {
+        setCreatingConsultation(false);
+        setAutoCreating(false);
+      });
+  // Only run on mount
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Patient search
   const searchPatients = useCallback(async (q: string) => {
@@ -71,6 +111,7 @@ function NewConsultationContent() {
       if (!res.ok) { toast.error("创建患者失败"); return; }
       const patient = await res.json();
       store.setPatientId(patient.id);
+      store.setPatientInfo({ name: patient.name, gender: patient.gender, age: patient.age, allergies: patient.allergies, chronicDisease: patient.chronicDisease, constitution: patient.constitution });
       setShowNewPatient(false);
       setCreatingPatient(false);
       // Create consultation
@@ -82,7 +123,7 @@ function NewConsultationContent() {
     }
   };
 
-  const createConsultation = async (patientId: string) => {
+  async function createConsultation(patientId: string) {
     setCreatingConsultation(true);
     try {
       const res = await fetch("/api/consultations", {
@@ -103,22 +144,37 @@ function NewConsultationContent() {
     } finally {
       setCreatingConsultation(false);
     }
-  };
+  }
 
-  const selectPatient = async (patientId: string) => {
-    store.setPatientId(patientId);
-    await createConsultation(patientId);
+  const selectPatient = async (p: { id: string; name: string; gender: string | null; age: number | null; allergies?: string; chronicDisease?: string }) => {
+    store.setPatientId(p.id);
+    store.setPatientInfo({ name: p.name, gender: p.gender, age: p.age, allergies: p.allergies, chronicDisease: p.chronicDisease });
+    await createConsultation(p.id);
   };
 
   // Step 4: Transcribe
   const handleTranscribe = async () => {
+    if (!store.consultationId) {
+      toast.error("就诊记录未创建，请返回上一步重新选择患者");
+      return;
+    }
     if (!store.rawText.trim() || store.rawText.trim().length < 10) {
       toast.error("请输入至少10个字符的问诊内容");
       return;
     }
     store.setIsTranscribing(true);
     try {
-      const body: Record<string, unknown> = { rawText: store.rawText };
+      const body: Record<string, unknown> = {
+        rawText: store.rawText,
+        // Patient context for Vercel cold-start resilience
+        patientId: store.patientId,
+        patientName: store.patientName,
+        patientGender: store.patientGender,
+        patientAge: store.patientAge,
+        patientAllergies: store.patientAllergies,
+        patientChronicDisease: store.patientChronicDisease,
+        patientConstitution: store.patientConstitution,
+      };
       // Include tongue/face analysis as additional context for AI
       if (store.tongueAnalysis) body.tongueAnalysis = store.tongueAnalysis;
       if (store.faceAnalysis) body.faceAnalysis = store.faceAnalysis;
@@ -148,6 +204,7 @@ function NewConsultationContent() {
     if (!store.consultationId || !store.structuredHistory) return;
     try {
       const body: Record<string, unknown> = {
+        patientId: store.patientId,
         editedHistory: JSON.stringify(store.structuredHistory),
         chiefComplaint: (store.structuredHistory as Record<string, unknown>).chief_complaint,
         presentIllness: (store.structuredHistory as Record<string, unknown>).present_illness,
@@ -167,6 +224,18 @@ function NewConsultationContent() {
       toast.error("保存失败");
     }
   };
+
+  // Loading: auto-creating consultation from patient page
+  if (autoCreating) {
+    return (
+      <div className="flex items-center justify-center p-12">
+        <div className="text-center space-y-3">
+          <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
+          <p className="text-muted-foreground">正在创建就诊记录...</p>
+        </div>
+      </div>
+    );
+  }
 
   // STEP 1: Patient Selection
   if (store.step === "patient") {
@@ -234,7 +303,7 @@ function NewConsultationContent() {
                           >
                             查看历史
                           </Button>
-                          <Button size="sm" onClick={() => selectPatient(p.id)} disabled={creatingConsultation}>
+                          <Button size="sm" onClick={() => selectPatient(p)} disabled={creatingConsultation}>
                             {creatingConsultation ? <Loader2 className="h-4 w-4 animate-spin" /> : "选择"}
                           </Button>
                         </div>
@@ -310,14 +379,19 @@ function NewConsultationContent() {
     const handleConfirmTongue = async () => {
       if (!store.consultationId) return;
       try {
-        await fetch(`/api/consultations/${store.consultationId}`, {
+        const res = await fetch(`/api/consultations/${store.consultationId}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
+            patientId: store.patientId,
             tongueImage: store.tongueImage,
             tongueAnalysis: JSON.stringify(store.tongueAnalysis),
           }),
         });
+        if (!res.ok) {
+          toast.error("保存舌象失败");
+          return;
+        }
         toast.success("舌象分析已确认");
         store.setStep("face");
       } catch {
@@ -477,14 +551,19 @@ function NewConsultationContent() {
     const handleConfirmFace = async () => {
       if (!store.consultationId) return;
       try {
-        await fetch(`/api/consultations/${store.consultationId}`, {
+        const res = await fetch(`/api/consultations/${store.consultationId}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
+            patientId: store.patientId,
             faceImage: store.faceImage,
             faceAnalysis: JSON.stringify(store.faceAnalysis),
           }),
         });
+        if (!res.ok) {
+          toast.error("保存面相失败");
+          return;
+        }
         toast.success("面相分析已确认");
         store.setStep("transcribe");
       } catch {

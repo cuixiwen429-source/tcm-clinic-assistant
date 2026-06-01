@@ -70,9 +70,6 @@ export default function AIAssistancePage() {
             }
           }
         }
-      } else {
-        toast.error("就诊记录不存在");
-        router.push("/consultations/new");
       }
     } catch { toast.error("加载失败"); }
     finally { setLoading(false); }
@@ -81,7 +78,22 @@ export default function AIAssistancePage() {
   const handleDifferentiate = async () => {
     setDifferentiating(true);
     try {
-      const res = await fetch(`/api/consultations/${consultationId}/differentiate`, { method: "POST" });
+      const patient = consultation?.patient as Record<string, unknown> | undefined;
+      const body: Record<string, unknown> = {
+        editedHistory: consultation?.editedHistory,
+        patientName: patient?.name,
+        patientGender: patient?.gender,
+        patientAge: patient?.age,
+        patientConstitution: patient?.constitution,
+        tongueAnalysis: consultation?.tongueAnalysis,
+        faceAnalysis: consultation?.faceAnalysis,
+        patientId: consultation?.patientId,
+      };
+      const res = await fetch(`/api/consultations/${consultationId}/differentiate`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
       if (!res.ok) { toast.error("AI辨证失败"); return; }
       const data = await res.json();
       setDifferentiations(data);
@@ -93,7 +105,28 @@ export default function AIAssistancePage() {
   const handleGenerateFormula = async () => {
     setGeneratingFormula(true);
     try {
-      const res = await fetch(`/api/consultations/${consultationId}/formula`, { method: "POST" });
+      const patient = consultation?.patient as Record<string, unknown> | undefined;
+      const body: Record<string, unknown> = {
+        patientName: patient?.name,
+        patientGender: patient?.gender,
+        patientAge: patient?.age,
+        patientConstitution: patient?.constitution,
+        tongueAnalysis: consultation?.tongueAnalysis,
+        faceAnalysis: consultation?.faceAnalysis,
+        editedHistory: consultation?.editedHistory,
+        huXishuAnalysis: consultation?.huXishuAnalysis,
+        zhangXichunAnalysis: consultation?.zhangXichunAnalysis,
+        niHaixiaAnalysis: consultation?.niHaixiaAnalysis,
+        liKeAnalysis: consultation?.liKeAnalysis,
+        doctorFinalPattern: consultation?.doctorFinalPattern,
+        doctorFinalPathogenesis: consultation?.doctorFinalPathogenesis,
+        patientId: consultation?.patientId,
+      };
+      const res = await fetch(`/api/consultations/${consultationId}/formula`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
       if (!res.ok) { toast.error("AI选方失败"); return; }
       const data = await res.json();
       setFormulas(data);
@@ -134,7 +167,7 @@ export default function AIAssistancePage() {
       const res = await fetch(`/api/consultations/${consultationId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ doctorFinalPattern: finalPattern.trim() }),
+        body: JSON.stringify({ patientId: consultation?.patientId, doctorFinalPattern: finalPattern.trim() }),
       });
       if (!res.ok) { toast.error("保存诊断失败"); return; }
       const updated = { ...(consultation || {}), doctorFinalPattern: finalPattern.trim() };
@@ -151,10 +184,28 @@ export default function AIAssistancePage() {
     }
     setSupplementing(true);
     try {
+      const patient = consultation?.patient as Record<string, unknown> | undefined;
+      const body: Record<string, unknown> = {
+        supplementText,
+        patientId: consultation?.patientId,
+        patientName: patient?.name,
+        patientGender: patient?.gender,
+        patientAge: patient?.age,
+        patientConstitution: patient?.constitution,
+        patientAllergies: patient?.allergies,
+        patientChronicDisease: patient?.chronicDisease,
+        editedHistory: consultation?.editedHistory,
+        chiefComplaint: consultation?.chiefComplaint,
+        presentIllness: consultation?.presentIllness,
+        symptomSummary: consultation?.symptomSummary,
+        constitution: consultation?.constitution,
+        tongueAnalysis: consultation?.tongueAnalysis,
+        faceAnalysis: consultation?.faceAnalysis,
+      };
       const res = await fetch(`/api/consultations/${consultationId}/synthesize`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ supplementText }),
+        body: JSON.stringify(body),
       });
       if (!res.ok) {
         const data = await res.json();
