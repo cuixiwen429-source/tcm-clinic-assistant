@@ -17,7 +17,6 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { Search, Plus, Loader2, ChevronRight } from "lucide-react";
 import { format } from "date-fns";
-import { zhCN } from "date-fns/locale";
 
 interface Patient {
   id: string;

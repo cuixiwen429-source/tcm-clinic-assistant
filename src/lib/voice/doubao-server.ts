@@ -68,13 +68,16 @@ function parseResponse(data: Buffer): { text: string; isFinal: boolean } | { err
   let json: Record<string, unknown>;
   try { json = JSON.parse(payload.toString("utf-8")); } catch { return null; }
 
+  console.log("[ASR] Parsed JSON:", JSON.stringify(json).substring(0, 300));
+
   // Error: type 0xF (0b1111) or JSON error
   if (msgType === 0xf || json.type === "error") {
     return { error: (json.error as string) || (json.header as Record<string, unknown>)?.["message"] as string || "ASR error" };
   }
 
-  // ASR result: type 0x9 (0b1001)
-  const result = json.result;
+  // Try nested payload_msg.result first (bigmodel v3 format), then json.result
+  const payloadMsg = json.payload_msg as Record<string, unknown> | undefined;
+  const result = payloadMsg?.result || json.result;
   if (!result) return null;
 
   const texts: string[] = [];
@@ -90,7 +93,11 @@ function parseResponse(data: Buffer): { text: string; isFinal: boolean } | { err
   const text = texts.join("");
   if (!text) return null;
 
-  return { text, isFinal: json.type === "final" };
+  // bigmodel v3 uses "final_result" or "speech_end" type, or payload_msg.type
+  const msgType2 = (json.type as string) || (payloadMsg?.type as string) || "";
+  const isFinal = msgType2 === "final" || msgType2 === "final_result" || msgType2 === "speech_end";
+
+  return { text, isFinal };
 }
 
 export async function recognizePcm(pcmData: Buffer, language: string): Promise<string> {
@@ -147,21 +154,31 @@ export async function recognizePcm(pcmData: Buffer, language: string): Promise<s
     });
 
     ws.on("message", (data: Buffer) => {
-      console.log("[ASR] Raw response:", data.length, "bytes, hex:", data.subarray(0, Math.min(16, data.length)).toString("hex"));
+      // Binary flags: bit 0x1 = has data, bit 0x2 = final
+      const flags = data.length >= 2 ? data.readUInt8(1) & 0x0f : 0;
+      const isFinalFromFlags = (flags & 0x2) !== 0;
+      console.log("[ASR] Raw response:", data.length, "bytes, flags:", flags.toString(16), "hex:", data.subarray(0, Math.min(16, data.length)).toString("hex"));
+
       const r = parseResponse(data);
-      if (!r) return;
+      if (!r) {
+        if (isFinalFromFlags) finish(null);
+        return;
+      }
 
       if ("error" in r) {
         finish(new Error(r.error));
         return;
       }
 
-      console.log("[ASR] Text:", r.text, "final:", r.isFinal);
+      console.log("[ASR] Text:", r.text, "final:", r.isFinal, "flagsFinal:", isFinalFromFlags);
       if (r.text) results.push(r.text);
-      if (r.isFinal) finish(null);
+      if (r.isFinal || isFinalFromFlags) finish(null);
     });
 
-    ws.on("close", () => finish(new Error("连接意外关闭")));
+    ws.on("close", (code: number) => {
+      console.log("[ASR] Connection closed, code:", code);
+      if (!settled) finish(null);
+    });
     ws.on("error", (err: Error) => finish(new Error(`连接错误: ${err.message}`)));
 
     setTimeout(() => finish(new Error("识别超时")), 15000);

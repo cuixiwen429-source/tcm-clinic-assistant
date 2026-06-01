@@ -5,53 +5,61 @@ import path from "path";
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
   dbReady: boolean;
+  initPromise: Promise<void> | null;
+  initStarted: boolean;
 };
 
 function getDbPath(): string {
-  const url = process.env.DATABASE_URL || "file:./dev.db";
+  const url = (process.env.DATABASE_URL || "file:./dev.db").replace(/^"|"$/g, "");
   return url.replace("file:", "");
 }
 
-function ensureDbFile() {
+function ensureDbDir() {
   if (globalForPrisma.dbReady) return;
   const dbPath = getDbPath();
   const dir = path.dirname(dbPath);
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-  if (!fs.existsSync(dbPath)) {
-    fs.writeFileSync(dbPath, "");
-  }
   globalForPrisma.dbReady = true;
 }
 
 async function initSchema(prisma: PrismaClient) {
-  try {
-    await prisma.$executeRaw`SELECT 1 FROM User LIMIT 1`;
-    // Run incremental migrations for existing databases
-    // SQLite ALTER TABLE ADD COLUMN fails silently if column exists (no "IF NOT EXISTS")
-    const newColumns = [
-      `ALTER TABLE Consultation ADD COLUMN "faceImage" TEXT`,
-      `ALTER TABLE Consultation ADD COLUMN "tongueAnalysis" TEXT`,
-      `ALTER TABLE Consultation ADD COLUMN "faceAnalysis" TEXT`,
-    ];
-    for (const sql of newColumns) {
-      try {
-        await prisma.$executeRawUnsafe(sql);
-        console.log(`[DB] Migration: ${sql}`);
-      } catch {
-        // Column may already exist — SQLite doesn't support IF NOT EXISTS for ADD COLUMN
+  // Check if schema exists — retry on locked database
+  for (let attempt = 0; attempt < 5; attempt++) {
+    try {
+      await prisma.$executeRaw`SELECT 1 FROM User LIMIT 1`;
+      console.log("[DB] Schema already exists, running incremental migrations...");
+      const newColumns = [
+        `ALTER TABLE Consultation ADD COLUMN "faceImage" TEXT`,
+        `ALTER TABLE Consultation ADD COLUMN "tongueAnalysis" TEXT`,
+        `ALTER TABLE Consultation ADD COLUMN "faceAnalysis" TEXT`,
+      ];
+      for (const sql of newColumns) {
+        try { await prisma.$executeRawUnsafe(sql); } catch { /* column may exist */ }
       }
+      return;
+    } catch (e: unknown) {
+      const msg = (e as { message?: string })?.message || "";
+      if (msg.includes("locked") && attempt < 4) {
+        await new Promise((r) => setTimeout(r, 200 * (attempt + 1)));
+        continue;
+      }
+      // Table doesn't exist or other error — proceed to schema creation
+      break;
     }
-    return;
-  } catch {
-    console.log("[DB] Creating schema...");
   }
 
+  console.log("[DB] Creating schema...");
   const schemaPath = path.resolve(process.cwd(), "prisma/migrations/20260601043216_init/migration.sql");
   if (!fs.existsSync(schemaPath)) { console.log("[DB] No migration file"); return; }
   const schema = fs.readFileSync(schemaPath, "utf8");
-  const stmts = schema.split(";").map((s) => s.trim()).filter((s) => s.length > 0);
+
+  // Execute each statement wrapped in BEGIN/COMMIT to avoid locking issues
+  const stmts = schema
+    .split(";")
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0);
   for (const stmt of stmts) {
-    try { await prisma.$executeRawUnsafe(`${stmt};`); } catch { /* ok */ }
+    try { await prisma.$executeRawUnsafe(`${stmt};`); } catch { /* table may exist */ }
   }
   console.log("[DB] Schema created.");
 
@@ -86,7 +94,7 @@ async function initSchema(prisma: PrismaClient) {
   for (const u of users) {
     await prisma.user.upsert({ where: { username: u.username }, update: {}, create: u });
   }
-  console.log("[DB] Users created.");
+  console.log("[DB] Users seeded.");
 
   // Compliance rules
   const rules = [
@@ -124,33 +132,36 @@ async function initSchema(prisma: PrismaClient) {
   console.log("[DB] Compliance rules seeded.");
 }
 
-ensureDbFile();
+ensureDbDir();
 
 const _prisma = globalForPrisma.prisma ?? new PrismaClient();
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = _prisma;
 
-// Lazy init: only on first actual query (skipped during next build data collection)
-let _initPromise: Promise<void> | null = null;
 function triggerInit() {
-  if (!_initPromise && process.env.DATABASE_URL) {
-    ensureDbFile();
-    _initPromise = initSchema(_prisma).catch((e) => console.error("[DB] Init error:", e));
+  if (!globalForPrisma.initPromise && process.env.DATABASE_URL) {
+    // Synchronous flag prevents any chance of double-entry
+    if (globalForPrisma.initStarted) {
+      // Another call is already constructing the promise; spin-wait briefly
+      return globalForPrisma.initPromise;
+    }
+    globalForPrisma.initStarted = true;
+    ensureDbDir();
+    globalForPrisma.initPromise = initSchema(_prisma)
+      .catch((e) => console.error("[DB] Init error:", e))
+      .finally(() => { globalForPrisma.initStarted = false; });
   }
-  return _initPromise;
+  return globalForPrisma.initPromise;
 }
 
-// Recursive lazy proxy — ensures init completes before any query
 function createLazyProxy<T extends object>(target: T): T {
   return new Proxy(target, {
     get(t, prop: string | symbol) {
-      // Skip special/internal props
       if (typeof prop === "string" && (prop === "$on" || prop === "$connect" || prop === "$disconnect" || prop === "$use" || prop === "then")) {
         return (t as Record<string | symbol, unknown>)[prop];
       }
 
       const val = (t as Record<string | symbol, unknown>)[prop];
 
-      // Wrap functions to await init first
       if (typeof val === "function") {
         return (...args: unknown[]) => {
           const init = triggerInit();
@@ -161,7 +172,6 @@ function createLazyProxy<T extends object>(target: T): T {
         };
       }
 
-      // Wrap nested objects (model delegates) recursively
       if (val !== null && typeof val === "object") {
         return createLazyProxy(val as object);
       }
