@@ -12,9 +12,10 @@ async function main() {
   const assistantPassword = await bcrypt.hash("assistant123", 10);
 
   const admin = await prisma.user.upsert({
-    where: { username: "admin" },
-    update: {},
+    where: { id: "user-admin" },
+    update: { username: "admin", password: adminPassword, name: "系统管理员", role: "ADMIN", phone: "13800000000" },
     create: {
+      id: "user-admin",
       username: "admin",
       password: adminPassword,
       name: "系统管理员",
@@ -25,9 +26,10 @@ async function main() {
   console.log("Created admin user:", admin.username);
 
   const doctor = await prisma.user.upsert({
-    where: { username: "doctor" },
-    update: {},
+    where: { id: "user-doctor" },
+    update: { username: "doctor", password: doctorPassword, name: "张医师", role: "DOCTOR", phone: "13800000001" },
     create: {
+      id: "user-doctor",
       username: "doctor",
       password: doctorPassword,
       name: "张医师",
@@ -38,9 +40,10 @@ async function main() {
   console.log("Created doctor user:", doctor.username);
 
   const assistant = await prisma.user.upsert({
-    where: { username: "assistant" },
-    update: {},
+    where: { id: "user-assistant" },
+    update: { username: "assistant", password: assistantPassword, name: "李助理", role: "ASSISTANT", phone: "13800000002" },
     create: {
+      id: "user-assistant",
       username: "assistant",
       password: assistantPassword,
       name: "李助理",

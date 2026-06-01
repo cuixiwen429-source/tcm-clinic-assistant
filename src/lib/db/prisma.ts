@@ -84,16 +84,20 @@ async function initSchema(prisma: PrismaClient) {
     console.log("[DB] Herbs imported.");
   }
 
-  // Default users
+  // Default users — use deterministic IDs so JWTs survive Vercel cold starts
   const bcrypt = await import("bcryptjs");
   const hash = (pw: string) => bcrypt.default.hashSync(pw, 10);
   const users = [
-    { username: "admin", password: hash("admin123"), name: "系统管理员", role: "ADMIN", phone: "13800000000" },
-    { username: "doctor", password: hash("doctor123"), name: "张医师", role: "DOCTOR", phone: "13800000001" },
-    { username: "assistant", password: hash("assistant123"), name: "李助理", role: "ASSISTANT", phone: "13800000002" },
+    { id: "user-admin", username: "admin", password: hash("admin123"), name: "系统管理员", role: "ADMIN", phone: "13800000000" },
+    { id: "user-doctor", username: "doctor", password: hash("doctor123"), name: "张医师", role: "DOCTOR", phone: "13800000001" },
+    { id: "user-assistant", username: "assistant", password: hash("assistant123"), name: "李助理", role: "ASSISTANT", phone: "13800000002" },
   ];
   for (const u of users) {
-    await prisma.user.upsert({ where: { username: u.username }, update: {}, create: u });
+    await prisma.user.upsert({
+      where: { id: u.id },
+      create: u,
+      update: { username: u.username, password: u.password, name: u.name, role: u.role, phone: u.phone },
+    });
   }
   console.log("[DB] Users seeded.");
 

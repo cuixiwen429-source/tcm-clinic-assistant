@@ -1,5 +1,6 @@
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
+import { prisma } from "@/lib/db/prisma";
 
 const JWT_SECRET = new TextEncoder().encode(
   process.env.JWT_SECRET || "dev-secret-change-in-production"
@@ -36,7 +37,26 @@ export async function getSession(): Promise<JWTPayload | null> {
   const cookieStore = await cookies();
   const token = cookieStore.get(COOKIE_NAME)?.value;
   if (!token) return null;
-  return verifyJWT(token);
+  const payload = await verifyJWT(token);
+  if (!payload) return null;
+
+  // Verify user exists in DB (handles Vercel cold starts where DB was re-created)
+  const user = await prisma.user.findUnique({ where: { id: payload.userId } });
+  if (user) return payload;
+
+  // Cold start recovery: user IDs may have changed, fall back to username
+  const recovered = await prisma.user.findUnique({ where: { username: payload.username } });
+  if (recovered) {
+    return { userId: recovered.id, username: recovered.username, role: recovered.role, name: recovered.name };
+  }
+
+  return null;
+}
+
+/** Validate session with cold-start recovery: if userId not found (DB was reset),
+ *  fall back to username lookup. Returns updated session or null. */
+export async function getValidatedSession(): Promise<JWTPayload | null> {
+  return getSession();
 }
 
 export async function setSessionCookie(token: string): Promise<void> {

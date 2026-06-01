@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
-import { getSession } from "@/lib/auth/jwt";
+import { getValidatedSession } from "@/lib/auth/jwt";
 
 export async function GET(request: NextRequest) {
-  const session = await getSession();
+  const session = await getValidatedSession();
   if (!session) return NextResponse.json({ error: "未登录" }, { status: 401 });
 
   const { searchParams } = new URL(request.url);
@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await getSession();
+    const session = await getValidatedSession();
     if (!session) return NextResponse.json({ error: "未登录" }, { status: 401 });
 
     const body = await request.json();
@@ -50,12 +50,6 @@ export async function POST(request: NextRequest) {
 
     if (!name) {
       return NextResponse.json({ error: "患者姓名不能为空" }, { status: 400 });
-    }
-
-    // Verify user still exists (Vercel cold starts may reset the DB)
-    const user = await prisma.user.findUnique({ where: { id: session.userId } });
-    if (!user) {
-      return NextResponse.json({ error: "会话已失效，请重新登录" }, { status: 401 });
     }
 
     const patient = await prisma.patient.create({
