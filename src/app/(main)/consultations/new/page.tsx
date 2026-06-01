@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -18,7 +18,7 @@ import { Search, Plus, User, Loader2, ChevronRight, ArrowRight, FileText } from 
 import { VoiceInput } from "@/components/consultations/VoiceInput";
 import { ImageUpload } from "@/components/consultations/ImageUpload";
 
-export default function NewConsultationPage() {
+function NewConsultationContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const store = useConsultationStore();
@@ -775,4 +775,12 @@ export default function NewConsultationPage() {
   }
 
   return null;
+}
+
+export default function NewConsultationPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center p-8 text-muted-foreground">加载中...</div>}>
+      <NewConsultationContent />
+    </Suspense>
+  );
 }
