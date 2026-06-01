@@ -12,10 +12,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "请选择患者" }, { status: 400 });
     }
 
-    // Verify patient exists before creating consultation
+    // Verify patient exists
     const patient = await prisma.patient.findUnique({ where: { id: patientId } });
     if (!patient) {
       return NextResponse.json({ error: "患者不存在" }, { status: 404 });
+    }
+
+    // Verify user still exists (Vercel cold starts may reset the DB)
+    const user = await prisma.user.findUnique({ where: { id: session.userId } });
+    if (!user) {
+      return NextResponse.json({ error: "会话已失效，请重新登录" }, { status: 401 });
     }
 
     const consultation = await prisma.consultation.create({
@@ -26,21 +32,25 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    await prisma.auditLog.create({
-      data: {
-        userId: session.userId,
-        action: "CREATE",
-        entityType: "CONSULTATION",
-        entityId: consultation.id,
-        detail: `创建就诊记录: ${patient.name}`,
-      },
-    });
+    try {
+      await prisma.auditLog.create({
+        data: {
+          userId: session.userId,
+          action: "CREATE",
+          entityType: "CONSULTATION",
+          entityId: consultation.id,
+          detail: `创建就诊记录: ${patient.name}`,
+        },
+      });
+    } catch (auditErr) {
+      console.error("[Consultation] Audit log error:", auditErr);
+    }
 
     return NextResponse.json(consultation, { status: 201 });
   } catch (e: unknown) {
     const msg = (e as { message?: string })?.message || "";
     if (msg.includes("Foreign key constraint")) {
-      return NextResponse.json({ error: "数据关联失败，请检查患者信息" }, { status: 400 });
+      return NextResponse.json({ error: "会话已失效，请刷新页面后重新登录" }, { status: 401 });
     }
     console.error("[Consultation] Create error:", msg);
     return NextResponse.json({ error: "创建就诊失败，请重试" }, { status: 500 });

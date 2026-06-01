@@ -52,6 +52,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "患者姓名不能为空" }, { status: 400 });
     }
 
+    // Verify user still exists (Vercel cold starts may reset the DB)
+    const user = await prisma.user.findUnique({ where: { id: session.userId } });
+    if (!user) {
+      return NextResponse.json({ error: "会话已失效，请重新登录" }, { status: 401 });
+    }
+
     const patient = await prisma.patient.create({
       data: {
         name,
