@@ -37,8 +37,8 @@ export async function analyzeImage(req: VisionRequest): Promise<string> {
         ],
       },
     ],
-    temperature: req.temperature ?? 0.3,
-    max_tokens: req.maxTokens ?? 2048,
+    temperature: req.temperature ?? 0.1,
+    max_tokens: req.maxTokens ?? 1024,
   };
 
   const payload = JSON.stringify(body);
