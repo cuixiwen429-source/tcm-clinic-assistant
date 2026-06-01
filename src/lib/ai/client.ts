@@ -16,6 +16,8 @@ function getClient(): OpenAI {
     clientInstance = new OpenAI({
       apiKey,
       baseURL: DEEPSEEK_BASE_URL,
+      timeout: 55000, // Vercel maxDuration=60s, leave 5s buffer
+      maxRetries: 1,
     });
   }
   return clientInstance;

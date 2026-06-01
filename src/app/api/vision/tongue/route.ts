@@ -3,6 +3,8 @@ import { getSession } from "@/lib/auth/jwt";
 import { prisma } from "@/lib/db/prisma";
 import { analyzeImage } from "@/lib/vision/doubao-vision";
 
+export const maxDuration = 60;
+
 export async function POST(request: NextRequest) {
   const session = await getSession();
   if (!session) return NextResponse.json({ error: "未登录" }, { status: 401 });

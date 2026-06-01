@@ -182,6 +182,6 @@ export async function recognizePcm(pcmData: Buffer, language: string): Promise<s
     });
     ws.on("error", (err: Error) => finish(new Error(`连接错误: ${err.message}`)));
 
-    setTimeout(() => finish(new Error("识别超时")), 15000);
+    setTimeout(() => finish(new Error("识别超时")), 50000);
   });
 }

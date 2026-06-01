@@ -5,6 +5,8 @@ import { callDeepSeekJson } from "@/lib/ai/client";
 import { TRANSCRIBE_PROMPT } from "@/lib/ai/prompts";
 import { StructuredHistorySchema } from "@/lib/ai/types";
 
+export const maxDuration = 60;
+
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }

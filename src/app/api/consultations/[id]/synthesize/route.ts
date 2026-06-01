@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
 import { getSession } from "@/lib/auth/jwt";
 import { callDeepSeekJson } from "@/lib/ai/client";
+
+export const maxDuration = 60;
 import { SYNTHESIZE_PROMPT } from "@/lib/ai/prompts";
 import { SynthesizeResultSchema } from "@/lib/ai/types";
 
