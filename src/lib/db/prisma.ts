@@ -38,6 +38,7 @@ async function initSchema(prisma: PrismaClient) {
         `ALTER TABLE Consultation ADD COLUMN "faceImage" TEXT`,
         `ALTER TABLE Consultation ADD COLUMN "tongueAnalysis" TEXT`,
         `ALTER TABLE Consultation ADD COLUMN "faceAnalysis" TEXT`,
+        `ALTER TABLE Patient ADD COLUMN "address" TEXT`,
       ];
       for (const sql of newColumns) {
         try { await prisma.$executeRawUnsafe(sql); } catch { /* column may exist */ }

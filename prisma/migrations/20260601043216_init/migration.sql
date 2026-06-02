@@ -18,6 +18,7 @@ CREATE TABLE "Patient" (
     "birthDate" DATETIME,
     "age" INTEGER,
     "phone" TEXT,
+    "address" TEXT,
     "allergies" TEXT,
     "constitution" TEXT,
     "chronicDisease" TEXT,
