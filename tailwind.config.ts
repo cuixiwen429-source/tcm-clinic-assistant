@@ -46,18 +46,27 @@ const config: Config = {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
         },
-        // TCM-specific warm tones
+        // TCM-specific tones
         herb: {
-          DEFAULT: "hsl(84 40% 45%)",
-          light: "hsl(84 40% 92%)",
+          DEFAULT: "hsl(120 25% 45%)",
+          light: "hsl(120 20% 92%)",
         },
         warning: {
           DEFAULT: "hsl(35 92% 50%)",
           light: "hsl(35 92% 94%)",
         },
         danger: {
-          DEFAULT: "hsl(0 84% 42%)",
-          light: "hsl(0 84% 94%)",
+          DEFAULT: "hsl(0 72% 45%)",
+          light: "hsl(0 72% 94%)",
+        },
+        // TCM palette
+        tcm: {
+          vermillion: "hsl(6 65% 48%)",
+          ink: "hsl(25 15% 12%)",
+          rice: "hsl(38 35% 96%)",
+          jade: "hsl(120 25% 55%)",
+          gold: "hsl(40 55% 55%)",
+          sand: "hsl(35 25% 92%)",
         },
       },
       borderRadius: {
@@ -66,7 +75,7 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        // For print: serif fonts
+        serif: ["Noto Serif SC", "SimSun", "STSong", "serif"],
         print: ["SimSun", "STSong", "serif"],
       },
       keyframes: {

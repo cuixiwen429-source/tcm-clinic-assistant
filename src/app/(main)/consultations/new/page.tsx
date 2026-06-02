@@ -213,8 +213,8 @@ function NewConsultationContent() {
         chiefComplaint: (store.structuredHistory as Record<string, unknown>).chief_complaint,
         presentIllness: (store.structuredHistory as Record<string, unknown>).present_illness,
         status: "AI_ASSISTED",
-        ...(store.tongueImage ? { tongueImage: store.tongueImage } : {}),
-        ...(store.faceImage ? { faceImage: store.faceImage } : {}),
+        ...(store.tongueImages.length > 0 ? { tongueImage: JSON.stringify(store.tongueImages) } : {}),
+        ...(store.faceImages.length > 0 ? { faceImage: JSON.stringify(store.faceImages) } : {}),
         ...(store.tongueAnalysis ? { tongueAnalysis: JSON.stringify(store.tongueAnalysis) } : {}),
         ...(store.faceAnalysis ? { faceAnalysis: JSON.stringify(store.faceAnalysis) } : {}),
       };
@@ -356,11 +356,11 @@ function NewConsultationContent() {
     const analyzed = analysis !== null;
 
     const handleAnalyzeTongue = async () => {
-      if (!store.consultationId || !store.tongueImage) return;
+      if (!store.consultationId || store.tongueImages.length === 0) return;
       store.setIsAnalyzingTongue(true);
       try {
-        // Fetch the uploaded image as a blob, then POST to vision API
-        const imgRes = await fetch(store.tongueImage);
+        // Fetch the first uploaded image as a blob, then POST to vision API
+        const imgRes = await fetch(store.tongueImages[0]);
         const blob = await imgRes.blob();
         const form = new FormData();
         form.set("image", blob, "tongue.jpg");
@@ -388,7 +388,7 @@ function NewConsultationContent() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             patientId: store.patientId,
-            tongueImage: store.tongueImage,
+            tongueImage: JSON.stringify(store.tongueImages),
             tongueAnalysis: JSON.stringify(store.tongueAnalysis),
           }),
         });
@@ -420,13 +420,13 @@ function NewConsultationContent() {
           <CardContent className="space-y-4">
             <ImageUpload
               title="舌苔照片"
-              description="请拍摄自然光下的舌面照片，舌尖微翘，舌体自然伸出"
-              currentImage={store.tongueImage}
-              onImageChange={(url) => { store.setTongueImage(url); store.setTongueAnalysis(null); }}
+              description="请拍摄自然光下的舌面照片，舌尖微翘，舌体自然伸出（支持多张）"
+              images={store.tongueImages}
+              onImagesChange={(urls) => { store.setTongueImages(urls); store.setTongueAnalysis(null); }}
               disabled={store.isAnalyzingTongue}
             />
 
-            {store.tongueImage && !analyzed && (
+            {store.tongueImages.length > 0 && !analyzed && (
               <Button onClick={handleAnalyzeTongue} disabled={store.isAnalyzingTongue}>
                 {store.isAnalyzingTongue ? (
                   <><Loader2 className="mr-2 h-4 w-4 animate-spin" />AI舌象分析中...</>
@@ -505,12 +505,12 @@ function NewConsultationContent() {
                     </Button>
                   </>
                 )}
-                {!analyzed && store.tongueImage && (
+                {!analyzed && store.tongueImages.length > 0 && (
                   <Button variant="ghost" onClick={() => store.setStep("face")}>
                     跳过，直接进入面相 <ChevronRight className="ml-1 h-4 w-4" />
                   </Button>
                 )}
-                {!store.tongueImage && (
+                {store.tongueImages.length === 0 && (
                   <Button variant="ghost" onClick={() => store.setStep("face")}>
                     跳过，直接进入面相 <ChevronRight className="ml-1 h-4 w-4" />
                   </Button>
@@ -529,10 +529,10 @@ function NewConsultationContent() {
     const analyzed = analysis !== null;
 
     const handleAnalyzeFace = async () => {
-      if (!store.consultationId || !store.faceImage) return;
+      if (!store.consultationId || store.faceImages.length === 0) return;
       store.setIsAnalyzingFace(true);
       try {
-        const imgRes = await fetch(store.faceImage);
+        const imgRes = await fetch(store.faceImages[0]);
         const blob = await imgRes.blob();
         const form = new FormData();
         form.set("image", blob, "face.jpg");
@@ -560,7 +560,7 @@ function NewConsultationContent() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             patientId: store.patientId,
-            faceImage: store.faceImage,
+            faceImage: JSON.stringify(store.faceImages),
             faceAnalysis: JSON.stringify(store.faceAnalysis),
           }),
         });
@@ -592,13 +592,13 @@ function NewConsultationContent() {
           <CardContent className="space-y-4">
             <ImageUpload
               title="面相照片"
-              description="请拍摄自然光下的面部正面照片，表情自然，勿化妆遮挡"
-              currentImage={store.faceImage}
-              onImageChange={(url) => { store.setFaceImage(url); store.setFaceAnalysis(null); }}
+              description="请拍摄自然光下的面部正面照片，表情自然，勿化妆遮挡（支持多张）"
+              images={store.faceImages}
+              onImagesChange={(urls) => { store.setFaceImages(urls); store.setFaceAnalysis(null); }}
               disabled={store.isAnalyzingFace}
             />
 
-            {store.faceImage && !analyzed && (
+            {store.faceImages.length > 0 && !analyzed && (
               <Button onClick={handleAnalyzeFace} disabled={store.isAnalyzingFace}>
                 {store.isAnalyzingFace ? (
                   <><Loader2 className="mr-2 h-4 w-4 animate-spin" />AI面相分析中...</>
@@ -687,12 +687,12 @@ function NewConsultationContent() {
                     </Button>
                   </>
                 )}
-                {!analyzed && store.faceImage && (
+                {!analyzed && store.faceImages.length > 0 && (
                   <Button variant="ghost" onClick={() => store.setStep("transcribe")}>
                     跳过，直接进入问诊 <ChevronRight className="ml-1 h-4 w-4" />
                   </Button>
                 )}
-                {!store.faceImage && (
+                {store.faceImages.length === 0 && (
                   <Button variant="ghost" onClick={() => store.setStep("transcribe")}>
                     跳过，直接进入问诊 <ChevronRight className="ml-1 h-4 w-4" />
                   </Button>

@@ -54,8 +54,8 @@ interface ConsultationState {
   isGeneratingFormula: boolean;
 
   // Tongue & Face
-  tongueImage: string | null;
-  faceImage: string | null;
+  tongueImages: string[];
+  faceImages: string[];
   tongueAnalysis: Record<string, unknown> | null;
   faceAnalysis: Record<string, unknown> | null;
   isAnalyzingTongue: boolean;
@@ -74,8 +74,8 @@ interface ConsultationState {
   setFormulas: (f: FormulaDraft[] | null) => void;
   setSelectedFormula: (f: FormulaDraft | null) => void;
   setIsGeneratingFormula: (v: boolean) => void;
-  setTongueImage: (url: string | null) => void;
-  setFaceImage: (url: string | null) => void;
+  setTongueImages: (urls: string[]) => void;
+  setFaceImages: (urls: string[]) => void;
   setTongueAnalysis: (a: Record<string, unknown> | null) => void;
   setFaceAnalysis: (a: Record<string, unknown> | null) => void;
   setIsAnalyzingTongue: (v: boolean) => void;
@@ -101,8 +101,8 @@ const initialState = {
   formulas: null,
   selectedFormula: null,
   isGeneratingFormula: false,
-  tongueImage: null,
-  faceImage: null,
+  tongueImages: [],
+  faceImages: [],
   tongueAnalysis: null,
   faceAnalysis: null,
   isAnalyzingTongue: false,
@@ -130,8 +130,8 @@ export const useConsultationStore = create<ConsultationState>((set) => ({
   setFormulas: (f) => set({ formulas: f }),
   setSelectedFormula: (f) => set({ selectedFormula: f }),
   setIsGeneratingFormula: (v) => set({ isGeneratingFormula: v }),
-  setTongueImage: (url) => set({ tongueImage: url }),
-  setFaceImage: (url) => set({ faceImage: url }),
+  setTongueImages: (urls) => set({ tongueImages: urls }),
+  setFaceImages: (urls) => set({ faceImages: urls }),
   setTongueAnalysis: (a) => set({ tongueAnalysis: a }),
   setFaceAnalysis: (a) => set({ faceAnalysis: a }),
   setIsAnalyzingTongue: (v) => set({ isAnalyzingTongue: v }),

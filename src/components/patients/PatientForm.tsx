@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -21,6 +22,7 @@ const patientSchema = z.object({
   age: z.string().optional(),
   phone: z.string().optional(),
   birthDate: z.string().optional(),
+  address: z.string().optional(),
   allergies: z.string().optional(),
   constitution: z.string().optional(),
   chronicDisease: z.string().optional(),
@@ -35,6 +37,16 @@ interface PatientFormProps {
   isLoading?: boolean;
 }
 
+function calcAge(birthDateStr: string): string {
+  if (!birthDateStr) return "";
+  const birth = new Date(birthDateStr);
+  const today = new Date();
+  let age = today.getFullYear() - birth.getFullYear();
+  const m = today.getMonth() - birth.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+  return age > 0 ? String(age) : "";
+}
+
 export function PatientForm({ defaultValues, onSubmit, isLoading }: PatientFormProps) {
   const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<PatientFormValues>({
     resolver: zodResolver(patientSchema),
@@ -44,12 +56,21 @@ export function PatientForm({ defaultValues, onSubmit, isLoading }: PatientFormP
       age: defaultValues?.age || "",
       phone: defaultValues?.phone || "",
       birthDate: defaultValues?.birthDate || "",
+      address: defaultValues?.address || "",
       allergies: defaultValues?.allergies || "",
       constitution: defaultValues?.constitution || "",
       chronicDisease: defaultValues?.chronicDisease || "",
       notes: defaultValues?.notes || "",
     },
   });
+
+  const birthDate = watch("birthDate");
+
+  useEffect(() => {
+    if (birthDate) {
+      setValue("age", calcAge(birthDate));
+    }
+  }, [birthDate, setValue]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -75,21 +96,25 @@ export function PatientForm({ defaultValues, onSubmit, isLoading }: PatientFormP
           </Select>
         </div>
         <div className="space-y-2">
+          <Label htmlFor="birthDate">出生日期</Label>
+          <Input id="birthDate" {...register("birthDate")} type="date" />
+        </div>
+        <div className="space-y-2">
           <Label htmlFor="age">年龄</Label>
-          <Input id="age" {...register("age")} placeholder="年龄" type="number" />
+          <Input id="age" {...register("age")} placeholder="自动计算或手动输入" type="number" />
         </div>
         <div className="space-y-2">
           <Label htmlFor="phone">手机号</Label>
           <Input id="phone" {...register("phone")} placeholder="手机号" />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="birthDate">出生日期</Label>
-          <Input id="birthDate" {...register("birthDate")} type="date" />
-        </div>
-        <div className="space-y-2">
           <Label htmlFor="constitution">体质类型</Label>
           <Input id="constitution" {...register("constitution")} placeholder="如：气虚质、湿热质" />
         </div>
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="address">地址</Label>
+        <Input id="address" {...register("address")} placeholder="居住地址" />
       </div>
       <div className="space-y-2">
         <Label htmlFor="allergies">过敏史</Label>

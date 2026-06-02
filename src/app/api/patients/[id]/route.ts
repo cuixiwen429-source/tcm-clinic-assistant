@@ -44,7 +44,7 @@ export async function PUT(
 
   const { id } = await params;
   const body = await request.json();
-  const { name, gender, birthDate, age, phone, allergies, constitution, chronicDisease, notes } = body;
+  const { name, gender, birthDate, age, phone, address, allergies, constitution, chronicDisease, notes } = body;
 
   const existing = await prisma.patient.findUnique({ where: { id } });
   if (!existing) {
@@ -59,6 +59,7 @@ export async function PUT(
       birthDate: birthDate !== undefined ? (birthDate ? new Date(birthDate) : null) : existing.birthDate,
       age: age !== undefined ? (age ? parseInt(age) : null) : existing.age,
       phone: phone !== undefined ? phone : existing.phone,
+      address: address !== undefined ? address : existing.address,
       allergies: allergies !== undefined ? allergies : existing.allergies,
       constitution: constitution !== undefined ? constitution : existing.constitution,
       chronicDisease: chronicDisease !== undefined ? chronicDisease : existing.chronicDisease,

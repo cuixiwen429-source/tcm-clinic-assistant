@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { LogOut, Menu } from "lucide-react";
+import { LogOut, Menu, User } from "lucide-react";
 
 const ROLE_LABELS: Record<string, string> = {
   ADMIN: "管理员",
@@ -38,11 +38,11 @@ export function TopBar({ onMenuClick }: TopBarProps) {
   };
 
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b bg-card px-4 md:px-6">
+    <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-primary/10 bg-card/80 backdrop-blur-sm px-4 md:px-6">
       <Button
         variant="ghost"
         size="icon"
-        className="md:hidden"
+        className="md:hidden hover:bg-muted"
         onClick={onMenuClick}
       >
         <Menu className="h-5 w-5" />
@@ -51,21 +51,26 @@ export function TopBar({ onMenuClick }: TopBarProps) {
       <div className="flex-1 md:flex-none" />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="flex items-center gap-2">
-            <Avatar className="h-8 w-8">
-              <AvatarFallback className="text-xs">{initials}</AvatarFallback>
+          <Button variant="ghost" className="flex items-center gap-2.5 hover:bg-muted px-2">
+            <Avatar className="h-8 w-8 ring-2 ring-primary/20">
+              <AvatarFallback className="text-xs bg-primary/10 text-primary font-medium">
+                {initials}
+              </AvatarFallback>
             </Avatar>
             <div className="hidden sm:block text-left text-sm">
-              <p className="font-medium">{user.name}</p>
+              <p className="font-medium text-foreground">{user.name}</p>
               <p className="text-xs text-muted-foreground">{ROLE_LABELS[user.role] || user.role}</p>
             </div>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-48">
           <DropdownMenuLabel>
-            <div className="flex flex-col">
-              <span>{user.name}</span>
-              <span className="text-xs text-muted-foreground">{ROLE_LABELS[user.role]}</span>
+            <div className="flex items-center gap-2">
+              <User className="h-4 w-4 text-muted-foreground" />
+              <div className="flex flex-col">
+                <span className="text-sm">{user.name}</span>
+                <span className="text-xs text-muted-foreground">{ROLE_LABELS[user.role]}</span>
+              </div>
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />

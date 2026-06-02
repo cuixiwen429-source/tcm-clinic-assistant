@@ -1,0 +1,232 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils/cn";
+import { Badge } from "@/components/ui/badge";
+import {
+  User, Camera, Eye, FileText, Brain, CheckCircle, Pill, ClipboardCheck,
+  ChevronRight,
+} from "lucide-react";
+
+interface ConsultationTimelineProps {
+  consultationId: string;
+  consultation: {
+    patientId?: string;
+    status?: string;
+    tongueImage?: string | null;
+    faceImage?: string | null;
+    editedHistory?: string | null;
+    huXishuAnalysis?: string | null;
+    zhangXichunAnalysis?: string | null;
+    niHaixiaAnalysis?: string | null;
+    liKeAnalysis?: string | null;
+    doctorFinalPattern?: string | null;
+    prescriptions?: Array<{ isConfirmed?: boolean }>;
+  };
+}
+
+interface StepDef {
+  key: string;
+  label: string;
+  icon: React.ElementType;
+  check: (c: ConsultationTimelineProps["consultation"]) => boolean;
+  href?: string;
+}
+
+export function ConsultationTimeline({ consultationId, consultation }: ConsultationTimelineProps) {
+  const router = useRouter();
+
+  const steps: StepDef[] = [
+    { key: "patient", label: "患者建档", icon: User,
+      check: (c) => !!c.patientId,
+    },
+    { key: "tongue", label: "舌象采集", icon: Camera,
+      check: (c) => !!c.tongueImage,
+    },
+    { key: "face", label: "面相采集", icon: Eye,
+      check: (c) => !!c.faceImage,
+    },
+    { key: "history", label: "问诊转写", icon: FileText,
+      check: (c) => !!c.editedHistory,
+    },
+    { key: "differentiate", label: "AI辨证", icon: Brain,
+      check: (c) => !!(c.huXishuAnalysis || c.zhangXichunAnalysis || c.niHaixiaAnalysis || c.liKeAnalysis),
+    },
+    { key: "diagnosis", label: "最终诊断", icon: CheckCircle,
+      check: (c) => !!c.doctorFinalPattern,
+    },
+    { key: "formula", label: "方剂生成", icon: Pill,
+      check: (c) => (c.prescriptions?.length ?? 0) > 0,
+    },
+    { key: "confirm", label: "处方确认", icon: ClipboardCheck,
+      check: (c) => c.prescriptions?.some(p => p.isConfirmed) ?? false,
+    },
+  ];
+
+  // Determine current step from status
+  const statusMap: Record<string, string> = {
+    DRAFT: "patient",
+    AI_ASSISTED: "differentiate",
+    PRESCRIBED: "formula",
+    FINALIZED: "confirm",
+  };
+  const currentStepKey = statusMap[consultation.status || "DRAFT"] || "patient";
+  const currentIdx = steps.findIndex(s => s.key === currentStepKey);
+
+  const handleStepClick = (step: StepDef, idx: number) => {
+    const isCompleted = step.check(consultation);
+    const isCurrent = step.key === currentStepKey;
+
+    // Allow clicking completed/current steps to navigate
+    if (!isCompleted && !isCurrent) return;
+
+    switch (step.key) {
+      case "patient":
+        router.push(`/patients/${consultation.patientId}`);
+        break;
+      case "tongue":
+      case "face":
+      case "history":
+        router.push(`/consultations/${consultationId}/ai`);
+        break;
+      case "differentiate":
+      case "diagnosis":
+      case "formula":
+        router.push(`/consultations/${consultationId}/ai`);
+        break;
+      case "confirm":
+        router.push(`/consultations/${consultationId}/prescription`);
+        break;
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Desktop: Horizontal steps */}
+      <div className="hidden md:block">
+        <div className="flex items-center gap-0 overflow-x-auto pb-2">
+          {steps.map((step, idx) => {
+            const isCompleted = step.check(consultation);
+            const isCurrent = step.key === currentStepKey;
+            const isPast = idx <= currentIdx;
+            const Icon = step.icon;
+
+            return (
+              <div key={step.key} className="flex items-center flex-shrink-0">
+                <button
+                  type="button"
+                  onClick={() => handleStepClick(step, idx)}
+                  disabled={!isCompleted && !isCurrent}
+                  className={cn(
+                    "flex flex-col items-center gap-1 px-3 py-2 rounded-lg min-w-[70px] transition-all duration-200",
+                    isCompleted
+                      ? "text-green-700 cursor-pointer hover:bg-green-50"
+                      : isCurrent
+                        ? "text-primary cursor-pointer animate-pulse"
+                        : "text-muted-foreground/40 cursor-not-allowed"
+                  )}
+                >
+                  <div className={cn(
+                    "flex items-center justify-center h-10 w-10 rounded-full border-2",
+                    isCompleted
+                      ? "border-green-500 bg-green-50"
+                      : isCurrent
+                        ? "border-primary bg-primary/10"
+                        : "border-muted-foreground/20 bg-transparent"
+                  )}>
+                    {isCompleted ? (
+                      <CheckCircle className="h-5 w-5 text-green-600" />
+                    ) : (
+                      <Icon className={cn(
+                        "h-5 w-5",
+                        isCurrent ? "text-primary" : "text-muted-foreground/40"
+                      )} />
+                    )}
+                  </div>
+                  <span className="text-[11px] text-center leading-tight font-medium">
+                    {step.label}
+                  </span>
+                  {isCurrent && !isCompleted && (
+                    <Badge variant="outline" className="text-[9px] px-1 py-0 h-4 border-primary/50 text-primary">
+                      当前
+                    </Badge>
+                  )}
+                </button>
+                {idx < steps.length - 1 && (
+                  <div className={cn(
+                    "h-0.5 w-6 flex-shrink-0",
+                    idx < currentIdx ? "bg-green-300" : "bg-muted-foreground/15"
+                  )} />
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Mobile: Vertical timeline */}
+      <div className="md:hidden space-y-0">
+        {steps.map((step, idx) => {
+          const isCompleted = step.check(consultation);
+          const isCurrent = step.key === currentStepKey;
+          const Icon = step.icon;
+
+          return (
+            <div key={step.key} className="flex gap-3">
+              {/* Connector line */}
+              <div className="flex flex-col items-center">
+                <div className={cn(
+                  "flex items-center justify-center h-8 w-8 rounded-full border-2 flex-shrink-0",
+                  isCompleted
+                    ? "border-green-500 bg-green-50"
+                    : isCurrent
+                      ? "border-primary bg-primary/10"
+                      : "border-muted-foreground/20 bg-transparent"
+                )}>
+                  {isCompleted ? (
+                    <CheckCircle className="h-4 w-4 text-green-600" />
+                  ) : (
+                    <Icon className={cn(
+                      "h-4 w-4",
+                      isCurrent ? "text-primary" : "text-muted-foreground/40"
+                    )} />
+                  )}
+                </div>
+                {idx < steps.length - 1 && (
+                  <div className={cn(
+                    "w-0.5 h-6",
+                    idx < currentIdx ? "bg-green-300" : "bg-muted-foreground/15"
+                  )} />
+                )}
+              </div>
+              {/* Content */}
+              <div className="pb-4">
+                <button
+                  type="button"
+                  onClick={() => handleStepClick(step, idx)}
+                  disabled={!isCompleted && !isCurrent}
+                  className="text-left"
+                >
+                  <span className={cn(
+                    "text-sm font-medium",
+                    isCompleted ? "text-green-700" : isCurrent ? "text-primary" : "text-muted-foreground/40"
+                  )}>
+                    {step.label}
+                  </span>
+                  {isCurrent && !isCompleted && (
+                    <Badge variant="outline" className="ml-2 text-[9px] px-1 py-0 h-4 border-primary/50 text-primary">
+                      当前
+                    </Badge>
+                  )}
+                  {isCompleted && (
+                    <span className="ml-2 text-[10px] text-green-600">✓ 已完成</span>
+                  )}
+                </button>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}

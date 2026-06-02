@@ -29,6 +29,7 @@ model Patient {
   birthDate     DateTime?
   age           Int?
   phone         String?
+  address       String?
   allergies     String?
   constitution  String?
   chronicDisease String?

@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
     if (!session) return NextResponse.json({ error: "未登录" }, { status: 401 });
 
     const body = await request.json();
-    const { name, gender, birthDate, age, phone, allergies, constitution, chronicDisease, notes } = body;
+    const { name, gender, birthDate, age, phone, address, allergies, constitution, chronicDisease, notes } = body;
 
     if (!name) {
       return NextResponse.json({ error: "患者姓名不能为空" }, { status: 400 });
@@ -59,6 +59,7 @@ export async function POST(request: NextRequest) {
         birthDate: birthDate ? new Date(birthDate) : null,
         age: age ? parseInt(age) : null,
         phone: phone || null,
+        address: address || null,
         allergies: allergies || null,
         constitution: constitution || null,
         chronicDisease: chronicDisease || null,

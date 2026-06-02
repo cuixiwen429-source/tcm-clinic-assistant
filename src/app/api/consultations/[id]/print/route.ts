@@ -1,6 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
 import { getSession } from "@/lib/auth/jwt";
+import { callDeepSeekJson } from "@/lib/ai/client";
+import { REFINE_SYMPTOM_PROMPT } from "@/lib/ai/prompts";
+import { z } from "zod";
+
+const RefinedSymptomSchema = z.object({
+  symptoms: z.array(z.string()),
+  tongue_pulse: z.string(),
+});
 
 export async function GET(
   request: NextRequest,
@@ -16,7 +24,6 @@ export async function GET(
     include: {
       patient: true,
       prescriptions: {
-        where: { isConfirmed: true },
         orderBy: { version: "desc" },
         take: 1,
       },
@@ -30,14 +37,42 @@ export async function GET(
 
   if (!consultation) {
     return NextResponse.json({
-      patient: { name: "", gender: null, age: null, phone: null },
+      patient: { name: "", gender: null, age: null, phone: null, address: null, allergies: null, chronicDisease: null, notes: null },
       diagnosis: { chiefComplaint: null, pattern: null, pathogenesis: null },
       prescription: null,
       advice: null,
+      refinedSymptoms: null,
     });
   }
 
   const prescription = consultation.prescriptions[0];
+
+  // Refine symptoms via AI
+  let refinedSymptoms: { symptoms: string[]; tongue_pulse: string } | null = null;
+  try {
+    const chiefComplaint = consultation.chiefComplaint || "";
+    const presentIllness = consultation.presentIllness || "";
+    let symptomSummaryText = "";
+    try {
+      const s = JSON.parse(consultation.symptomSummary || "{}");
+      if (s.tongue_pulse) symptomSummaryText += `舌脉：${s.tongue_pulse}。`;
+      if (s.stool_urine) symptomSummaryText += `二便：${s.stool_urine}。`;
+    } catch { /* */ }
+
+    const refineInput = [chiefComplaint, presentIllness, symptomSummaryText].filter(Boolean).join("\n");
+    if (refineInput.trim().length > 10) {
+      refinedSymptoms = await callDeepSeekJson({
+        systemPrompt: REFINE_SYMPTOM_PROMPT,
+        userMessage: refineInput,
+        schema: RefinedSymptomSchema,
+        schemaName: "refine-symptoms",
+        temperature: 0.2,
+        maxTokens: 1024,
+      });
+    }
+  } catch {
+    // Non-critical — proceed without AI refinement
+  }
 
   const printData = {
     patient: {
@@ -45,6 +80,10 @@ export async function GET(
       gender: consultation.patient?.gender,
       age: consultation.patient?.age,
       phone: consultation.patient?.phone,
+      address: consultation.patient?.address,
+      allergies: consultation.patient?.allergies,
+      chronicDisease: consultation.patient?.chronicDisease,
+      notes: consultation.patient?.notes,
     },
     diagnosis: {
       chiefComplaint: consultation.chiefComplaint,
@@ -65,7 +104,25 @@ export async function GET(
     advice: consultation.adviceItems[0]
       ? JSON.parse(consultation.adviceItems[0].editedContent || consultation.adviceItems[0].adviceContent)
       : null,
+    refinedSymptoms,
+    costCalculation: null as Record<string, unknown> | null,
   };
+
+  // Fetch cost calculation
+  if (prescription) {
+    try {
+      const cost = await prisma.costCalculation.findFirst({
+        where: { prescriptionId: prescription.id },
+        orderBy: { calculatedAt: "desc" },
+      });
+      if (cost) {
+        printData.costCalculation = {
+          totalCost: cost.totalCost,
+          breakdown: JSON.parse(cost.breakdown || "{}"),
+        };
+      }
+    } catch { /* */ }
+  }
 
   await prisma.auditLog.create({
     data: {

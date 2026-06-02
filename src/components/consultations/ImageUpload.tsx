@@ -2,22 +2,27 @@
 
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Camera, Upload, X, Loader2, FileImage } from "lucide-react";
+import { Camera, Upload, X, Loader2, FileImage, Plus } from "lucide-react";
 import { toast } from "sonner";
 
 interface ImageUploadProps {
   title: string;
   description?: string;
-  currentImage?: string | null;
-  onImageChange: (url: string | null) => void;
+  images: string[];
+  onImagesChange: (urls: string[]) => void;
   disabled?: boolean;
+  maxImages?: number;
 }
 
-export function ImageUpload({ title, description, currentImage, onImageChange, disabled }: ImageUploadProps) {
+export function ImageUpload({ title, description, images, onImagesChange, disabled, maxImages = 5 }: ImageUploadProps) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
 
   const handleFile = async (file: File) => {
+    if (images.length >= maxImages) {
+      toast.error(`最多上传${maxImages}张图片`);
+      return;
+    }
     setUploading(true);
     try {
       const form = new FormData();
@@ -29,12 +34,16 @@ export function ImageUpload({ title, description, currentImage, onImageChange, d
         return;
       }
       const data = await res.json();
-      onImageChange(data.url);
+      onImagesChange([...images, data.url]);
     } catch {
       toast.error("网络错误，请重试");
     } finally {
       setUploading(false);
     }
+  };
+
+  const removeImage = (index: number) => {
+    onImagesChange(images.filter((_, i) => i !== index));
   };
 
   const isMobile = typeof navigator !== "undefined" &&
@@ -58,27 +67,49 @@ export function ImageUpload({ title, description, currentImage, onImageChange, d
         }}
       />
 
-      {currentImage ? (
-        <div className="relative inline-block">
-          <img
-            src={currentImage}
-            alt={title}
-            className="w-40 h-40 rounded-lg border object-cover"
-          />
-          {!disabled && (
-            <Button
-              variant="destructive"
-              size="icon"
-              className="absolute -top-2 -right-2 h-6 w-6 rounded-full"
-              onClick={() => onImageChange(null)}
+      {/* Image grid */}
+      {images.length > 0 && (
+        <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+          {images.map((url, i) => (
+            <div key={i} className="relative aspect-square">
+              <img
+                src={url}
+                alt={`${title} ${i + 1}`}
+                className="w-full h-full rounded-lg border object-cover"
+              />
+              {!disabled && (
+                <Button
+                  variant="destructive"
+                  size="icon"
+                  className="absolute -top-1.5 -right-1.5 h-5 w-5 rounded-full"
+                  onClick={() => removeImage(i)}
+                >
+                  <X className="h-3 w-3" />
+                </Button>
+              )}
+            </div>
+          ))}
+          {/* Add more button */}
+          {!disabled && images.length < maxImages && (
+            <button
+              type="button"
+              className="aspect-square rounded-lg border-2 border-dashed border-muted-foreground/25 hover:border-primary/50 flex items-center justify-center transition-colors"
+              onClick={() => fileRef.current?.click()}
+              disabled={uploading}
             >
-              <X className="h-3 w-3" />
-            </Button>
+              {uploading ? (
+                <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+              ) : (
+                <Plus className="h-5 w-5 text-muted-foreground" />
+              )}
+            </button>
           )}
         </div>
-      ) : (
+      )}
+
+      {/* Initial upload buttons (no images yet) */}
+      {images.length === 0 && (
         <div className="flex gap-2">
-          {/* Camera capture (mobile) or file picker (desktop) */}
           <Button
             variant="outline"
             size="sm"
@@ -92,7 +123,6 @@ export function ImageUpload({ title, description, currentImage, onImageChange, d
             )}
             {isMobile ? "拍摄" : "拍照"}
           </Button>
-          {/* Album picker */}
           <Button
             variant="outline"
             size="sm"

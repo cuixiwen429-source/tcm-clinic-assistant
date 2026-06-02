@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
 import { toast } from "sonner";
-import { ArrowLeft, Printer } from "lucide-react";
+import { ArrowLeft, Printer, Download, Home, Plus } from "lucide-react";
 import { format } from "date-fns";
 import { zhCN } from "date-fns/locale";
 
@@ -18,27 +18,25 @@ export default function PrintPage() {
   const consultationId = params.id as string;
 
   const [loading, setLoading] = useState(true);
-  const [consultation, setConsultation] = useState<Record<string, unknown> | null>(null);
-  const [prescription, setPrescription] = useState<Record<string, unknown> | null>(null);
+  const [printData, setPrintData] = useState<Record<string, unknown> | null>(null);
   const [herbs, setHerbs] = useState<HerbItem[]>([]);
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [showPostPrint, setShowPostPrint] = useState(false);
+
+  const isMobile = typeof navigator !== "undefined" &&
+    /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
   useEffect(() => { fetchData(); }, [consultationId]);
 
   const fetchData = async () => {
     setLoading(true);
     try {
-      const [cRes, pRes] = await Promise.all([
-        fetch(`/api/consultations/${consultationId}`),
-        fetch(`/api/consultations/${consultationId}/prescription`),
-      ]);
-      if (cRes.ok) setConsultation(await cRes.json());
-      if (pRes.ok) {
-        const pres = await pRes.json();
-        if (pres.length > 0) {
-          const latest = pres[pres.length - 1];
-          setPrescription(latest);
-          try { setHerbs(JSON.parse((latest.herbs as string) || "[]")); } catch { setHerbs([]); }
+      const res = await fetch(`/api/consultations/${consultationId}/print`);
+      if (res.ok) {
+        const data = await res.json();
+        setPrintData(data);
+        if (data.prescription?.herbs) {
+          setHerbs(data.prescription.herbs as HerbItem[]);
         }
       }
     } catch { toast.error("加载失败"); }
@@ -56,55 +54,32 @@ export default function PrintPage() {
         body: JSON.stringify({ status: "FINALIZED" }),
       });
     } catch { /* ignore */ }
+
     window.print();
+
+    // After print dialog closes, show post-print dialog
+    setTimeout(() => setShowPostPrint(true), 1000);
   };
 
   if (loading) {
     return <div className="space-y-4"><Skeleton className="h-8 w-64" /><Skeleton className="h-96 w-full" /></div>;
   }
 
-  const patient = consultation?.patient as Record<string, unknown> || {};
+  const patient = printData?.patient as Record<string, unknown> || {};
+  const diagnosis = printData?.diagnosis as Record<string, unknown> || {};
+  const prescription = printData?.prescription as Record<string, unknown> || {};
+  const refined = printData?.refinedSymptoms as { symptoms: string[]; tongue_pulse: string } | null;
+  const costCalc = printData?.costCalculation as { totalCost: number } | null;
+
+  const pattern = (diagnosis.pattern as string) || "";
   const today = format(new Date(), "yyyy年MM月dd日", { locale: zhCN });
   const prescriptionDate = (prescription?.createdAt as string)
     ? format(new Date(prescription?.createdAt as string), "yyyy年MM月dd日", { locale: zhCN })
     : today;
-  // Build professional TCM pattern diagnosis — never use chief complaint
-  let diagnosis = (consultation?.doctorFinalPattern as string) || "";
-  if (!diagnosis) {
-    const analyses = [
-      consultation?.huXishuAnalysis as string,
-      consultation?.zhangXichunAnalysis as string,
-      consultation?.niHaixiaAnalysis as string,
-      consultation?.liKeAnalysis as string,
-    ];
-    for (const a of analyses) {
-      if (a) {
-        try {
-          const parsed = JSON.parse(a);
-          if (parsed.pattern) { diagnosis = parsed.pattern as string; break; }
-        } catch { /* */ }
-      }
-    }
-  }
-  const usage = (prescription?.usageInstruction as string) || "";
   const decoction = (prescription?.decoctionMethod as string) || "";
+  const usage = (prescription?.usageInstruction as string) || "";
   const precautions = (prescription?.precautions as string) || "";
   const totalDoses = (prescription?.totalDoses as number) || 7;
-
-  // Build compact symptom text
-  const symptomLines: string[] = [];
-  const cc = consultation?.chiefComplaint as string;
-  const pi = consultation?.presentIllness as string;
-  if (cc) symptomLines.push(cc);
-  if (pi) symptomLines.push(pi);
-  try {
-    const s = consultation?.symptomSummary as string;
-    if (s) {
-      const ss = JSON.parse(s);
-      if (ss.tongue_pulse) symptomLines.push(ss.tongue_pulse);
-      if (ss.stool_urine) symptomLines.push(ss.stool_urine);
-    }
-  } catch { /* */ }
 
   return (
     <div>
@@ -120,19 +95,21 @@ export default function PrintPage() {
           </div>
         </div>
         <Button onClick={handlePrint}>
-          <Printer className="mr-2 h-4 w-4" /> 打印处方
+          {isMobile ? (
+            <><Download className="mr-2 h-4 w-4" /> 保存PDF到本地</>
+          ) : (
+            <><Printer className="mr-2 h-4 w-4" /> 打印处方</>
+          )}
         </Button>
       </div>
 
       {/* Prescription Document */}
       <div className="flex justify-center">
-        <div className="prescription-doc">
-          {/* === SECTION 1: HEADER === */}
-          <div className="rx-header">
-            深圳同修仁德中医（综合）诊所处方笺
-          </div>
+        <div className="prescription-doc print-doc max-w-full overflow-x-auto">
+          {/* === HEADER === */}
+          <div className="rx-header">深圳同修仁德中医（综合）诊所处方笺</div>
 
-          {/* === SECTION 2: PATIENT === */}
+          {/* === PATIENT INFO === */}
           <div className="rx-patient">
             <div className="rx-row">
               <span>费别：□ 医保 □ 自费</span>
@@ -142,65 +119,131 @@ export default function PrintPage() {
               <span>姓名：<b>{patient.name as string || "________"}</b></span>
               <span>性别：{patient.gender as string || "____"}</span>
               <span>年龄：{(patient.age as number) ? `${patient.age}岁` : "____"}</span>
+              <span>电话：{patient.phone as string || "________________"}</span>
             </div>
             <div className="rx-row">
-              <span>临床诊断：{diagnosis || "________________"}</span>
+              <span>地址：{patient.address as string || "________________________"}</span>
+            </div>
+            <div className="rx-row">
+              <span>临床诊断：{pattern || "________________"}</span>
               <span>日期：{prescriptionDate}</span>
             </div>
+            {(patient.allergies as string) && (
+              <div className="rx-row">
+                <span>过敏史：{patient.allergies as string}</span>
+              </div>
+            )}
+            {(patient.chronicDisease as string) && (
+              <div className="rx-row">
+                <span>基础病史：{patient.chronicDisease as string}</span>
+              </div>
+            )}
+            {(patient.notes as string) && (
+              <div className="rx-row">
+                <span>备注：{patient.notes as string}</span>
+              </div>
+            )}
           </div>
 
-          {/* === SECTION 3: SYMPTOMS === */}
+          {/* === SYMPTOMS === */}
           <div className="rx-symptoms">
-            {symptomLines.length > 0 ? symptomLines.map((line, i) => (
-              <div key={i} className="rx-sym-line">{i === 0 ? `主诉：${line}` : i === 1 ? `现症：${line}` : line}</div>
-            )) : <div className="rx-sym-line">症状舌脉：________________</div>}
+            {refined?.symptoms && refined.symptoms.length > 0 ? (
+              <>
+                {refined.symptoms.map((line, i) => (
+                  <div key={i} className="rx-sym-line">{i === 0 ? "现症：" : ""}{line}</div>
+                ))}
+                {refined.tongue_pulse && (
+                  <div className="rx-sym-line">{refined.tongue_pulse}</div>
+                )}
+              </>
+            ) : (
+              <>
+                {(diagnosis.chiefComplaint as string) && (
+                  <div className="rx-sym-line">主诉：{diagnosis.chiefComplaint as string}</div>
+                )}
+              </>
+            )}
           </div>
 
-          {/* === SECTION 4: RP === */}
+          {/* === RP === */}
           <div className="rx-rp">
             <div className="rx-rp-title">Rp</div>
             <div className="rx-rp-grid">
               {herbs.map((h, i) => (
-                <div key={i} className="rx-rp-item">{h.name} {h.dose}g{h.note ? `（${h.note}）` : ""}</div>
+                <div key={i} className="rx-rp-item">
+                  <div className="rx-rp-herb-main">
+                    <span className="rx-rp-herb-name">{h.name}</span>
+                    <span className="rx-rp-herb-dose">{h.dose}g</span>
+                  </div>
+                  {h.note && <div className="rx-rp-herb-note">（{h.note}）</div>}
+                </div>
               ))}
             </div>
           </div>
 
-          {/* === SECTION 5: USAGE === */}
+          {/* === USAGE === */}
           <div className="rx-usage">
             <div className="rx-row">
               <span><b>剂数：</b>{totalDoses} 剂</span>
               <span><b>煎法：</b>{decoction || "________________"}</span>
               <span><b>服法：</b>{usage || "________________"}</span>
             </div>
-            {precautions && <div className="rx-row"><b>医嘱：</b>{precautions}</div>}
-            <div className="rx-row">
-              <span><b>费用：</b>________________</span>
-            </div>
+            {precautions && (
+              <div className="rx-row"><b>医嘱：</b>{precautions}</div>
+            )}
           </div>
 
-          {/* === SECTION 6: SIGNATURES === */}
+          {/* === SIGNATURES (includes cost) === */}
           <div className="rx-signatures">
             <div className="rx-row">
               <span>医师：________________</span>
-              <span>审核药师：________________</span>
+              <span>执业医师签名：________________</span>
             </div>
             <div className="rx-row">
+              <span>审核药师：________________</span>
               <span>调配：________________</span>
+            </div>
+            <div className="rx-row">
               <span>核对 / 发药：________________</span>
+              <span><b>费用合计：</b>{costCalc ? `¥${costCalc.totalCost.toFixed(2)}` : "________________"} 元</span>
             </div>
           </div>
         </div>
       </div>
 
+      {/* Confirm Dialog */}
       <ConfirmDialog
         open={confirmOpen}
         onOpenChange={setConfirmOpen}
-        title="打印前确认"
+        title={isMobile ? "保存前确认" : "打印前确认"}
         description="请确认处方、剂量、煎服方法及患者信息无误。"
         onConfirm={doPrint}
-        confirmLabel="确认打印"
+        confirmLabel={isMobile ? "保存PDF" : "确认打印"}
       />
+
+      {/* Post-Print Dialog */}
+      <ConfirmDialog
+        open={showPostPrint}
+        onOpenChange={setShowPostPrint}
+        title={isMobile ? "PDF已保存" : "处方已打印"}
+        description="是否返回工作台或新建就诊？"
+        onConfirm={() => {
+          setShowPostPrint(false);
+          router.push("/dashboard");
+        }}
+        confirmLabel="返回工作台"
+      >
+        <Button
+          variant="outline"
+          className="w-full mt-2"
+          onClick={() => {
+            setShowPostPrint(false);
+            router.push("/consultations/new");
+          }}
+        >
+          <Plus className="mr-2 h-4 w-4" /> 新建就诊
+        </Button>
+      </ConfirmDialog>
     </div>
   );
 }

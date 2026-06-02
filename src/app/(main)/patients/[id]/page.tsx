@@ -8,20 +8,28 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
-import { ArrowLeft, Edit, Plus, FileText } from "lucide-react";
+import { ArrowLeft, Edit, Plus, FileText, ChevronDown, ChevronUp } from "lucide-react";
 import { format } from "date-fns";
 import { zhCN } from "date-fns/locale";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,
 } from "@/components/ui/dialog";
 import { PatientForm, PatientFormValues } from "@/components/patients/PatientForm";
+import { ConsultationTimeline } from "@/components/consultations/ConsultationTimeline";
+import { cn } from "@/lib/utils/cn";
 
 interface Consultation {
   id: string;
   visitDate: string;
   chiefComplaint: string | null;
   status: string;
-  prescriptions: { id: string; formulaName: string | null; version: number }[];
+  prescriptions: { id: string; formulaName: string | null; version: number; isConfirmed?: boolean }[];
+  patientId?: string;
+  tongueImage?: string | null;
+  faceImage?: string | null;
+  editedHistory?: string | null;
+  huXishuAnalysis?: string | null;
+  doctorFinalPattern?: string | null;
 }
 
 interface Patient {
@@ -47,6 +55,7 @@ export default function PatientDetailPage() {
   const [loading, setLoading] = useState(true);
   const [editOpen, setEditOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchPatient();
@@ -222,40 +231,82 @@ export default function PatientDetailPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">就诊记录 ({patient.consultations.length})</CardTitle>
+          <CardTitle className="text-lg font-serif">就诊记录 ({patient.consultations.length})</CardTitle>
         </CardHeader>
         <CardContent>
           {patient.consultations.length === 0 ? (
             <p className="py-8 text-center text-muted-foreground">暂无就诊记录</p>
           ) : (
             <div className="space-y-3">
-              {patient.consultations.map((c) => (
-                <div
-                  key={c.id}
-                  className="flex items-center justify-between rounded-lg border p-4 hover:bg-accent/50 cursor-pointer transition-colors"
-                  onClick={() => router.push(`/consultations/${c.id}/ai`)}
-                >
-                  <div className="flex items-center gap-4">
-                    <FileText className="h-5 w-5 text-muted-foreground" />
-                    <div>
-                      <p className="font-medium">
-                        {c.chiefComplaint || "未填写主诉"}
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        {format(new Date(c.visitDate), "yyyy年MM月dd日 HH:mm", { locale: zhCN })}
-                      </p>
+              {patient.consultations.map((c) => {
+                const isExpanded = expandedId === c.id;
+                return (
+                  <div key={c.id} className="rounded-lg border border-primary/10 overflow-hidden">
+                    {/* Header row */}
+                    <div
+                      className="flex items-center justify-between p-4 hover:bg-muted/50 cursor-pointer transition-colors"
+                      onClick={() => setExpandedId(isExpanded ? null : c.id)}
+                    >
+                      <div className="flex items-center gap-4 min-w-0">
+                        <FileText className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+                        <div className="min-w-0">
+                          <p className="font-medium truncate">
+                            {c.chiefComplaint || "未填写主诉"}
+                          </p>
+                          <p className="text-xs text-muted-foreground">
+                            {format(new Date(c.visitDate), "yyyy年MM月dd日 HH:mm", { locale: zhCN })}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3 flex-shrink-0 ml-3">
+                        {c.prescriptions[0] && (
+                          <Badge variant="outline" className="text-xs hidden sm:inline-flex">
+                            {c.prescriptions[0].formulaName || "处方v" + c.prescriptions[0].version}
+                          </Badge>
+                        )}
+                        <Badge>{statusLabels[c.status] || c.status}</Badge>
+                        {isExpanded ? (
+                          <ChevronUp className="h-4 w-4 text-muted-foreground" />
+                        ) : (
+                          <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                        )}
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    {c.prescriptions[0] && (
-                      <Badge variant="outline" className="text-xs">
-                        {c.prescriptions[0].formulaName || "处方v" + c.prescriptions[0].version}
-                      </Badge>
+
+                    {/* Expanded timeline */}
+                    {isExpanded && (
+                      <div className="border-t border-primary/10 p-4 bg-muted/20">
+                        <div className="flex items-center justify-between mb-3">
+                          <p className="text-sm font-medium">诊疗流程</p>
+                          <button
+                            type="button"
+                            className="text-xs text-primary hover:underline"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              router.push(`/consultations/${c.id}/ai`);
+                            }}
+                          >
+                            进入诊疗 →
+                          </button>
+                        </div>
+                        <ConsultationTimeline
+                          consultationId={c.id}
+                          consultation={{
+                            patientId: patient.id,
+                            status: c.status,
+                            tongueImage: c.tongueImage ?? null,
+                            faceImage: c.faceImage ?? null,
+                            editedHistory: c.editedHistory ?? null,
+                            huXishuAnalysis: c.huXishuAnalysis ?? null,
+                            doctorFinalPattern: c.doctorFinalPattern ?? null,
+                            prescriptions: c.prescriptions,
+                          }}
+                        />
+                      </div>
                     )}
-                    <Badge>{statusLabels[c.status] || c.status}</Badge>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </CardContent>

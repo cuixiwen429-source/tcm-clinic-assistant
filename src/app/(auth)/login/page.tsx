@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
-import { PenTool, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -42,29 +42,41 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-muted/30">
-      <Card className="w-full max-w-sm">
-        <CardHeader className="text-center">
-          <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
-            <PenTool className="h-6 w-6 text-primary" />
+    <div className="flex min-h-screen items-center justify-center bg-[hsl(38,35%,96%)] p-4">
+      {/* Decorative background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-32 -right-32 h-96 w-96 rounded-full bg-primary/5" />
+        <div className="absolute -bottom-32 -left-32 h-96 w-96 rounded-full bg-[hsl(120,25%,55%)]/5" />
+      </div>
+
+      <Card className="w-full max-w-sm border-primary/10 shadow-lg">
+        <CardHeader className="text-center pb-6">
+          {/* Seal-style icon */}
+          <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full border-2 border-primary/20 bg-primary/5">
+            <span className="font-serif text-2xl text-primary font-bold tcm-seal">经</span>
           </div>
-          <CardTitle className="text-xl">经方辅助诊疗系统</CardTitle>
-          <CardDescription>执业中医师内部辅助工具</CardDescription>
+          <CardTitle className="text-xl font-serif text-foreground tracking-wide">
+            经方辅助诊疗系统
+          </CardTitle>
+          <CardDescription className="text-sm">
+            执业中医师内部辅助工具
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="username">用户名</Label>
+              <Label htmlFor="username" className="text-sm font-medium">用户名</Label>
               <Input
                 id="username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="请输入用户名"
                 required
+                className="border-primary/15 focus-visible:ring-primary/30"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">密码</Label>
+              <Label htmlFor="password" className="text-sm font-medium">密码</Label>
               <Input
                 id="password"
                 type="password"
@@ -72,15 +84,18 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="请输入密码"
                 required
+                className="border-primary/15 focus-visible:ring-primary/30"
               />
             </div>
-            <Button type="submit" className="w-full" disabled={loading}>
+            <Button type="submit" className="w-full font-medium" disabled={loading}>
               {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              登录
+              登录系统
             </Button>
           </form>
-          <p className="mt-4 text-center text-xs text-muted-foreground">
+          <p className="mt-5 text-center text-xs text-muted-foreground leading-relaxed">
             本系统仅供内部授权人员使用
+            <br />
+            <span className="opacity-60">AI学术参考 · 最终诊疗方案由执业医师确认</span>
           </p>
         </CardContent>
       </Card>

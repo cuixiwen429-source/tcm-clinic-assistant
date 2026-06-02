@@ -267,14 +267,39 @@ export default function AIAssistancePage() {
             <CardTitle className="text-base">舌诊信息</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            {(consultation?.tongueImage as string) && (
-              <img
-                src={consultation?.tongueImage as string}
-                alt="舌苔照片"
-                className="h-48 w-48 rounded-lg border object-cover cursor-pointer hover:opacity-90 transition-opacity"
-                onClick={() => window.open(consultation?.tongueImage as string, "_blank")}
-              />
-            )}
+            {(() => {
+              try {
+                const ti = consultation?.tongueImage as string;
+                if (!ti) return null;
+                const urls: string[] = JSON.parse(ti);
+                if (!Array.isArray(urls) || urls.length === 0) return null;
+                return (
+                  <div className="flex flex-wrap gap-2">
+                    {urls.map((url, i) => (
+                      <img
+                        key={i}
+                        src={url}
+                        alt={`舌苔照片 ${i + 1}`}
+                        className="h-32 w-32 rounded-lg border object-cover cursor-pointer hover:opacity-90 transition-opacity"
+                        onClick={() => window.open(url, "_blank")}
+                      />
+                    ))}
+                  </div>
+                );
+              } catch {
+                // Fallback: old single-image format
+                const url = consultation?.tongueImage as string;
+                if (!url) return null;
+                return (
+                  <img
+                    src={url}
+                    alt="舌苔照片"
+                    className="h-48 w-48 rounded-lg border object-cover cursor-pointer hover:opacity-90 transition-opacity"
+                    onClick={() => window.open(url, "_blank")}
+                  />
+                );
+              }
+            })()}
             {(() => {
               try {
                 const ta = consultation?.tongueAnalysis as string;
@@ -303,14 +328,39 @@ export default function AIAssistancePage() {
             <CardTitle className="text-base">面诊信息</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            {(consultation?.faceImage as string) && (
-              <img
-                src={consultation?.faceImage as string}
-                alt="面相照片"
-                className="h-48 w-48 rounded-lg border object-cover cursor-pointer hover:opacity-90 transition-opacity"
-                onClick={() => window.open(consultation?.faceImage as string, "_blank")}
-              />
-            )}
+            {(() => {
+              try {
+                const fi = consultation?.faceImage as string;
+                if (!fi) return null;
+                const urls: string[] = JSON.parse(fi);
+                if (!Array.isArray(urls) || urls.length === 0) return null;
+                return (
+                  <div className="flex flex-wrap gap-2">
+                    {urls.map((url, i) => (
+                      <img
+                        key={i}
+                        src={url}
+                        alt={`面相照片 ${i + 1}`}
+                        className="h-32 w-32 rounded-lg border object-cover cursor-pointer hover:opacity-90 transition-opacity"
+                        onClick={() => window.open(url, "_blank")}
+                      />
+                    ))}
+                  </div>
+                );
+              } catch {
+                // Fallback: old single-image format
+                const url = consultation?.faceImage as string;
+                if (!url) return null;
+                return (
+                  <img
+                    src={url}
+                    alt="面相照片"
+                    className="h-48 w-48 rounded-lg border object-cover cursor-pointer hover:opacity-90 transition-opacity"
+                    onClick={() => window.open(url, "_blank")}
+                  />
+                );
+              }
+            })()}
             {(() => {
               try {
                 const fa = consultation?.faceAnalysis as string;

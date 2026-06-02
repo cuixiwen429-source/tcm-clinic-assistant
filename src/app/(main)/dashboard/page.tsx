@@ -77,23 +77,32 @@ export default function DashboardPage() {
 
   const cards = [
     { title: "今日患者", value: stats.todayPatients, icon: Users, color: "text-blue-600", bg: "bg-blue-50" },
-    { title: "待确认处方", value: stats.pendingPrescriptions, icon: FileText, color: "text-orange-600", bg: "bg-orange-50" },
-    { title: "待打印处方", value: stats.pendingPrints, icon: Stethoscope, color: "text-green-600", bg: "bg-green-50" },
+    { title: "待确认处方", value: stats.pendingPrescriptions, icon: FileText, color: "text-amber-600", bg: "bg-amber-50" },
+    { title: "待打印处方", value: stats.pendingPrints, icon: Stethoscope, color: "text-emerald-600", bg: "bg-emerald-50" },
     { title: "高风险提醒", value: stats.highRiskAlerts, icon: AlertTriangle, color: "text-red-600", bg: "bg-red-50" },
   ];
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">工作台</h1>
-        <p className="text-muted-foreground">欢迎回来，{user?.name}医师</p>
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold font-serif tracking-wide">工作台</h1>
+          <p className="text-muted-foreground mt-0.5">
+            欢迎回来，<span className="text-foreground font-medium">{user?.name}</span> 医师
+          </p>
+        </div>
+        <div className="hidden sm:block text-xs text-muted-foreground bg-muted px-3 py-1.5 rounded-full">
+          {format(new Date(), "yyyy年MM月dd日 EEEE", { locale: zhCN })}
+        </div>
       </div>
 
+      {/* Stats cards */}
       <div className="grid gap-3 grid-cols-2 lg:grid-cols-4">
         {cards.map((card) => {
           const Icon = card.icon;
           return (
-            <Card key={card.title}>
+            <Card key={card.title} className="border-primary/10 hover:shadow-md transition-shadow duration-200">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-sm font-medium text-muted-foreground">{card.title}</CardTitle>
                 <div className={`rounded-full p-2 ${card.bg}`}>
@@ -104,7 +113,7 @@ export default function DashboardPage() {
                 {loading ? (
                   <Skeleton className="h-8 w-12" />
                 ) : (
-                  <p className="text-2xl font-bold">{card.value}</p>
+                  <p className="text-2xl font-bold font-serif">{card.value}</p>
                 )}
               </CardContent>
             </Card>
@@ -112,14 +121,22 @@ export default function DashboardPage() {
         })}
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
-        <Button onClick={() => router.push("/consultations/new")} className="w-full sm:w-auto">新建就诊</Button>
-        <Button variant="outline" onClick={() => router.push("/patients")} className="w-full sm:w-auto">患者管理</Button>
+      {/* Quick actions */}
+      <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+        <Button onClick={() => router.push("/consultations/new")} className="w-full sm:w-auto font-medium shadow-sm">
+          <Stethoscope className="mr-2 h-4 w-4" />
+          新建就诊
+        </Button>
+        <Button variant="outline" onClick={() => router.push("/patients")} className="w-full sm:w-auto border-primary/20">
+          <Users className="mr-2 h-4 w-4" />
+          患者管理
+        </Button>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">最近就诊</CardTitle>
+      {/* Recent consultations */}
+      <Card className="border-primary/10">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-lg font-serif">最近就诊</CardTitle>
         </CardHeader>
         <CardContent>
           {loading ? (
@@ -129,14 +146,20 @@ export default function DashboardPage() {
               <Skeleton className="h-12 w-full" />
             </div>
           ) : recentConsultations.length === 0 ? (
-            <p className="text-sm text-muted-foreground">暂无就诊记录。点击"新建就诊"开始接诊。</p>
+            <div className="text-center py-8">
+              <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-muted">
+                <FileText className="h-5 w-5 text-muted-foreground" />
+              </div>
+              <p className="text-sm text-muted-foreground">暂无就诊记录</p>
+              <p className="text-xs text-muted-foreground/70 mt-1">点击"新建就诊"开始接诊</p>
+            </div>
           ) : (
             <div className="space-y-2">
               {recentConsultations.map((c) => (
                 <div
                   key={c.id}
-                  className="flex items-center justify-between rounded-lg border p-3 hover:bg-accent cursor-pointer transition-colors"
-                  onClick={() => router.push(`/consultations/${c.id}/ai`)}
+                  className="flex items-center justify-between rounded-lg border border-primary/10 p-3 hover:bg-muted/50 cursor-pointer transition-colors duration-200"
+                  onClick={() => router.push(`/patients/${c.patient.id}`)}
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <div className="flex-shrink-0 rounded-full bg-primary/10 p-2">
@@ -145,7 +168,7 @@ export default function DashboardPage() {
                     <div className="min-w-0">
                       <p className="text-sm font-medium truncate">
                         {c.patient.name}
-                        <span className="text-muted-foreground font-normal ml-1">
+                        <span className="text-muted-foreground font-normal ml-1.5">
                           {c.patient.gender} {c.patient.age ? `${c.patient.age}岁` : ""}
                         </span>
                       </p>
@@ -158,7 +181,7 @@ export default function DashboardPage() {
                     <Badge variant={statusVariants[c.status] || "secondary"} className="text-[10px]">
                       {statusLabels[c.status] || c.status}
                     </Badge>
-                    <span className="text-xs text-muted-foreground">
+                    <span className="text-xs text-muted-foreground hidden sm:inline">
                       {format(new Date(c.visitDate), "MM/dd", { locale: zhCN })}
                     </span>
                   </div>
