@@ -38,6 +38,16 @@ export default function AIAssistancePage() {
     fetchConsultation();
   }, [consultationId]);
 
+  // Redirect finalized/archived consultations to read-only detail view
+  useEffect(() => {
+    if (consultation) {
+      const status = consultation.status as string;
+      if (status === "FINALIZED" || status === "ARCHIVED") {
+        router.replace(`/consultations/${consultationId}`);
+      }
+    }
+  }, [consultation, consultationId, router]);
+
   const fetchConsultation = async () => {
     setLoading(true);
     try {
@@ -247,13 +257,13 @@ export default function AIAssistancePage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon" onClick={() => router.push("/patients")}>
+      <div className="flex items-center gap-2 sm:gap-4 min-w-0">
+        <Button variant="ghost" size="icon" className="flex-shrink-0" onClick={() => router.push("/patients")}>
           <ArrowLeft className="h-4 w-4" />
         </Button>
-        <div>
-          <h1 className="text-2xl font-bold">AI辨证辅助</h1>
-          <p className="text-muted-foreground">
+        <div className="min-w-0">
+          <h1 className="text-xl sm:text-2xl font-bold">AI辨证辅助</h1>
+          <p className="text-muted-foreground text-xs sm:text-sm truncate">
             患者：{patient.name as string} · 主诉：{(consultation?.chiefComplaint as string) || "未填写"}
           </p>
         </div>
@@ -485,11 +495,11 @@ export default function AIAssistancePage() {
       ) : (
         <>
           <Tabs defaultValue="huXishu">
-            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4">
-              <TabsTrigger value="huXishu">胡希恕·六经辨证</TabsTrigger>
-              <TabsTrigger value="zhangXichun">张锡纯·衷中参西</TabsTrigger>
-              <TabsTrigger value="niHaixia">倪海厦·人纪</TabsTrigger>
-              <TabsTrigger value="liKe">李可·扶阳</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 h-auto">
+              <TabsTrigger value="huXishu" className="text-xs sm:text-sm py-2">胡希恕·六经</TabsTrigger>
+              <TabsTrigger value="zhangXichun" className="text-xs sm:text-sm py-2">张锡纯·参西</TabsTrigger>
+              <TabsTrigger value="niHaixia" className="text-xs sm:text-sm py-2">倪海厦·人纪</TabsTrigger>
+              <TabsTrigger value="liKe" className="text-xs sm:text-sm py-2">李可·扶阳</TabsTrigger>
             </TabsList>
 
             {(["huXishu", "zhangXichun", "niHaixia", "liKe"] as const).map((key) => {

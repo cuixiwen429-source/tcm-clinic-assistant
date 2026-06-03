@@ -1,8 +1,9 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Camera, Upload, X, Loader2, FileImage, Plus } from "lucide-react";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { Camera, Upload, X, Loader2, FileImage, Plus, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 
 interface ImageUploadProps {
@@ -16,7 +17,84 @@ interface ImageUploadProps {
 
 export function ImageUpload({ title, description, images, onImagesChange, disabled, maxImages = 5 }: ImageUploadProps) {
   const fileRef = useRef<HTMLInputElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const streamRef = useRef<MediaStream | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [cameraOpen, setCameraOpen] = useState(false);
+  const [cameraReady, setCameraReady] = useState(false);
+  const [cameraError, setCameraError] = useState("");
+
+  const isMobile = typeof navigator !== "undefined" &&
+    /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+  /** Resize image to max 1024px longest side, JPEG quality 0.75 — reduces ~5MB→~200KB */
+  async function resizeImage(file: File): Promise<Blob> {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        const MAX = 1024;
+        let { width, height } = img;
+        if (width > height) {
+          if (width > MAX) { height = Math.round((height / width) * MAX); width = MAX; }
+        } else {
+          if (height > MAX) { width = Math.round((width / height) * MAX); height = MAX; }
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d")!;
+        ctx.drawImage(img, 0, 0, width, height);
+        canvas.toBlob((b) => (b ? resolve(b) : reject(new Error("resize failed"))), "image/jpeg", 0.75);
+      };
+      img.onerror = () => reject(new Error("failed to load image"));
+      img.src = URL.createObjectURL(file);
+    });
+  }
+
+  const stopCamera = () => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((t) => t.stop());
+      streamRef.current = null;
+    }
+    setCameraReady(false);
+  };
+
+  const startCamera = async () => {
+    setCameraError("");
+    setCameraOpen(true);
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "environment", width: { ideal: 1920 }, height: { ideal: 1080 } },
+      });
+      streamRef.current = stream;
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+      }
+      setCameraReady(true);
+    } catch {
+      setCameraError("无法访问摄像头，请检查权限设置");
+      setCameraReady(false);
+    }
+  };
+
+  const capturePhoto = () => {
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+    if (!video || !canvas) return;
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    ctx.drawImage(video, 0, 0);
+    canvas.toBlob(async (blob) => {
+      if (!blob) return;
+      stopCamera();
+      setCameraOpen(false);
+      const file = new File([blob], `webcam-${Date.now()}.jpg`, { type: "image/jpeg" });
+      await handleFile(file);
+    }, "image/jpeg", 0.92);
+  };
 
   const handleFile = async (file: File) => {
     if (images.length >= maxImages) {
@@ -25,8 +103,10 @@ export function ImageUpload({ title, description, images, onImagesChange, disabl
     }
     setUploading(true);
     try {
+      const resized = await resizeImage(file);
+      const resizedFile = new File([resized], file.name.replace(/\.\w+$/, ".jpg"), { type: "image/jpeg" });
       const form = new FormData();
-      form.set("file", file);
+      form.set("file", resizedFile);
       const res = await fetch("/api/upload", { method: "POST", body: form });
       if (!res.ok) {
         const data = await res.json().catch(() => ({ error: "上传失败" }));
@@ -46,8 +126,10 @@ export function ImageUpload({ title, description, images, onImagesChange, disabl
     onImagesChange(images.filter((_, i) => i !== index));
   };
 
-  const isMobile = typeof navigator !== "undefined" &&
-    /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  // Cleanup stream on unmount
+  useEffect(() => {
+    return () => stopCamera();
+  }, []);
 
   return (
     <div className="space-y-2">
@@ -66,6 +148,9 @@ export function ImageUpload({ title, description, images, onImagesChange, disabl
           e.target.value = "";
         }}
       />
+
+      {/* Hidden canvas for capture */}
+      <canvas ref={canvasRef} className="hidden" />
 
       {/* Image grid */}
       {images.length > 0 && (
@@ -94,7 +179,7 @@ export function ImageUpload({ title, description, images, onImagesChange, disabl
             <button
               type="button"
               className="aspect-square rounded-lg border-2 border-dashed border-muted-foreground/25 hover:border-primary/50 flex items-center justify-center transition-colors"
-              onClick={() => fileRef.current?.click()}
+              onClick={() => isMobile ? fileRef.current?.click() : startCamera()}
               disabled={uploading}
             >
               {uploading ? (
@@ -114,7 +199,7 @@ export function ImageUpload({ title, description, images, onImagesChange, disabl
             variant="outline"
             size="sm"
             disabled={disabled || uploading}
-            onClick={() => fileRef.current?.click()}
+            onClick={() => isMobile ? fileRef.current?.click() : startCamera()}
           >
             {uploading ? (
               <Loader2 className="h-4 w-4 mr-1 animate-spin" />
@@ -127,13 +212,7 @@ export function ImageUpload({ title, description, images, onImagesChange, disabl
             variant="outline"
             size="sm"
             disabled={disabled || uploading}
-            onClick={() => {
-              const input = fileRef.current;
-              if (input) {
-                input.removeAttribute("capture");
-                input.click();
-              }
-            }}
+            onClick={() => fileRef.current?.click()}
           >
             {uploading ? (
               <Loader2 className="h-4 w-4 mr-1 animate-spin" />
@@ -144,6 +223,44 @@ export function ImageUpload({ title, description, images, onImagesChange, disabl
           </Button>
         </div>
       )}
+
+      {/* Camera capture dialog */}
+      <Dialog open={cameraOpen} onOpenChange={(o) => { if (!o) { stopCamera(); setCameraOpen(false); } }}>
+        <DialogContent className="max-w-lg p-0 gap-0">
+          <DialogTitle className="px-4 pt-4 text-sm">拍摄照片</DialogTitle>
+          <div className="relative bg-black rounded-md overflow-hidden mx-4 mt-2">
+            {cameraError ? (
+              <div className="flex flex-col items-center justify-center h-64 gap-3 text-muted-foreground">
+                <Camera className="h-10 w-10" />
+                <p className="text-sm">{cameraError}</p>
+                <Button variant="outline" size="sm" onClick={startCamera}>重试</Button>
+              </div>
+            ) : (
+              <video
+                ref={videoRef}
+                autoPlay
+                playsInline
+                muted
+                onLoadedMetadata={() => setCameraReady(true)}
+                className="w-full h-64 object-cover"
+              />
+            )}
+            {!cameraReady && !cameraError && (
+              <div className="absolute inset-0 flex items-center justify-center text-white">
+                <Loader2 className="h-8 w-8 animate-spin" />
+              </div>
+            )}
+          </div>
+          <div className="flex justify-center gap-4 p-4">
+            <Button variant="outline" onClick={() => { stopCamera(); setCameraOpen(false); }}>
+              取消
+            </Button>
+            <Button onClick={capturePhoto} disabled={!cameraReady || !!cameraError}>
+              拍摄
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

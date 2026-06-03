@@ -5,9 +5,10 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils/cn";
 import { useAuthStore } from "@/stores/auth-store";
 import {
-  LayoutDashboard, Users, PenTool, Leaf, Settings, Shield,
-  Stethoscope,
+  LayoutDashboard, Users, Leaf, Shield,
+  Stethoscope, ShieldCheck,
 } from "lucide-react";
+import { BrandLogo } from "@/components/BrandLogo";
 
 interface NavItem {
   href: string;
@@ -22,6 +23,7 @@ const navItems: NavItem[] = [
   { href: "/consultations/new", label: "新建就诊", icon: Stethoscope },
   { href: "/settings/herbs", label: "药材管理", icon: Leaf, roles: ["ADMIN", "DOCTOR"] },
   { href: "/settings/rules", label: "规则配置", icon: Shield, roles: ["ADMIN"] },
+  { href: "/admin", label: "系统管理", icon: ShieldCheck, roles: ["ADMIN"] },
 ];
 
 interface SidebarProps {
@@ -37,26 +39,29 @@ export function Sidebar({ onNavClick }: SidebarProps) {
   );
 
   return (
-    <div className="flex h-full flex-col border-r border-primary/10 bg-card">
+    <div className="flex h-full flex-col sidebar-border bg-card">
       {/* Brand header */}
-      <div className="flex h-14 items-center border-b border-primary/10 px-4">
+      <div className="flex h-20 items-center px-4 pt-1.5">
         <Link
           href="/dashboard"
-          className="flex items-center gap-2.5 group"
+          className="flex items-center gap-3 group"
           onClick={onNavClick}
         >
-          <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary shadow-sm">
-            <PenTool className="h-4 w-4 text-primary-foreground" />
-          </div>
+          <BrandLogo size={76} />
           <div className="flex flex-col leading-tight">
-            <span className="text-sm font-semibold text-foreground">经方辅助诊疗</span>
-            <span className="text-[10px] text-muted-foreground">TCM Assistant</span>
+            <span className="text-base font-semibold text-foreground font-serif tracking-wide">
+              药谷云阁
+            </span>
+            <span className="text-[11px] text-muted-foreground">中医大健康平台</span>
           </div>
         </Link>
       </div>
 
+      {/* Fret divider */}
+      <div className="tcm-fret-border" />
+
       {/* Navigation */}
-      <nav className="flex flex-col gap-0.5 p-2">
+      <nav className="flex flex-col gap-0.5 p-2 mt-1">
         {filteredItems.map((item) => {
           const Icon = item.icon;
           const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
@@ -75,15 +80,36 @@ export function Sidebar({ onNavClick }: SidebarProps) {
               <Icon className="h-4 w-4 flex-shrink-0" />
               <span>{item.label}</span>
               {isActive && (
-                <span className="ml-auto h-1.5 w-1.5 rounded-full bg-primary-foreground/60" />
+                <span
+                  className="ml-auto w-2.5 h-2.5 flex-shrink-0 rounded-sm border border-primary-foreground/40"
+                  style={{ transform: "rotate(5deg)" }}
+                />
               )}
             </Link>
           );
         })}
       </nav>
 
-      {/* Footer */}
+      {/* Footer — cloud motif + seal */}
       <div className="mt-auto border-t border-primary/10 p-3">
+        {/* Cloud decoration */}
+        <div className="flex justify-center gap-1 mb-2 opacity-25">
+          <svg width="18" height="10" viewBox="0 0 18 10" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2,8 Q0,6 2,4 Q1,2 4,1.5 Q5,0 8,1 Q10,0 13,1.5 Q16,1 17,3.5 Q18,6 15,7.5 Q13,9 10,8.5 Q7,10 4,9 Z" fill="hsl(var(--tcm-seal))" opacity="0.5" />
+          </svg>
+          <svg width="14" height="8" viewBox="0 0 14 8" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1,6 Q0,4 2,3 Q1,1 3.5,0.5 Q4.5,0 7,1 Q9,0 10.5,1 Q13,1 14,3 Q14.5,5 12,6 Q10,7 7.5,6.5 Q5,7 3,6.5 Z" fill="hsl(var(--tcm-celadon))" opacity="0.5" />
+          </svg>
+          <svg width="18" height="10" viewBox="0 0 18 10" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2,8 Q0,6 2,4 Q1,2 4,1.5 Q5,0 8,1 Q10,0 13,1.5 Q16,1 17,3.5 Q18,6 15,7.5 Q13,9 10,8.5 Q7,10 4,9 Z" fill="hsl(var(--tcm-gold))" opacity="0.5" />
+          </svg>
+        </div>
+
+        {/* Tiny brand logo */}
+        <div className="flex justify-center mb-1.5">
+          <BrandLogo size={42} />
+        </div>
+
         <p className="text-[10px] text-muted-foreground text-center leading-relaxed">
           执业中医师内部辅助工具
           <br />

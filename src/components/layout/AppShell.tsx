@@ -21,6 +21,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!isLoading && !user && pathname !== "/login") {
       router.push("/login");
+    } else if (!isLoading && user && user.role === "ADMIN") {
+      router.replace("/admin");
     }
   }, [user, isLoading, pathname, router]);
 
@@ -42,7 +44,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen">
       {/* Desktop Sidebar */}
-      <aside className="fixed left-0 top-0 z-40 hidden h-screen w-56 border-r bg-card md:block">
+      <aside className="fixed left-0 top-0 z-40 hidden h-screen w-56 md:block">
         <Sidebar />
       </aside>
 
@@ -55,7 +57,16 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
       <div className="md:ml-56">
         <TopBar onMenuClick={() => setMobileOpen(true)} />
-        <main className="p-3 md:p-6">{children}</main>
+        {/* Subtle radial vignette on content area */}
+        <main
+          className="p-3 md:p-6 max-w-full overflow-x-hidden"
+          style={{
+            backgroundImage: "radial-gradient(ellipse at 50% 0%, hsla(var(--tcm-seal) / 0.02) 0%, transparent 60%)",
+            backgroundRepeat: "no-repeat",
+          }}
+        >
+          {children}
+        </main>
       </div>
     </div>
   );

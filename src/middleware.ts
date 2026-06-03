@@ -5,7 +5,7 @@ const JWT_SECRET = new TextEncoder().encode(
   process.env.JWT_SECRET || "dev-secret-change-in-production"
 );
 
-const PUBLIC_PATHS = ["/login", "/api/auth/login"];
+const PUBLIC_PATHS = ["/login", "/register", "/api/auth/login", "/api/auth/register", "/admin/login"];
 const COOKIE_NAME = "tcm_token";
 
 export async function middleware(request: NextRequest) {
@@ -37,7 +37,28 @@ export async function middleware(request: NextRequest) {
   }
 
   try {
-    await jwtVerify(token, JWT_SECRET);
+    const { payload } = await jwtVerify<{ role?: string }>(token, JWT_SECRET);
+    const role = payload.role;
+
+    const isAdminPath = pathname.startsWith("/admin") || pathname.startsWith("/api/admin");
+    const isSharedApi = pathname === "/api/auth/me" || pathname === "/api/auth/logout";
+
+    // ADMIN users can only access admin paths and shared APIs
+    if (role === "ADMIN" && !isAdminPath && !isSharedApi) {
+      if (pathname.startsWith("/api/")) {
+        return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      }
+      return NextResponse.redirect(new URL("/admin", request.url));
+    }
+
+    // Non-ADMIN users cannot access admin paths
+    if (role !== "ADMIN" && isAdminPath) {
+      if (pathname.startsWith("/api/")) {
+        return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      }
+      return NextResponse.redirect(new URL("/dashboard", request.url));
+    }
+
     return NextResponse.next();
   } catch {
     if (pathname.startsWith("/api/")) {

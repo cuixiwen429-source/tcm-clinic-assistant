@@ -5,6 +5,18 @@ import { analyzeImage } from "@/lib/vision/doubao-vision";
 
 export const maxDuration = 60;
 
+async function resizeImage(buf: Buffer): Promise<Buffer> {
+  try {
+    const sharp = (await import("sharp")).default;
+    return await sharp(buf)
+      .resize(1024, 1024, { fit: "inside", withoutEnlargement: true })
+      .jpeg({ quality: 75 })
+      .toBuffer();
+  } catch {
+    return buf; // sharp unavailable or image malformed — use original
+  }
+}
+
 export async function POST(request: NextRequest) {
   const session = await getSession();
   if (!session) return NextResponse.json({ error: "未登录" }, { status: 401 });
@@ -19,7 +31,8 @@ export async function POST(request: NextRequest) {
 
     if (!file) return NextResponse.json({ error: "未上传舌苔图片" }, { status: 400 });
 
-    const buf = Buffer.from(await file.arrayBuffer());
+    const arr = new Uint8Array(await file.arrayBuffer());
+    const buf = await resizeImage(Buffer.from(arr));
     const imageBase64 = buf.toString("base64");
 
     // Fetch patient info for context

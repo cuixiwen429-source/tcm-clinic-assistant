@@ -85,10 +85,10 @@ export default function PatientsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold">患者管理</h1>
-          <p className="text-muted-foreground">管理患者档案</p>
+          <h1 className="text-xl sm:text-2xl font-bold">患者管理</h1>
+          <p className="text-muted-foreground text-sm">管理患者档案</p>
         </div>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
@@ -134,29 +134,36 @@ export default function PatientsPage() {
               <TableHeader>
                 <TableRow>
                   <TableHead>姓名</TableHead>
-                  <TableHead>性别</TableHead>
-                  <TableHead>年龄</TableHead>
-                  <TableHead>手机号</TableHead>
-                  <TableHead>体质</TableHead>
-                  <TableHead>就诊次数</TableHead>
-                  <TableHead>更新时间</TableHead>
+                  <TableHead className="hidden sm:table-cell">性别</TableHead>
+                  <TableHead className="hidden sm:table-cell">年龄</TableHead>
+                  <TableHead className="hidden md:table-cell">手机号</TableHead>
+                  <TableHead className="hidden sm:table-cell">体质</TableHead>
+                  <TableHead className="hidden sm:table-cell">就诊次数</TableHead>
+                  <TableHead className="hidden md:table-cell">更新时间</TableHead>
                   <TableHead></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {patients.map((p) => (
                   <TableRow key={p.id} className="cursor-pointer" onClick={() => router.push(`/patients/${p.id}`)}>
-                    <TableCell className="font-medium">{p.name}</TableCell>
-                    <TableCell>{p.gender || "-"}</TableCell>
-                    <TableCell>{p.age || "-"}</TableCell>
-                    <TableCell>{p.phone || "-"}</TableCell>
-                    <TableCell>
+                    <TableCell className="font-medium">
+                      <div className="flex flex-col">
+                        <span>{p.name}</span>
+                        <span className="text-xs text-muted-foreground sm:hidden">
+                          {[p.gender, p.age ? `${p.age}岁` : null].filter(Boolean).join(" · ") || "—"}
+                        </span>
+                      </div>
+                    </TableCell>
+                    <TableCell className="hidden sm:table-cell">{p.gender || "-"}</TableCell>
+                    <TableCell className="hidden sm:table-cell">{p.age || "-"}</TableCell>
+                    <TableCell className="hidden md:table-cell">{p.phone || "-"}</TableCell>
+                    <TableCell className="hidden sm:table-cell">
                       {p.constitution ? (
                         <Badge variant="outline">{p.constitution}</Badge>
                       ) : "-"}
                     </TableCell>
-                    <TableCell>{p._count.consultations}</TableCell>
-                    <TableCell className="text-muted-foreground text-xs">
+                    <TableCell className="hidden sm:table-cell">{p._count.consultations}</TableCell>
+                    <TableCell className="hidden md:table-cell text-muted-foreground text-xs">
                       {p.updatedAt ? format(new Date(p.updatedAt), "MM-dd HH:mm") : "-"}
                     </TableCell>
                     <TableCell>

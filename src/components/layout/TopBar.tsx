@@ -38,7 +38,7 @@ export function TopBar({ onMenuClick }: TopBarProps) {
   };
 
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-primary/10 bg-card/80 backdrop-blur-sm px-4 md:px-6">
+    <header className="sticky top-0 z-30 flex h-14 items-center justify-between bg-card/80 backdrop-blur-md px-4 md:px-6 topbar-fret">
       <Button
         variant="ghost"
         size="icon"
@@ -48,7 +48,15 @@ export function TopBar({ onMenuClick }: TopBarProps) {
         <Menu className="h-5 w-5" />
         <span className="sr-only">菜单</span>
       </Button>
-      <div className="flex-1 md:flex-none" />
+
+      {/* Desktop: centered brand name */}
+      <div className="hidden md:flex flex-1 justify-center">
+        <span className="brand-underline text-sm font-serif font-semibold text-foreground/80 tracking-[0.15em]">
+          药谷云阁中医大健康平台
+        </span>
+      </div>
+      <div className="flex-1 md:hidden" />
+
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="flex items-center gap-2.5 hover:bg-muted px-2">

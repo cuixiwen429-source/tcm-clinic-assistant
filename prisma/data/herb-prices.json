@@ -1,0 +1,2462 @@
+{
+  "丁公藤": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "丁香": {
+    "retailPrice": 0.28,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "三七": {
+    "retailPrice": 2.5,
+    "spec": "统",
+    "origin": "山东"
+  },
+  "三棱": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "三白草": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "云南"
+  },
+  "三颗针": {
+    "retailPrice": 0.25,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "丝瓜络": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "丹参": {
+    "retailPrice": 0.25,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "乌梅": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "河南"
+  },
+  "乌梢蛇": {
+    "retailPrice": 1.8,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "乌药": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "九香虫": {
+    "retailPrice": 0.35,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "乳香": {
+    "retailPrice": 0.25,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "五加皮": {
+    "retailPrice": 0.25,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "五味子": {
+    "retailPrice": 0.38,
+    "spec": "统",
+    "origin": "河南"
+  },
+  "五指毛桃": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "五灵脂": {
+    "retailPrice": 0.25,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "京大戟": {
+    "retailPrice": 0.35,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "人参": {
+    "retailPrice": 2,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "仙茅": {
+    "retailPrice": 0.28,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "仙鹤草": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "山东"
+  },
+  "伸筋草": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "何首乌": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "佛手": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "佩兰": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "使君子": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "湖南"
+  },
+  "侧柏叶": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "山东"
+  },
+  "僵蚕": {
+    "retailPrice": 0.35,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "儿茶": {
+    "retailPrice": 0.2,
+    "spec": "统",
+    "origin": "湖南"
+  },
+  "党参": {
+    "retailPrice": 0.28,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "全蝎": {
+    "retailPrice": 3.5,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "冬瓜皮": {
+    "retailPrice": 0.1,
+    "spec": "统",
+    "origin": "云南"
+  },
+  "冬葵子": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "云南"
+  },
+  "冬虫夏草": {
+    "retailPrice": 25,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "冰片": {
+    "retailPrice": 0.35,
+    "spec": "统",
+    "origin": "西藏"
+  },
+  "决明子": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "凌霄花": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "刀豆": {
+    "retailPrice": 0.16,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "刘寄奴": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "刺猬皮": {
+    "retailPrice": 0.5,
+    "spec": "统",
+    "origin": "河南"
+  },
+  "前胡": {
+    "retailPrice": 0.2,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "北沙参": {
+    "retailPrice": 0.3,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "北豆根": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "千年健": {
+    "retailPrice": 0.25,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "千里光": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "千金子": {
+    "retailPrice": 0.3,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "升药": {
+    "retailPrice": 0.6,
+    "spec": "统",
+    "origin": "湖南"
+  },
+  "升麻": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "半夏": {
+    "retailPrice": 0.38,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "半边莲": {
+    "retailPrice": 0.2,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "华山参": {
+    "retailPrice": 0.45,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "南沙参": {
+    "retailPrice": 0.28,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "南瓜子": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "湖南"
+  },
+  "厚朴": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "合欢皮": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "合欢花": {
+    "retailPrice": 0.25,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "吴茱萸": {
+    "retailPrice": 0.28,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "商陆": {
+    "retailPrice": 0.25,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "四季青": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "土茯苓": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "土荆皮": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "湖南"
+  },
+  "土鳖虫": {
+    "retailPrice": 0.45,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "地榆": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "山东"
+  },
+  "地耳草": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "云南"
+  },
+  "地肤子": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "云南"
+  },
+  "地锦草": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "地骨皮": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "地龙": {
+    "retailPrice": 0.45,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "垂盆草": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "云南"
+  },
+  "墨旱莲": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "夏天无": {
+    "retailPrice": 0.28,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "夏枯草": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "大枣": {
+    "retailPrice": 0.08,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "大腹皮": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "大蒜": {
+    "retailPrice": 0.05,
+    "spec": "统",
+    "origin": "湖南"
+  },
+  "大蓟": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "山东"
+  },
+  "大血藤": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "大青叶": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "大风子": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "湖南"
+  },
+  "大黄": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "天仙藤": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "天冬": {
+    "retailPrice": 0.38,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "天南星": {
+    "retailPrice": 0.3,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "天山雪莲": {
+    "retailPrice": 2.5,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "天竺黄": {
+    "retailPrice": 0.35,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "天花粉": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "天麻": {
+    "retailPrice": 1.2,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "太子参": {
+    "retailPrice": 0.5,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "女贞子": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "委陵菜": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "姜黄": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "威灵仙": {
+    "retailPrice": 0.2,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "娑罗子": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "守宫": {
+    "retailPrice": 2.5,
+    "spec": "统",
+    "origin": "湖南"
+  },
+  "安息香": {
+    "retailPrice": 0.8,
+    "spec": "统",
+    "origin": "西藏"
+  },
+  "密蒙花": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "密陀僧": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "湖南"
+  },
+  "寒水石": {
+    "retailPrice": 0.08,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "寻骨风": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "射干": {
+    "retailPrice": 0.28,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "小茴香": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "小蓟": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "山东"
+  },
+  "小通草": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "云南"
+  },
+  "小麦": {
+    "retailPrice": 0.05,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "山慈菇": {
+    "retailPrice": 0.5,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "山楂": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "河南"
+  },
+  "山茱萸": {
+    "retailPrice": 0.3,
+    "spec": "统",
+    "origin": "河南"
+  },
+  "山药": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "山豆根": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "岗梅": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "川乌": {
+    "retailPrice": 0.45,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "川楝子": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "川牛膝": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "川芎": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "川贝母": {
+    "retailPrice": 3.5,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "巴戟天": {
+    "retailPrice": 0.3,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "巴豆霜": {
+    "retailPrice": 0.5,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "布渣叶": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "常山": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "广西"
+  },
+  "干姜": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "广藿香": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "延胡索": {
+    "retailPrice": 0.3,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "当归": {
+    "retailPrice": 0.3,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "徐长卿": {
+    "retailPrice": 0.35,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "拳参": {
+    "retailPrice": 0.28,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "斑蝥": {
+    "retailPrice": 1.5,
+    "spec": "统",
+    "origin": "湖南"
+  },
+  "旋覆花": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "昆布": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "昆明山海棠": {
+    "retailPrice": 0.25,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "月季花": {
+    "retailPrice": 0.2,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "木槿皮": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "湖南"
+  },
+  "木瓜": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "木蝴蝶": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "木贼": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "木通": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "云南"
+  },
+  "木香": {
+    "retailPrice": 0.2,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "木鳖子": {
+    "retailPrice": 0.25,
+    "spec": "统",
+    "origin": "湖南"
+  },
+  "朱砂": {
+    "retailPrice": 0.8,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "杜仲": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "松子仁": {
+    "retailPrice": 0.25,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "松节": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "松香": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "湖南"
+  },
+  "板蓝根": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "枇杷叶": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "枫香脂": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "枳壳": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "枳实": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "枳椇子": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "云南"
+  },
+  "枸杞子": {
+    "retailPrice": 0.28,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "柏子仁": {
+    "retailPrice": 0.45,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "柴胡": {
+    "retailPrice": 0.28,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "柽柳": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "柿蒂": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "栀子": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "核桃仁": {
+    "retailPrice": 0.2,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "桂枝": {
+    "retailPrice": 0.1,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "桃仁": {
+    "retailPrice": 0.35,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "桑叶": {
+    "retailPrice": 0.1,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "桑寄生": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "桑枝": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "桑椹": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "桑白皮": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "桑螵蛸": {
+    "retailPrice": 0.6,
+    "spec": "统",
+    "origin": "河南"
+  },
+  "桔梗": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "棕榈炭": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "山东"
+  },
+  "椿皮": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "河南"
+  },
+  "榧子": {
+    "retailPrice": 0.25,
+    "spec": "统",
+    "origin": "湖南"
+  },
+  "槐花": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "山东"
+  },
+  "槐角": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "山东"
+  },
+  "槟榔": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "湖南"
+  },
+  "樟脑": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "湖南"
+  },
+  "檀香": {
+    "retailPrice": 0.8,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "款冬花": {
+    "retailPrice": 0.3,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "水牛角": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "水蛭": {
+    "retailPrice": 1.8,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "沉香": {
+    "retailPrice": 1.8,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "沙棘": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "沙苑子": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "没药": {
+    "retailPrice": 0.25,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "泽兰": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "泽泻": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "云南"
+  },
+  "泽漆": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "云南"
+  },
+  "洋金花": {
+    "retailPrice": 0.35,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "浙贝母": {
+    "retailPrice": 0.45,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "浮小麦": {
+    "retailPrice": 0.1,
+    "spec": "统",
+    "origin": "河南"
+  },
+  "浮萍": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "海桐皮": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "海浮石": {
+    "retailPrice": 0.1,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "海藻": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "海蛤壳": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "海螵蛸": {
+    "retailPrice": 0.28,
+    "spec": "统",
+    "origin": "河南"
+  },
+  "海金沙": {
+    "retailPrice": 0.3,
+    "spec": "统",
+    "origin": "云南"
+  },
+  "海风藤": {
+    "retailPrice": 0.2,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "海马": {
+    "retailPrice": 6,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "海龙": {
+    "retailPrice": 5.5,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "淡竹叶": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "淡豆豉": {
+    "retailPrice": 0.1,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "淫羊藿": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "滑石": {
+    "retailPrice": 0.06,
+    "spec": "统",
+    "origin": "云南"
+  },
+  "满山红": {
+    "retailPrice": 0.2,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "漏芦": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "火炭母": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "火麻仁": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "灯心草": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "云南"
+  },
+  "灯盏细辛": {
+    "retailPrice": 0.35,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "灵芝": {
+    "retailPrice": 0.65,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "灶心土": {
+    "retailPrice": 0.08,
+    "spec": "统",
+    "origin": "山东"
+  },
+  "炉甘石": {
+    "retailPrice": 0.1,
+    "spec": "统",
+    "origin": "湖南"
+  },
+  "炮姜": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "山东"
+  },
+  "熊胆粉": {
+    "retailPrice": 8,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "熟地黄": {
+    "retailPrice": 0.25,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "牛膝": {
+    "retailPrice": 0.2,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "牛蒡子": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "牛黄": {
+    "retailPrice": 15,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "牡丹皮": {
+    "retailPrice": 0.25,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "牡蛎": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "牵牛子": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "狗脊": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "独一味": {
+    "retailPrice": 0.28,
+    "spec": "统",
+    "origin": "山东"
+  },
+  "独活": {
+    "retailPrice": 0.28,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "猪苓": {
+    "retailPrice": 0.6,
+    "spec": "统",
+    "origin": "云南"
+  },
+  "玄参": {
+    "retailPrice": 0.2,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "玉竹": {
+    "retailPrice": 0.25,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "玉米须": {
+    "retailPrice": 0.16,
+    "spec": "统",
+    "origin": "云南"
+  },
+  "王不留行": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "玫瑰花": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "珍珠母": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "珍珠草": {
+    "retailPrice": 0.2,
+    "spec": "统",
+    "origin": "云南"
+  },
+  "珠子参": {
+    "retailPrice": 0.5,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "琥珀": {
+    "retailPrice": 0.6,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "瓜蒂": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "广西"
+  },
+  "瓜蒌": {
+    "retailPrice": 0.25,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "瓦楞子": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "甘松": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "甘草": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "甘遂": {
+    "retailPrice": 0.45,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "生地黄": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "生姜": {
+    "retailPrice": 0.06,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "番泻叶": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "白前": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "白及": {
+    "retailPrice": 0.45,
+    "spec": "统",
+    "origin": "山东"
+  },
+  "白头翁": {
+    "retailPrice": 0.2,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "白扁豆": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "白术": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "白果": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "白矾": {
+    "retailPrice": 0.08,
+    "spec": "统",
+    "origin": "湖南"
+  },
+  "白芍": {
+    "retailPrice": 0.2,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "白芥子": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "白花蛇舌草": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "白芷": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "白茅根": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "山东"
+  },
+  "白蔹": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "白薇": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "白豆蔻": {
+    "retailPrice": 0.28,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "白附子": {
+    "retailPrice": 0.28,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "白鲜皮": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "百合": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "百部": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "皂荚": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "益智仁": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "益母草": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "瞿麦": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "云南"
+  },
+  "知母": {
+    "retailPrice": 0.2,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "矮地茶": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "石决明": {
+    "retailPrice": 0.2,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "石斛": {
+    "retailPrice": 0.55,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "石膏": {
+    "retailPrice": 0.04,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "石菖蒲": {
+    "retailPrice": 0.25,
+    "spec": "统",
+    "origin": "西藏"
+  },
+  "石韦": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "云南"
+  },
+  "砂仁": {
+    "retailPrice": 0.35,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "砒石": {
+    "retailPrice": 0.8,
+    "spec": "统",
+    "origin": "湖南"
+  },
+  "硫黄": {
+    "retailPrice": 0.1,
+    "spec": "统",
+    "origin": "湖南"
+  },
+  "硼砂": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "湖南"
+  },
+  "磁石": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "磠石": {
+    "retailPrice": 0.08,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "神曲": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "河南"
+  },
+  "秦皮": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "秦艽": {
+    "retailPrice": 0.3,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "稻芽": {
+    "retailPrice": 0.1,
+    "spec": "统",
+    "origin": "河南"
+  },
+  "穿山甲": {
+    "retailPrice": 6,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "穿山龙": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "穿心莲": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "穿破石": {
+    "retailPrice": 0.25,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "竹叶": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "竹沥": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "竹茹": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "紫河车": {
+    "retailPrice": 2.5,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "紫珠": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "山东"
+  },
+  "紫花地丁": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "紫苏": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "紫苏子": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "紫草": {
+    "retailPrice": 0.3,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "紫菀": {
+    "retailPrice": 0.2,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "红景天": {
+    "retailPrice": 0.45,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "红花": {
+    "retailPrice": 0.55,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "细辛": {
+    "retailPrice": 0.45,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "络石藤": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "绞股蓝": {
+    "retailPrice": 0.2,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "续断": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "绿萼梅": {
+    "retailPrice": 0.25,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "绿豆": {
+    "retailPrice": 0.05,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "罂粟壳": {
+    "retailPrice": 0.5,
+    "spec": "统",
+    "origin": "河南"
+  },
+  "罗布麻叶": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "羊蹄": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "山东"
+  },
+  "羌活": {
+    "retailPrice": 0.38,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "羚羊角": {
+    "retailPrice": 18,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "翻白草": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "老鹳草": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "肉桂": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "肉苁蓉": {
+    "retailPrice": 0.5,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "肉豆蔻": {
+    "retailPrice": 0.25,
+    "spec": "统",
+    "origin": "河南"
+  },
+  "胆矾": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "广西"
+  },
+  "胖大海": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "胡椒": {
+    "retailPrice": 0.25,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "胡荽": {
+    "retailPrice": 0.1,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "胡颓子叶": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "胡黄连": {
+    "retailPrice": 0.3,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "自然铜": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "臭梧桐": {
+    "retailPrice": 0.2,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "艾叶": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "山东"
+  },
+  "芒硝": {
+    "retailPrice": 0.05,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "芜荑": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "湖南"
+  },
+  "芡实": {
+    "retailPrice": 0.2,
+    "spec": "统",
+    "origin": "河南"
+  },
+  "芦根": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "芦荟": {
+    "retailPrice": 0.25,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "芫花": {
+    "retailPrice": 0.3,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "花椒": {
+    "retailPrice": 0.25,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "花蕊石": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "山东"
+  },
+  "苍术": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "苍耳子": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "苎麻根": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "山东"
+  },
+  "苏合香": {
+    "retailPrice": 1.2,
+    "spec": "统",
+    "origin": "西藏"
+  },
+  "苏木": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "苦参": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "苦杏仁": {
+    "retailPrice": 0.28,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "苦楝皮": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "湖南"
+  },
+  "苦豆子": {
+    "retailPrice": 0.2,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "茜草": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "山东"
+  },
+  "茯神": {
+    "retailPrice": 0.28,
+    "spec": "统",
+    "origin": "云南"
+  },
+  "茯苓": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "云南"
+  },
+  "茵陈": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "云南"
+  },
+  "荆芥": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "草乌": {
+    "retailPrice": 0.4,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "草果": {
+    "retailPrice": 0.25,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "草豆蔻": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "荔枝核": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "荜澄茄": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "荜茇": {
+    "retailPrice": 0.25,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "荠菜": {
+    "retailPrice": 0.1,
+    "spec": "统",
+    "origin": "云南"
+  },
+  "莪术": {
+    "retailPrice": 0.2,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "莱菔子": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "河南"
+  },
+  "莲子": {
+    "retailPrice": 0.2,
+    "spec": "统",
+    "origin": "河南"
+  },
+  "莲房": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "山东"
+  },
+  "菊花": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "菟丝子": {
+    "retailPrice": 0.25,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "萆薢": {
+    "retailPrice": 0.2,
+    "spec": "统",
+    "origin": "云南"
+  },
+  "萹蓄": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "云南"
+  },
+  "葛根": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "葫芦": {
+    "retailPrice": 0.16,
+    "spec": "统",
+    "origin": "云南"
+  },
+  "葱白": {
+    "retailPrice": 0.05,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "葶苈子": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "蒲公英": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "蒲黄": {
+    "retailPrice": 0.2,
+    "spec": "统",
+    "origin": "山东"
+  },
+  "蒺藜": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "蔓荆子": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "蕲蛇": {
+    "retailPrice": 3.5,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "薄荷": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "薏苡仁": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "云南"
+  },
+  "薤白": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "藁本": {
+    "retailPrice": 0.25,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "藕节": {
+    "retailPrice": 0.1,
+    "spec": "统",
+    "origin": "山东"
+  },
+  "藜芦": {
+    "retailPrice": 0.25,
+    "spec": "统",
+    "origin": "广西"
+  },
+  "藤黄": {
+    "retailPrice": 0.3,
+    "spec": "统",
+    "origin": "湖南"
+  },
+  "虎杖": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "云南"
+  },
+  "虻虫": {
+    "retailPrice": 1.5,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "蚕沙": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "蛇床子": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "湖南"
+  },
+  "蛤蚧": {
+    "retailPrice": 3.5,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "蜂房": {
+    "retailPrice": 0.3,
+    "spec": "统",
+    "origin": "湖南"
+  },
+  "蜂蜜": {
+    "retailPrice": 0.08,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "蜈蚣": {
+    "retailPrice": 4,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "蝉蜕": {
+    "retailPrice": 0.85,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "蝼蛄": {
+    "retailPrice": 0.5,
+    "spec": "统",
+    "origin": "云南"
+  },
+  "蟾酥": {
+    "retailPrice": 9,
+    "spec": "统",
+    "origin": "湖南"
+  },
+  "血余炭": {
+    "retailPrice": 0.2,
+    "spec": "统",
+    "origin": "山东"
+  },
+  "血竭": {
+    "retailPrice": 0.6,
+    "spec": "统",
+    "origin": "湖南"
+  },
+  "补骨脂": {
+    "retailPrice": 0.2,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "西洋参": {
+    "retailPrice": 2.5,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "覆盆子": {
+    "retailPrice": 0.3,
+    "spec": "统",
+    "origin": "河南"
+  },
+  "诃子": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "河南"
+  },
+  "谷精草": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "象皮": {
+    "retailPrice": 1.2,
+    "spec": "统",
+    "origin": "湖南"
+  },
+  "豨莶草": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "败酱草": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "贯众": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "赤石脂": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "河南"
+  },
+  "赤芍": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "赭石": {
+    "retailPrice": 0.1,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "路路通": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "车前子": {
+    "retailPrice": 0.2,
+    "spec": "统",
+    "origin": "云南"
+  },
+  "车前草": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "云南"
+  },
+  "轻粉": {
+    "retailPrice": 0.5,
+    "spec": "统",
+    "origin": "湖南"
+  },
+  "辛夷": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "远志": {
+    "retailPrice": 0.5,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "连翘": {
+    "retailPrice": 0.28,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "通草": {
+    "retailPrice": 0.25,
+    "spec": "统",
+    "origin": "云南"
+  },
+  "郁李仁": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "郁金": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "酸枣仁": {
+    "retailPrice": 1.8,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "重楼": {
+    "retailPrice": 0.65,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "野菊花": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "金果榄": {
+    "retailPrice": 0.3,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "金樱子": {
+    "retailPrice": 0.2,
+    "spec": "统",
+    "origin": "河南"
+  },
+  "金荞麦": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "金钱白花蛇": {
+    "retailPrice": 4,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "金钱草": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "云南"
+  },
+  "金银花": {
+    "retailPrice": 0.35,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "钩藤": {
+    "retailPrice": 0.25,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "铅丹": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "湖南"
+  },
+  "铜绿": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "湖南"
+  },
+  "银柴胡": {
+    "retailPrice": 0.25,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "银耳": {
+    "retailPrice": 0.35,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "锁阳": {
+    "retailPrice": 0.3,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "锦灯笼": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "防己": {
+    "retailPrice": 0.25,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "防风": {
+    "retailPrice": 0.28,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "阳起石": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "阿胶": {
+    "retailPrice": 3.5,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "阿魏": {
+    "retailPrice": 0.5,
+    "spec": "统",
+    "origin": "河南"
+  },
+  "附子": {
+    "retailPrice": 0.35,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "陈皮": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "降香": {
+    "retailPrice": 0.3,
+    "spec": "统",
+    "origin": "山东"
+  },
+  "雄黄": {
+    "retailPrice": 0.25,
+    "spec": "统",
+    "origin": "湖南"
+  },
+  "雪上一枝蒿": {
+    "retailPrice": 0.35,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "雪莲花": {
+    "retailPrice": 0.8,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "雷丸": {
+    "retailPrice": 0.35,
+    "spec": "统",
+    "origin": "湖南"
+  },
+  "雷公藤": {
+    "retailPrice": 0.3,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "青果": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "青皮": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "青葙子": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "青蒿": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "青风藤": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "青黛": {
+    "retailPrice": 0.35,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "韭菜子": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "饴糖": {
+    "retailPrice": 0.05,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "首乌藤": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "香加皮": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "云南"
+  },
+  "香橼": {
+    "retailPrice": 0.2,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "香薷": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "香附": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "广东"
+  },
+  "马兜铃": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "马勃": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "马尾连": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "马钱子": {
+    "retailPrice": 0.28,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "马齿苋": {
+    "retailPrice": 0.1,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "骨碎补": {
+    "retailPrice": 0.2,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "高良姜": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "鬼箭羽": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "鱼腥草": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "鳕酥": {
+    "retailPrice": 8,
+    "spec": "统",
+    "origin": "西藏"
+  },
+  "鳖甲": {
+    "retailPrice": 0.65,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "鸡内金": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "河南"
+  },
+  "鸡冠花": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "河南"
+  },
+  "鸡蛋花": {
+    "retailPrice": 0.2,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "鸡血藤": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "鸡骨草": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "云南"
+  },
+  "鸦胆子": {
+    "retailPrice": 0.25,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "鸭跖草": {
+    "retailPrice": 0.12,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "鹤草芽": {
+    "retailPrice": 0.25,
+    "spec": "统",
+    "origin": "湖南"
+  },
+  "鹤虱": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "湖南"
+  },
+  "鹿茸": {
+    "retailPrice": 5.5,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "鹿衔草": {
+    "retailPrice": 0.2,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "鹿角": {
+    "retailPrice": 2.5,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "鹿角胶": {
+    "retailPrice": 4,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "麝香": {
+    "retailPrice": 28,
+    "spec": "统",
+    "origin": "西藏"
+  },
+  "麦冬": {
+    "retailPrice": 0.35,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "麦芽": {
+    "retailPrice": 0.1,
+    "spec": "统",
+    "origin": "河南"
+  },
+  "麻黄": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "麻黄根": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "河南"
+  },
+  "黄柏": {
+    "retailPrice": 0.22,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "黄精": {
+    "retailPrice": 0.28,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "黄芩": {
+    "retailPrice": 0.25,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "黄芪": {
+    "retailPrice": 0.25,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "黄药子": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "黄连": {
+    "retailPrice": 0.85,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "黑芝麻": {
+    "retailPrice": 0.15,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "龙眼肉": {
+    "retailPrice": 0.25,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "龙胆": {
+    "retailPrice": 0.28,
+    "spec": "统",
+    "origin": "四川"
+  },
+  "龙骨": {
+    "retailPrice": 0.18,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "龙齿": {
+    "retailPrice": 0.35,
+    "spec": "统",
+    "origin": "河北"
+  },
+  "龟甲": {
+    "retailPrice": 0.5,
+    "spec": "统",
+    "origin": "甘肃"
+  },
+  "龟甲胶": {
+    "retailPrice": 3,
+    "spec": "统",
+    "origin": "甘肃"
+  }
+}

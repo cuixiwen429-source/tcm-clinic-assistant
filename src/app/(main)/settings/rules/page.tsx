@@ -81,16 +81,16 @@ export default function RulesSettingsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-3 flex-wrap">
         <div>
-          <h1 className="text-2xl font-bold">合规规则配置</h1>
-          <p className="text-muted-foreground">管理十八反、十九畏、妊娠禁忌等用药安全规则</p>
+          <h1 className="text-xl sm:text-2xl font-bold">合规规则配置</h1>
+          <p className="text-muted-foreground text-sm">管理十八反、十九畏、妊娠禁忌等用药安全规则</p>
         </div>
         <Dialog open={addOpen} onOpenChange={setAddOpen}>
           <DialogTrigger asChild>
             <Button><Plus className="mr-2 h-4 w-4" />添加规则</Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className="max-w-full sm:max-w-lg">
             <DialogHeader>
               <DialogTitle>添加合规规则</DialogTitle>
             </DialogHeader>
@@ -128,15 +128,15 @@ export default function RulesSettingsPage() {
       </div>
 
       <Card>
-        <CardContent className="p-0">
+        <CardContent className="p-0 overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow>
                 <TableHead>类型</TableHead>
                 <TableHead>药材A</TableHead>
-                <TableHead>药材B</TableHead>
+                <TableHead className="hidden sm:table-cell">药材B</TableHead>
                 <TableHead>严重程度</TableHead>
-                <TableHead>说明</TableHead>
+                <TableHead className="hidden md:table-cell">说明</TableHead>
                 <TableHead>操作</TableHead>
               </TableRow>
             </TableHeader>
@@ -145,9 +145,9 @@ export default function RulesSettingsPage() {
                 <TableRow key={r.id as string}>
                   <TableCell><Badge variant="outline">{typeLabels[r.ruleType as string] || (r.ruleType as string)}</Badge></TableCell>
                   <TableCell className="font-medium">{r.herbA as string}</TableCell>
-                  <TableCell>{(r.herbB as string) || "-"}</TableCell>
+                  <TableCell className="hidden sm:table-cell">{(r.herbB as string) || "-"}</TableCell>
                   <TableCell><Badge variant={severityColors[r.severity as string] as "warning" | "destructive" | undefined}>{(r.severity as string)}</Badge></TableCell>
-                  <TableCell className="text-sm max-w-xs truncate">{r.description as string}</TableCell>
+                  <TableCell className="hidden md:table-cell text-sm max-w-xs truncate">{r.description as string}</TableCell>
                   <TableCell>
                     <Button variant="ghost" size="icon" onClick={() => handleDelete(r.id as string)}>
                       <Trash2 className="h-3 w-3 text-destructive" />

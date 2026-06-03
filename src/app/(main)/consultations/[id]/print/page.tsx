@@ -22,11 +22,15 @@ export default function PrintPage() {
   const [herbs, setHerbs] = useState<HerbItem[]>([]);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [showPostPrint, setShowPostPrint] = useState(false);
+  const [clinicName, setClinicName] = useState("");
 
   const isMobile = typeof navigator !== "undefined" &&
     /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-  useEffect(() => { fetchData(); }, [consultationId]);
+  useEffect(() => {
+    setClinicName(localStorage.getItem("clinicName") || "深圳同修仁德中医（综合）诊所");
+    fetchData();
+  }, [consultationId]);
 
   const fetchData = async () => {
     setLoading(true);
@@ -84,17 +88,17 @@ export default function PrintPage() {
   return (
     <div>
       {/* Toolbar */}
-      <div className="flex items-center justify-between mb-4 no-print">
-        <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => router.push(`/consultations/${consultationId}/prescription`)}>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4 no-print">
+        <div className="flex items-center gap-2 sm:gap-4">
+          <Button variant="ghost" size="icon" className="flex-shrink-0" onClick={() => router.push(`/consultations/${consultationId}/prescription`)}>
             <ArrowLeft className="h-4 w-4" />
           </Button>
           <div>
-            <h1 className="text-2xl font-bold">处方预览与打印</h1>
-            <p className="text-muted-foreground text-sm">A5格式 · 楷体</p>
+            <h1 className="text-xl sm:text-2xl font-bold">处方预览与打印</h1>
+            <p className="text-muted-foreground text-xs sm:text-sm">A5格式 · 楷体</p>
           </div>
         </div>
-        <Button onClick={handlePrint}>
+        <Button onClick={handlePrint} className="self-start sm:self-auto">
           {isMobile ? (
             <><Download className="mr-2 h-4 w-4" /> 保存PDF到本地</>
           ) : (
@@ -107,7 +111,7 @@ export default function PrintPage() {
       <div className="flex justify-center">
         <div className="prescription-doc print-doc max-w-full overflow-x-auto">
           {/* === HEADER === */}
-          <div className="rx-header">深圳同修仁德中医（综合）诊所处方笺</div>
+          <div className="rx-header">{clinicName}处方笺</div>
 
           {/* === PATIENT INFO === */}
           <div className="rx-patient">
@@ -148,18 +152,15 @@ export default function PrintPage() {
           {/* === SYMPTOMS === */}
           <div className="rx-symptoms">
             {refined?.symptoms && refined.symptoms.length > 0 ? (
-              <>
-                {refined.symptoms.map((line, i) => (
-                  <div key={i} className="rx-sym-line">{i === 0 ? "现症：" : ""}{line}</div>
-                ))}
-                {refined.tongue_pulse && (
-                  <div className="rx-sym-line">{refined.tongue_pulse}</div>
-                )}
-              </>
+              <div className="rx-sym-line">
+                <span>现症：</span>
+                {refined.symptoms.join("；")}
+                {refined.tongue_pulse && `。${refined.tongue_pulse}`}
+              </div>
             ) : (
               <>
                 {(diagnosis.chiefComplaint as string) && (
-                  <div className="rx-sym-line">主诉：{diagnosis.chiefComplaint as string}</div>
+                  <div className="rx-sym-line">现症：{diagnosis.chiefComplaint as string}</div>
                 )}
               </>
             )}
@@ -197,7 +198,6 @@ export default function PrintPage() {
           <div className="rx-signatures">
             <div className="rx-row">
               <span>医师：________________</span>
-              <span>执业医师签名：________________</span>
             </div>
             <div className="rx-row">
               <span>审核药师：________________</span>

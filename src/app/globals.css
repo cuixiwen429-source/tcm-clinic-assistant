@@ -4,48 +4,58 @@
 
 @layer base {
   :root {
-    --background: 38 35% 96%;
-    --foreground: 25 15% 12%;
-    --card: 38 30% 99%;
-    --card-foreground: 25 15% 12%;
-    --popover: 38 30% 99%;
-    --popover-foreground: 25 15% 12%;
-    --primary: 6 65% 48%;
+    --background: 36 30% 94%;
+    --foreground: 30 12% 10%;
+    --card: 36 28% 97%;
+    --card-foreground: 30 12% 10%;
+    --popover: 36 28% 97%;
+    --popover-foreground: 30 12% 10%;
+    --primary: 3 70% 42%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 35 25% 92%;
-    --secondary-foreground: 25 15% 15%;
-    --muted: 35 20% 94%;
-    --muted-foreground: 25 10% 42%;
-    --accent: 120 20% 90%;
-    --accent-foreground: 120 25% 25%;
+    --secondary: 36 20% 90%;
+    --secondary-foreground: 30 12% 15%;
+    --muted: 36 18% 92%;
+    --muted-foreground: 30 8% 40%;
+    --accent: 140 18% 88%;
+    --accent-foreground: 140 20% 28%;
     --destructive: 0 72% 45%;
     --destructive-foreground: 0 0% 98%;
-    --border: 30 12% 84%;
-    --input: 30 12% 84%;
-    --ring: 6 65% 48%;
+    --border: 32 10% 80%;
+    --input: 32 10% 80%;
+    --ring: 3 70% 42%;
     --radius: 0.5rem;
+    --tcm-seal: 3 72% 38%;
+    --tcm-ink: 30 10% 8%;
+    --tcm-gold: 40 35% 48%;
+    --tcm-celadon: 145 18% 52%;
+    --tcm-wood: 30 20% 32%;
   }
 
   .dark {
-    --background: 25 15% 6%;
-    --foreground: 38 30% 93%;
-    --card: 25 15% 9%;
-    --card-foreground: 38 30% 93%;
-    --popover: 25 15% 9%;
-    --popover-foreground: 38 30% 93%;
-    --primary: 6 65% 55%;
+    --background: 30 10% 5%;
+    --foreground: 38 28% 90%;
+    --card: 30 10% 8%;
+    --card-foreground: 38 28% 90%;
+    --popover: 30 10% 8%;
+    --popover-foreground: 38 28% 90%;
+    --primary: 3 65% 50%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 25 15% 14%;
-    --secondary-foreground: 38 30% 90%;
-    --muted: 25 15% 14%;
-    --muted-foreground: 38 15% 60%;
-    --accent: 120 18% 14%;
-    --accent-foreground: 120 20% 75%;
+    --secondary: 30 12% 14%;
+    --secondary-foreground: 38 28% 88%;
+    --muted: 30 12% 14%;
+    --muted-foreground: 38 12% 58%;
+    --accent: 140 15% 16%;
+    --accent-foreground: 140 18% 72%;
     --destructive: 0 72% 50%;
     --destructive-foreground: 0 0% 98%;
-    --border: 25 15% 18%;
-    --input: 25 15% 18%;
-    --ring: 6 65% 55%;
+    --border: 30 12% 16%;
+    --input: 30 12% 16%;
+    --ring: 3 65% 50%;
+    --tcm-seal: 3 68% 46%;
+    --tcm-ink: 38 25% 92%;
+    --tcm-gold: 40 30% 52%;
+    --tcm-celadon: 145 15% 42%;
+    --tcm-wood: 30 18% 40%;
   }
 }
 
@@ -56,6 +66,19 @@
   body {
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
+    font-family: "Noto Serif SC", "SimSun", "STSong", serif;
+    background-color: hsl(36, 30%, 94%);
+    /* Layer 3: Rice paper grain texture */
+    /* Layer 2: Subtle vertical fiber */
+    /* Layer 1: Zhang Zhongjing scholar composition */
+    background-image:
+      url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E"),
+      url("data:image/svg+xml,%3Csvg width='300' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Cline x1='10' y1='0' x2='10' y2='40' stroke='%235C4033' stroke-width='0.3' opacity='0.04'/%3E%3Cline x1='30' y1='0' x2='30' y2='40' stroke='%235C4033' stroke-width='0.5' opacity='0.05'/%3E%3Cline x1='55' y1='0' x2='55' y2='40' stroke='%235C4033' stroke-width='0.2' opacity='0.03'/%3E%3Cline x1='80' y1='0' x2='80' y2='40' stroke='%235C4033' stroke-width='0.4' opacity='0.04'/%3E%3Cline x1='110' y1='0' x2='110' y2='40' stroke='%235C4033' stroke-width='0.3' opacity='0.04'/%3E%3Cline x1='145' y1='0' x2='145' y2='40' stroke='%235C4033' stroke-width='0.5' opacity='0.05'/%3E%3Cline x1='175' y1='0' x2='175' y2='40' stroke='%235C4033' stroke-width='0.2' opacity='0.03'/%3E%3Cline x1='210' y1='0' x2='210' y2='40' stroke='%235C4033' stroke-width='0.4' opacity='0.04'/%3E%3Cline x1='240' y1='0' x2='240' y2='40' stroke='%235C4033' stroke-width='0.3' opacity='0.03'/%3E%3Cline x1='265' y1='0' x2='265' y2='40' stroke='%235C4033' stroke-width='0.5' opacity='0.05'/%3E%3Cline x1='290' y1='0' x2='290' y2='40' stroke='%235C4033' stroke-width='0.2' opacity='0.02'/%3E%3C/svg%3E"),
+      url("data:image/svg+xml,%3Csvg width='600' height='500' viewBox='0 0 600 500' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='fade' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%235C4033' stop-opacity='0'/%3E%3Cstop offset='60%25' stop-color='%235C4033' stop-opacity='0.06'/%3E%3Cstop offset='100%25' stop-color='%235C4033' stop-opacity='0.08'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='600' height='500' fill='url(%23fade)'/%3E%3C!-- Medicine Cabinet --%3E%3Crect x='400' y='60' width='165' height='230' rx='3' fill='none' stroke='%236B4423' stroke-width='1.2' opacity='0.12'/%3E%3Cg opacity='0.14'%3E%3C!-- Drawers --%3E%3Cline x1='400' y1='88' x2='565' y2='88' stroke='%236B4423' stroke-width='0.6'/%3E%3Cline x1='400' y1='116' x2='565' y2='116' stroke='%236B4423' stroke-width='0.6'/%3E%3Cline x1='400' y1='144' x2='565' y2='144' stroke='%236B4423' stroke-width='0.6'/%3E%3Cline x1='400' y1='172' x2='565' y2='172' stroke='%236B4423' stroke-width='0.6'/%3E%3Cline x1='400' y1='200' x2='565' y2='200' stroke='%236B4423' stroke-width='0.6'/%3E%3Cline x1='400' y1='228' x2='565' y2='228' stroke='%236B4423' stroke-width='0.6'/%3E%3Cline x1='400' y1='256' x2='565' y2='256' stroke='%236B4423' stroke-width='0.6'/%3E%3Cline x1='427' y1='60' x2='427' y2='290' stroke='%236B4423' stroke-width='0.6'/%3E%3Cline x1='454' y1='60' x2='454' y2='290' stroke='%236B4423' stroke-width='0.6'/%3E%3Cline x1='481' y1='60' x2='481' y2='290' stroke='%236B4423' stroke-width='0.6'/%3E%3Cline x1='508' y1='60' x2='508' y2='290' stroke='%236B4423' stroke-width='0.6'/%3E%3Cline x1='535' y1='60' x2='535' y2='290' stroke='%236B4423' stroke-width='0.6'/%3E%3C!-- Handles --%3E%3Ccircle cx='413' cy='102' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='440' cy='102' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='467' cy='102' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='494' cy='102' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='521' cy='102' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='548' cy='102' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='413' cy='130' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='440' cy='130' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='467' cy='130' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='494' cy='130' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='521' cy='130' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='548' cy='130' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='413' cy='158' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='440' cy='158' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='467' cy='158' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='494' cy='158' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='521' cy='158' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='548' cy='158' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='413' cy='186' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='440' cy='186' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='467' cy='186' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='494' cy='186' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='521' cy='186' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='548' cy='186' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='413' cy='214' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='440' cy='214' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='467' cy='214' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='494' cy='214' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='521' cy='214' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='548' cy='214' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='413' cy='242' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='440' cy='242' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='467' cy='242' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='494' cy='242' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='521' cy='242' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='548' cy='242' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='413' cy='270' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='440' cy='270' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='467' cy='270' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='494' cy='270' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='521' cy='270' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3Ccircle cx='548' cy='270' r='2.5' fill='none' stroke='%236B4423' stroke-width='0.5'/%3E%3C/g%3E%3C!-- Bamboo Slips --%3E%3Cg opacity='0.1'%3E%3Crect x='50' y='350' width='210' height='70' rx='2' fill='none' stroke='%236B4423' stroke-width='0.8'/%3E%3Cline x1='70' y1='350' x2='70' y2='420' stroke='%236B4423' stroke-width='0.4'/%3E%3Cline x1='85' y1='350' x2='85' y2='420' stroke='%236B4423' stroke-width='0.4'/%3E%3Cline x1='100' y1='350' x2='100' y2='420' stroke='%236B4423' stroke-width='0.4'/%3E%3Cline x1='115' y1='350' x2='115' y2='420' stroke='%236B4423' stroke-width='0.4'/%3E%3Cline x1='130' y1='350' x2='130' y2='420' stroke='%236B4423' stroke-width='0.4'/%3E%3Cline x1='145' y1='350' x2='145' y2='420' stroke='%236B4423' stroke-width='0.4'/%3E%3Cline x1='160' y1='350' x2='160' y2='420' stroke='%236B4423' stroke-width='0.4'/%3E%3Cline x1='175' y1='350' x2='175' y2='420' stroke='%236B4423' stroke-width='0.4'/%3E%3Cline x1='190' y1='350' x2='190' y2='420' stroke='%236B4423' stroke-width='0.4'/%3E%3Cline x1='205' y1='350' x2='205' y2='420' stroke='%236B4423' stroke-width='0.4'/%3E%3Cline x1='220' y1='350' x2='220' y2='420' stroke='%236B4423' stroke-width='0.4'/%3E%3Cline x1='235' y1='350' x2='235' y2='420' stroke='%236B4423' stroke-width='0.4'/%3E%3C!-- Binding cords --%3E%3Cline x1='55' y1='365' x2='250' y2='365' stroke='%238B6914' stroke-width='1.2' opacity='0.5'/%3E%3Cline x1='55' y1='385' x2='250' y2='385' stroke='%238B6914' stroke-width='1.2' opacity='0.5'/%3E%3Cline x1='55' y1='405' x2='250' y2='405' stroke='%238B6914' stroke-width='1.2' opacity='0.5'/%3E%3C/g%3E%3C!-- Zhang Zhongjing Scholar Figure --%3E%3Cg opacity='0.1' fill='%233E2723'%3E%3C!-- Robe body --%3E%3Cpath d='M100,300 Q95,260 110,220 L130,220 Q125,260 125,300 Z'/%3E%3C!-- Head --%3E%3Cellipse cx='120' cy='195' rx='12' ry='14'/%3E%3C!-- Cap/headdress --%3E%3Crect x='108' y='178' width='24' height='10' rx='2'/%3E%3Crect x='113' y='170' width='14' height='10' rx='1.5'/%3E%3C!-- Extended arm with brush --%3E%3Cpath d='M125,230 Q150,225 165,220' stroke='%233E2723' stroke-width='3' fill='none'/%3E%3Cline x1='165' y1='218' x2='170' y2='210' stroke='%233E2723' stroke-width='1.5'/%3E%3C/g%3E%3C!-- Desk --%3E%3Cg opacity='0.1'%3E%3Cline x1='70' y1='265' x2='200' y2='265' stroke='%233E2723' stroke-width='2'/%3E%3Cline x1='70' y1='270' x2='200' y2='270' stroke='%233E2723' stroke-width='0.5'/%3E%3C!-- Ink stone --%3E%3Crect x='155' y='255' width='14' height='10' rx='1' fill='none' stroke='%233E2723' stroke-width='0.8'/%3E%3C!-- Brush rest --%3E%3Cpath d='M80,258 Q87,252 94,258' stroke='%233E2723' stroke-width='0.8' fill='none'/%3E%3C/g%3E%3C!-- Incense Burner --%3E%3Cg opacity='0.08'%3E%3Cpath d='M280,420 L290,440 L310,440 L320,420' fill='none' stroke='%233E2723' stroke-width='1'/%3E%3Cpath d='M290,440 L285,448' stroke='%233E2723' stroke-width='0.8'/%3E%3Cpath d='M310,440 L315,448' stroke='%233E2723' stroke-width='0.8'/%3E%3C!-- Smoke wisps --%3E%3Cpath d='M300,418 Q295,400 300,385 Q305,370 300,355' stroke='%233E2723' stroke-width='0.6' fill='none'/%3E%3Cpath d='M300,418 Q308,402 302,388 Q296,374 300,360' stroke='%233E2723' stroke-width='0.4' fill='none'/%3E%3Cpath d='M300,418 Q292,405 298,392 Q304,378 300,365' stroke='%233E2723' stroke-width='0.5' fill='none'/%3E%3C/g%3E%3C!-- Calligraphy watermark --%3E%3Cg transform='rotate(-10 380 320)'%3E%3Ctext x='380' y='310' font-family='Noto Serif SC, SimSun, STSong, serif' font-size='38' fill='%233E2723' opacity='0.06' font-weight='700'%3E%E5%82%B7%E5%AF%92%E9%9B%9C%E7%97%85%E8%AB%96%3C/text%3E%3Ctext x='400' y='345' font-family='Noto Serif SC, SimSun, STSong, serif' font-size='18' fill='%233E2723' opacity='0.05' font-weight='600'%3E%E5%BC%B5%E4%BB%B2%E6%99%AF%3C/text%3E%3C/g%3E%3C!-- Cloud motifs --%3E%3Cg opacity='0.07' fill='none' stroke='%235C4033' stroke-width='0.8'%3E%3Cpath d='M30,40 Q40,30 55,35 Q70,30 75,40 Q80,35 85,42 Q75,48 60,48 Q45,48 30,40 Z'/%3E%3Cpath d='M480,25 Q490,15 505,20 Q520,15 525,25 Q530,20 535,27 Q525,33 510,33 Q495,33 480,25 Z'/%3E%3Cpath d='M200,15 Q210,5 220,10 Q230,5 235,15 Q240,10 245,17 Q235,23 220,23 Q205,23 200,15 Z'/%3E%3C/g%3E%3C!-- Pine branch --%3E%3Cg opacity='0.07'%3E%3Cpath d='M15,120 Q30,105 55,95 Q80,88 100,92' stroke='%233E2723' stroke-width='1.5' fill='none'/%3E%3Cpath d='M35,110 L30,95' stroke='%233E2723' stroke-width='0.8'/%3E%3Cpath d='M55,96 L50,80' stroke='%233E2723' stroke-width='0.8'/%3E%3Cpath d='M75,92 L72,76' stroke='%233E2723' stroke-width='0.8'/%3E%3Cpath d='M40,108 Q38,100 42,92 Q46,85 40,78' stroke='%233E2723' stroke-width='0.6' fill='none'/%3E%3Cpath d='M62,95 Q60,87 64,80 Q68,73 62,66' stroke='%233E2723' stroke-width='0.6' fill='none'/%3E%3C/g%3E%3C/svg%3E");
+    background-repeat: repeat, repeat, no-repeat;
+    background-position: 0 0, 0 0, right bottom;
+    background-size: 200px 200px, 300px 40px, 600px 500px;
+    background-attachment: fixed;
   }
 }
 
@@ -65,20 +88,143 @@
   letter-spacing: 0.15em;
 }
 
+.tcm-card {
+  background: hsl(36, 28%, 97%);
+  border: 1px solid hsl(32, 10%, 80%);
+  box-shadow:
+    0 1px 3px rgba(139, 69, 19, 0.06),
+    0 4px 12px rgba(139, 69, 19, 0.04);
+}
+
+/* ===== Key Fret Pattern (回纹) ===== */
+.tcm-fret-border {
+  position: relative;
+}
+.tcm-fret-border::after {
+  content: "";
+  display: block;
+  height: 8px;
+  width: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,6 h6 v-4 h6 v4 h6 v-4 h6 v4 h6 v-4 h6 v4 h6 v-4 h6 v4 h6 v-4 h6' stroke='%23996633' stroke-width='1.2' fill='none' opacity='0.35'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-position: center;
+}
+
+/* ===== Cloud Corner (祥云角) ===== */
+.tcm-cloud-corner::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 36px;
+  height: 36px;
+  background-image: url("data:image/svg+xml,%3Csvg width='36' height='36' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M18,2 Q10,2 6,8 Q2,14 8,18 Q14,22 18,18 Q22,14 18,8 Q18,4 20,2' stroke='%23996633' stroke-width='1' fill='none' opacity='0.25'/%3E%3Cpath d='M18,18 Q22,16 24,12 Q26,8 22,6 Q18,10 18,14' stroke='%23996633' stroke-width='0.8' fill='none' opacity='0.2'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+/* ===== Seal Stamp (印章) ===== */
+.tcm-seal-stamp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 2px solid hsl(var(--tcm-seal));
+  color: hsl(var(--tcm-seal));
+  font-family: "Noto Serif SC", "SimSun", serif;
+  font-weight: 700;
+  font-size: 1.125rem;
+  border-radius: 3px;
+  transform: rotate(-5deg);
+  opacity: 0.85;
+  box-shadow: inset 1px 1px 0 hsla(0, 0%, 100%, 0.15),
+    inset -1px -1px 0 hsla(0, 0%, 0%, 0.08);
+}
+.tcm-seal-stamp-lg {
+  width: 3.5rem;
+  height: 3.5rem;
+  font-size: 1.5rem;
+  border-width: 2.5px;
+}
+
+/* ===== Scroll Edges (卷轴边) ===== */
+.tcm-scroll {
+  position: relative;
+  border-top: 5px solid hsl(var(--tcm-wood) / 0.25);
+  border-bottom: 5px solid hsl(var(--tcm-wood) / 0.25);
+  background: linear-gradient(
+    to bottom,
+    hsl(var(--tcm-wood) / 0.06),
+    transparent 10%,
+    transparent 90%,
+    hsl(var(--tcm-wood) / 0.06)
+  );
+}
+
+/* ===== Ink Splash (墨韵) ===== */
+.tcm-ink-splash {
+  position: relative;
+}
+.tcm-ink-splash::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='s'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.03' numOctaves='4'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Ccircle cx='100' cy='100' r='60' filter='url(%23s)' fill='%233E2723' opacity='0.03'/%3E%3C/svg%3E");
+  background-size: cover;
+  background-position: center;
+  pointer-events: none;
+}
+
+/* ===== Watermark ===== */
+.tcm-watermark {
+  position: relative;
+}
+.tcm-watermark::after {
+  content: "";
+  position: absolute;
+  bottom: 8px;
+  right: 12px;
+  font-family: "Noto Serif SC", "SimSun", "STSong", serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: hsl(var(--tcm-seal));
+  opacity: 0.06;
+  transform: rotate(-8deg);
+  pointer-events: none;
+}
+
+/* ===== Decorative Divider (水墨分隔线) ===== */
+.tcm-divider {
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    hsl(var(--tcm-seal) / 0.25) 20%,
+    hsl(var(--tcm-seal) / 0.35) 50%,
+    hsl(var(--tcm-seal) / 0.25) 80%,
+    transparent 100%
+  );
+  border: none;
+  margin: 1rem 0;
+}
+
 /* ===== Prescription Document (screen + print) ===== */
 .prescription-doc {
   width: 148mm;
-  height: 210mm;
-  padding: 2mm 4mm;
+  min-height: 210mm;
+  padding: 6mm 8mm;
   background: white;
   color: #000;
   font-family: "KaiTi", "楷体", "SimKai", "STKaiti", "Times New Roman", serif;
   font-size: 9pt;
-  line-height: 1.45;
-  border: 1px solid #ccc;
+  line-height: 1.55;
+  border: none;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
 }
 
 .prescription-doc b {
@@ -86,7 +232,6 @@
   font-weight: bold;
 }
 
-/* Header */
 .rx-header {
   text-align: center;
   font-size: 12pt;
@@ -98,7 +243,6 @@
   flex-shrink: 0;
 }
 
-/* Shared flex row */
 .rx-row {
   display: flex;
   gap: 2.5mm;
@@ -112,7 +256,6 @@
   white-space: nowrap;
 }
 
-/* Patient info */
 .rx-patient {
   border: 0.5pt solid #000;
   padding: 2mm 2.5mm;
@@ -120,7 +263,6 @@
   flex-shrink: 0;
 }
 
-/* Symptoms */
 .rx-symptoms {
   border: 0.5pt solid #000;
   padding: 1.2mm 2mm;
@@ -129,9 +271,11 @@
 }
 .rx-sym-line {
   margin-bottom: 0.3mm;
+  text-align: justify;
+  word-break: break-all;
+  overflow-wrap: break-word;
 }
 
-/* RP Medications — fills all space between symptoms and usage */
 .rx-rp {
   border: 0.5pt solid #000;
   padding: 2mm 2.5mm;
@@ -163,37 +307,96 @@
 }
 .rx-rp-herb-main {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: baseline;
-  gap: 1mm;
+  gap: 0.5mm;
 }
 .rx-rp-herb-name {
-  font-family: "Times New Roman", Times, "KaiTi", "楷体", serif;
+  font-family: "KaiTi", "楷体", "SimKai", "STKaiti", "Times New Roman", serif;
+  font-size: 11pt;
 }
 .rx-rp-herb-dose {
   font-family: "Times New Roman", Times, serif;
+  font-size: 10.5pt;
   white-space: nowrap;
 }
 .rx-rp-herb-note {
-  font-size: 7.5pt;
+  font-size: 8pt;
+  font-family: "KaiTi", "楷体", "SimKai", "STKaiti", serif;
   color: #555;
   line-height: 1.2;
 }
 
-/* Usage */
 .rx-usage {
   border: 0.5pt solid #000;
   padding: 1.2mm 2mm;
   margin-bottom: 0.5mm;
   flex-shrink: 0;
 }
+.rx-usage .rx-row {
+  flex-wrap: wrap;
+}
+.rx-usage .rx-row span {
+  white-space: normal;
+  word-break: break-all;
+}
 
-/* Signatures — pinned to bottom edge, no margin below */
 .rx-signatures {
   border: 0.5pt solid #000;
   padding: 1.2mm 2mm;
   margin-bottom: 0;
   flex-shrink: 0;
+}
+
+/* ===== Sidebar Decorative Border ===== */
+.sidebar-border {
+  border-right: 1.5px solid transparent;
+  border-image: linear-gradient(
+    to bottom,
+    hsl(var(--tcm-seal) / 0.35),
+    hsl(var(--tcm-gold) / 0.3) 40%,
+    hsl(var(--tcm-celadon) / 0.25) 100%
+  ) 1;
+}
+
+/* ===== TopBar Fret Border ===== */
+.topbar-fret {
+  position: relative;
+}
+.topbar-fret::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,6 h6 v-4 h6 v4 h6 v-4 h6 v4 h6 v-4 h6 v4 h6 v-4 h6 v4 h6 v-4 h6 v4 h6 v-4 h6' stroke='%23996633' stroke-width='1' fill='none' opacity='0.3'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-position: center;
+  pointer-events: none;
+}
+
+/* ===== Brand Brush-Underline ===== */
+.brand-underline {
+  position: relative;
+  display: inline-block;
+}
+.brand-underline::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 10%;
+  width: 80%;
+  height: 3px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    hsl(var(--tcm-seal) / 0.3) 15%,
+    hsl(var(--tcm-seal) / 0.5) 50%,
+    hsl(var(--tcm-seal) / 0.3) 85%,
+    transparent
+  );
+  border-radius: 2px;
 }
 
 /* ===== Print Styles ===== */
@@ -203,7 +406,8 @@
     margin: 0;
   }
 
-  html, body {
+  html,
+  body {
     background: white !important;
     margin: 0;
     padding: 0;
@@ -223,12 +427,13 @@
     top: 0;
     left: 0;
     width: 148mm;
-    height: 210mm;
+    min-height: 210mm;
     border: none;
     margin: 0;
-    padding: 2mm 4mm;
+    padding: 6mm 8mm;
     box-shadow: none;
     background: white;
+    box-sizing: border-box;
   }
 
   .no-print {
@@ -239,18 +444,129 @@
 /* ===== Screen Preview ===== */
 @media screen {
   .prescription-doc {
-    box-shadow: 0 0 10px rgba(0,0,0,0.15);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.12);
     margin: 20px auto;
   }
 
-  /* Scale down on very small screens */
   @media (max-width: 420px) {
     .prescription-doc {
       width: 100%;
-      height: auto;
       min-height: 180mm;
-      font-size: 7.5pt;
-      padding: 1.5mm 2mm;
+      font-size: 7pt;
+      padding: 3mm 4mm;
     }
+  }
+}
+
+/* ===== Dark Mode Background Adapt ===== */
+.dark body {
+  background-color: hsl(30, 10%, 5%);
+  background-image:
+    url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg width='300' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Cline x1='10' y1='0' x2='10' y2='40' stroke='%23A0855B' stroke-width='0.3' opacity='0.04'/%3E%3Cline x1='30' y1='0' x2='30' y2='40' stroke='%23A0855B' stroke-width='0.5' opacity='0.05'/%3E%3Cline x1='55' y1='0' x2='55' y2='40' stroke='%23A0855B' stroke-width='0.2' opacity='0.03'/%3E%3Cline x1='80' y1='0' x2='80' y2='40' stroke='%23A0855B' stroke-width='0.4' opacity='0.04'/%3E%3Cline x1='110' y1='0' x2='110' y2='40' stroke='%23A0855B' stroke-width='0.3' opacity='0.04'/%3E%3Cline x1='145' y1='0' x2='145' y2='40' stroke='%23A0855B' stroke-width='0.5' opacity='0.05'/%3E%3Cline x1='175' y1='0' x2='175' y2='40' stroke='%23A0855B' stroke-width='0.2' opacity='0.03'/%3E%3Cline x1='210' y1='0' x2='210' y2='40' stroke='%23A0855B' stroke-width='0.4' opacity='0.04'/%3E%3Cline x1='240' y1='0' x2='240' y2='40' stroke='%23A0855B' stroke-width='0.3' opacity='0.03'/%3E%3Cline x1='265' y1='0' x2='265' y2='40' stroke='%23A0855B' stroke-width='0.5' opacity='0.05'/%3E%3Cline x1='290' y1='0' x2='290' y2='40' stroke='%23A0855B' stroke-width='0.2' opacity='0.02'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg width='600' height='500' viewBox='0 0 600 500' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='fade' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%238B7355' stop-opacity='0'/%3E%3Cstop offset='60%25' stop-color='%238B7355' stop-opacity='0.05'/%3E%3Cstop offset='100%25' stop-color='%238B7355' stop-opacity='0.07'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='600' height='500' fill='url(%23fade)'/%3E%3Crect x='400' y='60' width='165' height='230' rx='3' fill='none' stroke='%238B7355' stroke-width='1.2' opacity='0.1'/%3E%3Cg opacity='0.12'%3E%3Cline x1='400' y1='88' x2='565' y2='88' stroke='%238B7355' stroke-width='0.6'/%3E%3Cline x1='400' y1='116' x2='565' y2='116' stroke='%238B7355' stroke-width='0.6'/%3E%3Cline x1='400' y1='144' x2='565' y2='144' stroke='%238B7355' stroke-width='0.6'/%3E%3Cline x1='400' y1='172' x2='565' y2='172' stroke='%238B7355' stroke-width='0.6'/%3E%3Cline x1='400' y1='200' x2='565' y2='200' stroke='%238B7355' stroke-width='0.6'/%3E%3Cline x1='400' y1='228' x2='565' y2='228' stroke='%238B7355' stroke-width='0.6'/%3E%3Cline x1='400' y1='256' x2='565' y2='256' stroke='%238B7355' stroke-width='0.6'/%3E%3Cline x1='427' y1='60' x2='427' y2='290' stroke='%238B7355' stroke-width='0.6'/%3E%3Cline x1='454' y1='60' x2='454' y2='290' stroke='%238B7355' stroke-width='0.6'/%3E%3Cline x1='481' y1='60' x2='481' y2='290' stroke='%238B7355' stroke-width='0.6'/%3E%3Cline x1='508' y1='60' x2='508' y2='290' stroke='%238B7355' stroke-width='0.6'/%3E%3Cline x1='535' y1='60' x2='535' y2='290' stroke='%238B7355' stroke-width='0.6'/%3E%3C/g%3E%3Cg opacity='0.08'%3E%3Cpath d='M100,300 Q95,260 110,220 L130,220 Q125,260 125,300 Z' fill='%238B7355'/%3E%3Cellipse cx='120' cy='195' rx='12' ry='14' fill='%238B7355'/%3E%3Crect x='108' y='178' width='24' height='10' rx='2' fill='%238B7355'/%3E%3Crect x='113' y='170' width='14' height='10' rx='1.5' fill='%238B7355'/%3E%3C/g%3E%3Ctext x='380' y='310' transform='rotate(-10 380 310)' font-family='serif' font-size='38' fill='%238B7355' opacity='0.05' font-weight='700'%3E%E5%82%B7%E5%AF%92%E9%9B%9C%E7%97%85%E8%AB%96%3C/text%3E%3Ctext x='400' y='345' transform='rotate(-10 400 345)' font-family='serif' font-size='18' fill='%238B7355' opacity='0.04' font-weight='600'%3E%E5%BC%B5%E4%BB%B2%E6%99%AF%3C/text%3E%3C/svg%3E");
+  background-repeat: repeat, repeat, no-repeat;
+  background-position: 0 0, 0 0, right bottom;
+  background-size: 200px 200px, 300px 40px, 600px 500px;
+  background-attachment: fixed;
+}
+
+/* ===== Mobile Responsive Fixes ===== */
+@media (max-width: 767px) {
+  [data-sheet-overlay] {
+    backdrop-filter: blur(2px);
+  }
+
+  /* Reduce background composition on mobile */
+  body {
+    background-size: 200px 200px, 300px 40px, 400px 350px;
+  }
+
+  .mobile-table {
+    display: block;
+  }
+  .mobile-table thead {
+    display: none;
+  }
+  .mobile-table tbody tr {
+    display: block;
+    padding: 0.75rem;
+    border-bottom: 1px solid hsl(var(--border));
+  }
+  .mobile-table tbody td {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.25rem 0;
+    border: none;
+  }
+  .mobile-table tbody td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: hsl(var(--muted-foreground));
+    margin-right: 1rem;
+  }
+
+  .form-grid-mobile {
+    grid-template-columns: 1fr !important;
+  }
+  .card-mobile {
+    padding: 0.75rem !important;
+  }
+  .dashboard-stats {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0.5rem !important;
+  }
+  .rx-editor-sidebar {
+    order: -1;
+  }
+  .print-toolbar {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+  .ai-page-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  h1 {
+    font-size: 1.25rem !important;
+  }
+  .dialog-mobile-full {
+    max-width: 100% !important;
+    margin: 0.5rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    background-size: 200px 200px, 300px 40px, 280px 240px;
+  }
+
+  .tcm-seal-stamp,
+  .tcm-cloud-corner::before {
+    display: none;
+  }
+}
+
+/* Small phone fixes */
+@media (max-width: 380px) {
+  .dashboard-stats {
+    grid-template-columns: 1fr !important;
+  }
+
+  h1 {
+    font-size: 1.15rem !important;
+  }
+  h2 {
+    font-size: 1.05rem !important;
+  }
+
+  .btn-compact {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+    font-size: 0.75rem !important;
   }
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 export interface HerbDraft {
   name: string;
@@ -31,7 +32,7 @@ interface ConsultationState {
   consultationId: string | null;
   patientId: string | null;
 
-  // Patient context (pass to API routes for Vercel cold-start resilience)
+  // Patient context
   patientName: string;
   patientGender: string | null;
   patientAge: number | null;
@@ -88,53 +89,82 @@ const initialState = {
   consultationId: null,
   patientId: null,
   patientName: "",
-  patientGender: null,
-  patientAge: null,
+  patientGender: null as string | null,
+  patientAge: null as number | null,
   patientAllergies: "",
   patientChronicDisease: "",
   patientConstitution: "",
   rawText: "",
-  structuredHistory: null,
+  structuredHistory: null as Record<string, unknown> | null,
   isTranscribing: false,
-  differentiations: null,
+  differentiations: null as Record<string, unknown> | null,
   isDifferentiating: false,
-  formulas: null,
-  selectedFormula: null,
+  formulas: null as FormulaDraft[] | null,
+  selectedFormula: null as FormulaDraft | null,
   isGeneratingFormula: false,
-  tongueImages: [],
-  faceImages: [],
-  tongueAnalysis: null,
-  faceAnalysis: null,
+  tongueImages: [] as string[],
+  faceImages: [] as string[],
+  tongueAnalysis: null as Record<string, unknown> | null,
+  faceAnalysis: null as Record<string, unknown> | null,
   isAnalyzingTongue: false,
   isAnalyzingFace: false,
 };
 
-export const useConsultationStore = create<ConsultationState>((set) => ({
-  ...initialState,
-  setStep: (step) => set({ step }),
-  setConsultationId: (id) => set({ consultationId: id }),
-  setPatientId: (id) => set({ patientId: id }),
-  setPatientInfo: (info) => set({
-    patientName: info.name,
-    patientGender: info.gender,
-    patientAge: info.age,
-    patientAllergies: info.allergies || "",
-    patientChronicDisease: info.chronicDisease || "",
-    patientConstitution: info.constitution || "",
-  }),
-  setRawText: (textOrFn: string | ((prev: string) => string)) => set((state) => ({ rawText: typeof textOrFn === "function" ? textOrFn(state.rawText) : textOrFn })),
-  setStructuredHistory: (history) => set({ structuredHistory: history }),
-  setIsTranscribing: (v) => set({ isTranscribing: v }),
-  setDifferentiations: (d) => set({ differentiations: d }),
-  setIsDifferentiating: (v) => set({ isDifferentiating: v }),
-  setFormulas: (f) => set({ formulas: f }),
-  setSelectedFormula: (f) => set({ selectedFormula: f }),
-  setIsGeneratingFormula: (v) => set({ isGeneratingFormula: v }),
-  setTongueImages: (urls) => set({ tongueImages: urls }),
-  setFaceImages: (urls) => set({ faceImages: urls }),
-  setTongueAnalysis: (a) => set({ tongueAnalysis: a }),
-  setFaceAnalysis: (a) => set({ faceAnalysis: a }),
-  setIsAnalyzingTongue: (v) => set({ isAnalyzingTongue: v }),
-  setIsAnalyzingFace: (v) => set({ isAnalyzingFace: v }),
-  reset: () => set(initialState),
-}));
+export const useConsultationStore = create<ConsultationState>()(
+  persist(
+    (set) => ({
+      ...initialState,
+      setStep: (step) => set({ step }),
+      setConsultationId: (id) => set({ consultationId: id }),
+      setPatientId: (id) => set({ patientId: id }),
+      setPatientInfo: (info) => set({
+        patientName: info.name,
+        patientGender: info.gender,
+        patientAge: info.age,
+        patientAllergies: info.allergies || "",
+        patientChronicDisease: info.chronicDisease || "",
+        patientConstitution: info.constitution || "",
+      }),
+      setRawText: (textOrFn: string | ((prev: string) => string)) => set((state) => ({ rawText: typeof textOrFn === "function" ? textOrFn(state.rawText) : textOrFn })),
+      setStructuredHistory: (history) => set({ structuredHistory: history }),
+      setIsTranscribing: (v) => set({ isTranscribing: v }),
+      setDifferentiations: (d) => set({ differentiations: d }),
+      setIsDifferentiating: (v) => set({ isDifferentiating: v }),
+      setFormulas: (f) => set({ formulas: f }),
+      setSelectedFormula: (f) => set({ selectedFormula: f }),
+      setIsGeneratingFormula: (v) => set({ isGeneratingFormula: v }),
+      setTongueImages: (urls) => set({ tongueImages: urls }),
+      setFaceImages: (urls) => set({ faceImages: urls }),
+      setTongueAnalysis: (a) => set({ tongueAnalysis: a }),
+      setFaceAnalysis: (a) => set({ faceAnalysis: a }),
+      setIsAnalyzingTongue: (v) => set({ isAnalyzingTongue: v }),
+      setIsAnalyzingFace: (v) => set({ isAnalyzingFace: v }),
+      reset: () => {
+        // Clear persisted state too
+        try { localStorage.removeItem("consultation-store"); } catch {}
+        set(initialState);
+      },
+    }),
+    {
+      name: "consultation-store",
+      // Only persist key data — skip transient UI flags
+      partialize: (state) => ({
+        step: state.step,
+        consultationId: state.consultationId,
+        patientId: state.patientId,
+        patientName: state.patientName,
+        patientGender: state.patientGender,
+        patientAge: state.patientAge,
+        patientAllergies: state.patientAllergies,
+        patientChronicDisease: state.patientChronicDisease,
+        patientConstitution: state.patientConstitution,
+        rawText: state.rawText,
+        structuredHistory: state.structuredHistory,
+        tongueImages: state.tongueImages,
+        faceImages: state.faceImages,
+        tongueAnalysis: state.tongueAnalysis,
+        faceAnalysis: state.faceAnalysis,
+      }),
+    }
+  )
+);

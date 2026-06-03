@@ -73,30 +73,21 @@ export function ConsultationTimeline({ consultationId, consultation }: Consultat
   const currentStepKey = statusMap[consultation.status || "DRAFT"] || "patient";
   const currentIdx = steps.findIndex(s => s.key === currentStepKey);
 
-  const handleStepClick = (step: StepDef, idx: number) => {
-    const isCompleted = step.check(consultation);
-    const isCurrent = step.key === currentStepKey;
+  const isFinalized = consultation.status === "FINALIZED" || consultation.status === "ARCHIVED";
 
-    // Allow clicking completed/current steps to navigate
-    if (!isCompleted && !isCurrent) return;
-
+  const handleStepClick = (step: StepDef) => {
     switch (step.key) {
       case "patient":
         router.push(`/patients/${consultation.patientId}`);
         break;
-      case "tongue":
-      case "face":
-      case "history":
-        router.push(`/consultations/${consultationId}/ai`);
-        break;
-      case "differentiate":
-      case "diagnosis":
-      case "formula":
-        router.push(`/consultations/${consultationId}/ai`);
-        break;
-      case "confirm":
-        router.push(`/consultations/${consultationId}/prescription`);
-        break;
+      default:
+        // Finalized consultations → read-only detail view with section anchor
+        // Active consultations → wizard flow
+        if (isFinalized) {
+          router.push(`/consultations/${consultationId}#${step.key}`);
+        } else {
+          router.push(`/consultations/${consultationId}/ai`);
+        }
     }
   };
 
@@ -115,15 +106,15 @@ export function ConsultationTimeline({ consultationId, consultation }: Consultat
               <div key={step.key} className="flex items-center flex-shrink-0">
                 <button
                   type="button"
-                  onClick={() => handleStepClick(step, idx)}
-                  disabled={!isCompleted && !isCurrent}
+                  onClick={() => handleStepClick(step)}
+                  disabled={false}
                   className={cn(
-                    "flex flex-col items-center gap-1 px-3 py-2 rounded-lg min-w-[70px] transition-all duration-200",
+                    "flex flex-col items-center gap-1 px-3 py-2 rounded-lg min-w-[70px] transition-all duration-200 cursor-pointer",
                     isCompleted
-                      ? "text-green-700 cursor-pointer hover:bg-green-50"
+                      ? "text-green-700 hover:bg-green-50"
                       : isCurrent
-                        ? "text-primary cursor-pointer animate-pulse"
-                        : "text-muted-foreground/40 cursor-not-allowed"
+                        ? "text-primary"
+                        : "text-muted-foreground/50 hover:bg-muted"
                   )}
                 >
                   <div className={cn(
@@ -132,14 +123,14 @@ export function ConsultationTimeline({ consultationId, consultation }: Consultat
                       ? "border-green-500 bg-green-50"
                       : isCurrent
                         ? "border-primary bg-primary/10"
-                        : "border-muted-foreground/20 bg-transparent"
+                        : "border-muted-foreground/25 bg-transparent"
                   )}>
                     {isCompleted ? (
                       <CheckCircle className="h-5 w-5 text-green-600" />
                     ) : (
                       <Icon className={cn(
                         "h-5 w-5",
-                        isCurrent ? "text-primary" : "text-muted-foreground/40"
+                        isCurrent ? "text-primary" : "text-muted-foreground/50"
                       )} />
                     )}
                   </div>
@@ -203,13 +194,13 @@ export function ConsultationTimeline({ consultationId, consultation }: Consultat
               <div className="pb-4">
                 <button
                   type="button"
-                  onClick={() => handleStepClick(step, idx)}
-                  disabled={!isCompleted && !isCurrent}
-                  className="text-left"
+                  onClick={() => handleStepClick(step)}
+                  disabled={false}
+                  className="text-left cursor-pointer"
                 >
                   <span className={cn(
                     "text-sm font-medium",
-                    isCompleted ? "text-green-700" : isCurrent ? "text-primary" : "text-muted-foreground/40"
+                    isCompleted ? "text-green-700" : isCurrent ? "text-primary" : "text-muted-foreground/50 hover:text-foreground"
                   )}>
                     {step.label}
                   </span>

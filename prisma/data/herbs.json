@@ -22,8 +22,8 @@
     "toxicity": null
   },
   {
-    "name": "紫苏",
-    "pinyin": "zi su",
+    "name": "紫苏叶",
+    "pinyin": "zi su ye",
     "category": "解表药",
     "nature": "温",
     "taste": "辛",
@@ -69,7 +69,7 @@
     "name": "防风",
     "pinyin": "fang feng",
     "category": "解表药",
-    "nature": "温",
+    "nature": "微温",
     "taste": "辛、甘",
     "meridian": "膀胱、肝、脾",
     "pharmacopoeiaMin": 5,
@@ -143,39 +143,6 @@
     "toxicity": null
   },
   {
-    "name": "葱白",
-    "pinyin": "cong bai",
-    "category": "解表药",
-    "nature": "温",
-    "taste": "辛",
-    "meridian": "肺、胃",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 10,
-    "toxicity": null
-  },
-  {
-    "name": "胡荽",
-    "pinyin": "hu sui",
-    "category": "解表药",
-    "nature": "温",
-    "taste": "辛",
-    "meridian": "肺、胃",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 10,
-    "toxicity": null
-  },
-  {
-    "name": "柽柳",
-    "pinyin": "cheng liu",
-    "category": "解表药",
-    "nature": "平",
-    "taste": "辛、甘",
-    "meridian": "肺、胃、心",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 10,
-    "toxicity": null
-  },
-  {
     "name": "薄荷",
     "pinyin": "bo he",
     "category": "解表药",
@@ -198,22 +165,11 @@
     "toxicity": null
   },
   {
-    "name": "蝉蜕",
-    "pinyin": "chan tui",
-    "category": "解表药",
-    "nature": "寒",
-    "taste": "甘",
-    "meridian": "肺、肝",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 6,
-    "toxicity": null
-  },
-  {
     "name": "桑叶",
     "pinyin": "sang ye",
     "category": "解表药",
     "nature": "寒",
-    "taste": "苦、甘",
+    "taste": "甘、苦",
     "meridian": "肺、肝",
     "pharmacopoeiaMin": 5,
     "pharmacopoeiaMax": 10,
@@ -224,7 +180,7 @@
     "pinyin": "ju hua",
     "category": "解表药",
     "nature": "微寒",
-    "taste": "辛、甘、苦",
+    "taste": "甘、苦",
     "meridian": "肺、肝",
     "pharmacopoeiaMin": 5,
     "pharmacopoeiaMax": 10,
@@ -246,7 +202,7 @@
     "pinyin": "chai hu",
     "category": "解表药",
     "nature": "微寒",
-    "taste": "苦、辛",
+    "taste": "辛、苦",
     "meridian": "肝、胆、肺",
     "pharmacopoeiaMin": 3,
     "pharmacopoeiaMax": 10,
@@ -257,7 +213,7 @@
     "pinyin": "sheng ma",
     "category": "解表药",
     "nature": "微寒",
-    "taste": "辛、甘",
+    "taste": "辛、微甘",
     "meridian": "肺、脾、胃、大肠",
     "pharmacopoeiaMin": 3,
     "pharmacopoeiaMax": 10,
@@ -286,33 +242,11 @@
     "toxicity": null
   },
   {
-    "name": "浮萍",
-    "pinyin": "fu ping",
-    "category": "解表药",
-    "nature": "寒",
-    "taste": "辛",
-    "meridian": "肺、膀胱",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
-    "name": "木贼",
-    "pinyin": "mu zei",
-    "category": "解表药",
-    "nature": "平",
-    "taste": "甘、苦",
-    "meridian": "肺、肝",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
     "name": "石膏",
     "pinyin": "shi gao",
     "category": "清热药",
     "nature": "大寒",
-    "taste": "辛、甘",
+    "taste": "甘、辛",
     "meridian": "肺、胃",
     "pharmacopoeiaMin": 15,
     "pharmacopoeiaMax": 60,
@@ -327,17 +261,6 @@
     "meridian": "肺、胃、肾",
     "pharmacopoeiaMin": 6,
     "pharmacopoeiaMax": 12,
-    "toxicity": null
-  },
-  {
-    "name": "寒水石",
-    "pinyin": "han shui shi",
-    "category": "清热药",
-    "nature": "寒",
-    "taste": "辛、咸",
-    "meridian": "心、胃、肾",
-    "pharmacopoeiaMin": 10,
-    "pharmacopoeiaMax": 30,
     "toxicity": null
   },
   {
@@ -368,7 +291,7 @@
     "category": "清热药",
     "nature": "寒",
     "taste": "甘、淡",
-    "meridian": "心、胃、小肠",
+    "meridian": "心、肺、胃",
     "pharmacopoeiaMin": 6,
     "pharmacopoeiaMax": 15,
     "toxicity": null
@@ -381,18 +304,7 @@
     "taste": "甘、淡",
     "meridian": "心、胃、小肠",
     "pharmacopoeiaMin": 6,
-    "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
-    "name": "鸭跖草",
-    "pinyin": "ya zhi cao",
-    "category": "清热药",
-    "nature": "寒",
-    "taste": "甘、淡",
-    "meridian": "肺、胃、小肠",
-    "pharmacopoeiaMin": 15,
-    "pharmacopoeiaMax": 30,
+    "pharmacopoeiaMax": 10,
     "toxicity": null
   },
   {
@@ -411,7 +323,7 @@
     "pinyin": "xia ku cao",
     "category": "清热药",
     "nature": "寒",
-    "taste": "苦、辛",
+    "taste": "辛、苦",
     "meridian": "肝、胆",
     "pharmacopoeiaMin": 9,
     "pharmacopoeiaMax": 15,
@@ -427,39 +339,6 @@
     "pharmacopoeiaMin": 9,
     "pharmacopoeiaMax": 15,
     "toxicity": null
-  },
-  {
-    "name": "谷精草",
-    "pinyin": "gu jing cao",
-    "category": "清热药",
-    "nature": "平",
-    "taste": "辛、甘",
-    "meridian": "肝、肺",
-    "pharmacopoeiaMin": 5,
-    "pharmacopoeiaMax": 10,
-    "toxicity": null
-  },
-  {
-    "name": "密蒙花",
-    "pinyin": "mi meng hua",
-    "category": "清热药",
-    "nature": "微寒",
-    "taste": "甘",
-    "meridian": "肝",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
-    "name": "青葙子",
-    "pinyin": "qing xiang zi",
-    "category": "清热药",
-    "nature": "微寒",
-    "taste": "苦",
-    "meridian": "肝",
-    "pharmacopoeiaMin": 9,
-    "pharmacopoeiaMax": 15,
-    "toxicity": "有小毒"
   },
   {
     "name": "黄芩",
@@ -523,9 +402,9 @@
     "nature": "寒",
     "taste": "苦",
     "meridian": "心、肝、胃、大肠、膀胱",
-    "pharmacopoeiaMin": 5,
-    "pharmacopoeiaMax": 10,
-    "toxicity": null
+    "pharmacopoeiaMin": 4.5,
+    "pharmacopoeiaMax": 9,
+    "toxicity": "有小毒"
   },
   {
     "name": "白鲜皮",
@@ -536,39 +415,6 @@
     "meridian": "脾、胃、膀胱",
     "pharmacopoeiaMin": 5,
     "pharmacopoeiaMax": 10,
-    "toxicity": null
-  },
-  {
-    "name": "苦豆子",
-    "pinyin": "ku dou zi",
-    "category": "清热药",
-    "nature": "寒",
-    "taste": "苦",
-    "meridian": "胃、大肠",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 6,
-    "toxicity": "有毒"
-  },
-  {
-    "name": "三颗针",
-    "pinyin": "san ke zhen",
-    "category": "清热药",
-    "nature": "寒",
-    "taste": "苦",
-    "meridian": "肝、胃、大肠",
-    "pharmacopoeiaMin": 9,
-    "pharmacopoeiaMax": 15,
-    "toxicity": null
-  },
-  {
-    "name": "马尾连",
-    "pinyin": "ma wei lian",
-    "category": "清热药",
-    "nature": "寒",
-    "taste": "苦",
-    "meridian": "心、肝、胃、大肠",
-    "pharmacopoeiaMin": 6,
-    "pharmacopoeiaMax": 12,
     "toxicity": null
   },
   {
@@ -594,28 +440,6 @@
     "toxicity": null
   },
   {
-    "name": "穿心莲",
-    "pinyin": "chuan xin lian",
-    "category": "清热药",
-    "nature": "寒",
-    "taste": "苦",
-    "meridian": "心、肺、大肠、膀胱",
-    "pharmacopoeiaMin": 6,
-    "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
-    "name": "大青叶",
-    "pinyin": "da qing ye",
-    "category": "清热药",
-    "nature": "寒",
-    "taste": "苦",
-    "meridian": "心、胃",
-    "pharmacopoeiaMin": 9,
-    "pharmacopoeiaMax": 15,
-    "toxicity": null
-  },
-  {
     "name": "板蓝根",
     "pinyin": "ban lan gen",
     "category": "清热药",
@@ -625,28 +449,6 @@
     "pharmacopoeiaMin": 9,
     "pharmacopoeiaMax": 15,
     "toxicity": null
-  },
-  {
-    "name": "青黛",
-    "pinyin": "qing dai",
-    "category": "清热药",
-    "nature": "寒",
-    "taste": "咸",
-    "meridian": "肝",
-    "pharmacopoeiaMin": 1,
-    "pharmacopoeiaMax": 3,
-    "toxicity": null
-  },
-  {
-    "name": "贯众",
-    "pinyin": "guan zhong",
-    "category": "清热药",
-    "nature": "微寒",
-    "taste": "苦",
-    "meridian": "肝、胃",
-    "pharmacopoeiaMin": 5,
-    "pharmacopoeiaMax": 10,
-    "toxicity": "有小毒"
   },
   {
     "name": "蒲公英",
@@ -682,47 +484,36 @@
     "toxicity": null
   },
   {
-    "name": "重楼",
-    "pinyin": "chong lou",
-    "category": "清热药",
-    "nature": "微寒",
-    "taste": "苦",
-    "meridian": "肝",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
-    "toxicity": "有小毒"
-  },
-  {
-    "name": "拳参",
-    "pinyin": "quan shen",
-    "category": "清热药",
-    "nature": "微寒",
-    "taste": "苦、涩",
-    "meridian": "肺、肝、大肠",
-    "pharmacopoeiaMin": 5,
-    "pharmacopoeiaMax": 10,
-    "toxicity": null
-  },
-  {
-    "name": "漏芦",
-    "pinyin": "lou lu",
+    "name": "穿心莲",
+    "pinyin": "chuan xin lian",
     "category": "清热药",
     "nature": "寒",
     "taste": "苦",
-    "meridian": "胃",
-    "pharmacopoeiaMin": 5,
+    "meridian": "心、肺、大肠、膀胱",
+    "pharmacopoeiaMin": 6,
     "pharmacopoeiaMax": 9,
     "toxicity": null
   },
   {
-    "name": "土茯苓",
-    "pinyin": "tu fu ling",
+    "name": "大青叶",
+    "pinyin": "da qing ye",
     "category": "清热药",
-    "nature": "平",
-    "taste": "甘、淡",
-    "meridian": "肝、胃",
-    "pharmacopoeiaMin": 15,
-    "pharmacopoeiaMax": 60,
+    "nature": "寒",
+    "taste": "苦",
+    "meridian": "心、胃",
+    "pharmacopoeiaMin": 9,
+    "pharmacopoeiaMax": 15,
+    "toxicity": null
+  },
+  {
+    "name": "青黛",
+    "pinyin": "qing dai",
+    "category": "清热药",
+    "nature": "寒",
+    "taste": "咸",
+    "meridian": "肝",
+    "pharmacopoeiaMin": 1,
+    "pharmacopoeiaMax": 3,
     "toxicity": null
   },
   {
@@ -734,116 +525,6 @@
     "meridian": "肺",
     "pharmacopoeiaMin": 15,
     "pharmacopoeiaMax": 25,
-    "toxicity": null
-  },
-  {
-    "name": "金荞麦",
-    "pinyin": "jin qiao mai",
-    "category": "清热药",
-    "nature": "凉",
-    "taste": "微辛、涩",
-    "meridian": "肺",
-    "pharmacopoeiaMin": 15,
-    "pharmacopoeiaMax": 45,
-    "toxicity": null
-  },
-  {
-    "name": "大血藤",
-    "pinyin": "da xue teng",
-    "category": "清热药",
-    "nature": "平",
-    "taste": "苦",
-    "meridian": "大肠、肝",
-    "pharmacopoeiaMin": 9,
-    "pharmacopoeiaMax": 15,
-    "toxicity": null
-  },
-  {
-    "name": "败酱草",
-    "pinyin": "bai jiang cao",
-    "category": "清热药",
-    "nature": "微寒",
-    "taste": "辛、苦",
-    "meridian": "肝、胃、大肠",
-    "pharmacopoeiaMin": 6,
-    "pharmacopoeiaMax": 15,
-    "toxicity": null
-  },
-  {
-    "name": "射干",
-    "pinyin": "she gan",
-    "category": "清热药",
-    "nature": "寒",
-    "taste": "苦",
-    "meridian": "肺",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 10,
-    "toxicity": null
-  },
-  {
-    "name": "山豆根",
-    "pinyin": "shan dou gen",
-    "category": "清热药",
-    "nature": "寒",
-    "taste": "苦",
-    "meridian": "肺、胃",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 6,
-    "toxicity": "有毒"
-  },
-  {
-    "name": "马勃",
-    "pinyin": "ma bo",
-    "category": "清热药",
-    "nature": "平",
-    "taste": "辛",
-    "meridian": "肺",
-    "pharmacopoeiaMin": 2,
-    "pharmacopoeiaMax": 6,
-    "toxicity": null
-  },
-  {
-    "name": "青果",
-    "pinyin": "qing guo",
-    "category": "清热药",
-    "nature": "平",
-    "taste": "甘、酸",
-    "meridian": "肺、胃",
-    "pharmacopoeiaMin": 5,
-    "pharmacopoeiaMax": 10,
-    "toxicity": null
-  },
-  {
-    "name": "锦灯笼",
-    "pinyin": "jin deng long",
-    "category": "清热药",
-    "nature": "寒",
-    "taste": "苦",
-    "meridian": "肺",
-    "pharmacopoeiaMin": 5,
-    "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
-    "name": "金果榄",
-    "pinyin": "jin guo lan",
-    "category": "清热药",
-    "nature": "寒",
-    "taste": "苦",
-    "meridian": "肺、大肠",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
-    "name": "木蝴蝶",
-    "pinyin": "mu hu die",
-    "category": "清热药",
-    "nature": "凉",
-    "taste": "苦、甘",
-    "meridian": "肺、肝、胃",
-    "pharmacopoeiaMin": 1,
-    "pharmacopoeiaMax": 3,
     "toxicity": null
   },
   {
@@ -880,125 +561,26 @@
     "toxicity": "有小毒"
   },
   {
-    "name": "地锦草",
-    "pinyin": "di jin cao",
-    "category": "清热药",
-    "nature": "平",
-    "taste": "辛",
-    "meridian": "肝、大肠",
-    "pharmacopoeiaMin": 9,
-    "pharmacopoeiaMax": 20,
-    "toxicity": null
-  },
-  {
-    "name": "委陵菜",
-    "pinyin": "wei ling cai",
+    "name": "射干",
+    "pinyin": "she gan",
     "category": "清热药",
     "nature": "寒",
     "taste": "苦",
-    "meridian": "肝、大肠",
-    "pharmacopoeiaMin": 9,
-    "pharmacopoeiaMax": 15,
-    "toxicity": null
-  },
-  {
-    "name": "翻白草",
-    "pinyin": "fan bai cao",
-    "category": "清热药",
-    "nature": "平",
-    "taste": "甘、微苦",
-    "meridian": "肝、胃、大肠",
-    "pharmacopoeiaMin": 9,
-    "pharmacopoeiaMax": 15,
-    "toxicity": null
-  },
-  {
-    "name": "半边莲",
-    "pinyin": "ban bian lian",
-    "category": "清热药",
-    "nature": "寒",
-    "taste": "辛",
-    "meridian": "心、小肠、肺",
-    "pharmacopoeiaMin": 9,
-    "pharmacopoeiaMax": 15,
-    "toxicity": null
-  },
-  {
-    "name": "白花蛇舌草",
-    "pinyin": "bai hua she she cao",
-    "category": "清热药",
-    "nature": "寒",
-    "taste": "微苦、甘",
-    "meridian": "胃、大肠、小肠",
-    "pharmacopoeiaMin": 15,
-    "pharmacopoeiaMax": 60,
-    "toxicity": null
-  },
-  {
-    "name": "山慈菇",
-    "pinyin": "shan ci gu",
-    "category": "清热药",
-    "nature": "凉",
-    "taste": "甘、微辛",
-    "meridian": "肝、脾",
+    "meridian": "肺",
     "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
-    "toxicity": "有小毒"
-  },
-  {
-    "name": "熊胆粉",
-    "pinyin": "xiong dan fen",
-    "category": "清热药",
-    "nature": "寒",
-    "taste": "苦",
-    "meridian": "肝、胆、心",
-    "pharmacopoeiaMin": 0.2,
-    "pharmacopoeiaMax": 0.5,
-    "toxicity": null
-  },
-  {
-    "name": "千里光",
-    "pinyin": "qian li guang",
-    "category": "清热药",
-    "nature": "寒",
-    "taste": "苦",
-    "meridian": "肺、肝",
-    "pharmacopoeiaMin": 15,
-    "pharmacopoeiaMax": 30,
-    "toxicity": "有小毒"
-  },
-  {
-    "name": "白蔹",
-    "pinyin": "bai lian",
-    "category": "清热药",
-    "nature": "微寒",
-    "taste": "苦",
-    "meridian": "心、胃",
-    "pharmacopoeiaMin": 5,
     "pharmacopoeiaMax": 10,
     "toxicity": null
   },
   {
-    "name": "四季青",
-    "pinyin": "si ji qing",
-    "category": "清热药",
-    "nature": "凉",
-    "taste": "苦、涩",
-    "meridian": "肺、心",
-    "pharmacopoeiaMin": 15,
-    "pharmacopoeiaMax": 30,
-    "toxicity": null
-  },
-  {
-    "name": "绿豆",
-    "pinyin": "lv dou",
+    "name": "山豆根",
+    "pinyin": "shan dou gen",
     "category": "清热药",
     "nature": "寒",
-    "taste": "甘",
-    "meridian": "心、胃",
-    "pharmacopoeiaMin": 15,
-    "pharmacopoeiaMax": 30,
-    "toxicity": null
+    "taste": "苦",
+    "meridian": "肺、胃",
+    "pharmacopoeiaMin": 3,
+    "pharmacopoeiaMax": 6,
+    "toxicity": "有毒"
   },
   {
     "name": "生地黄",
@@ -1078,17 +660,6 @@
     "toxicity": null
   },
   {
-    "name": "白薇",
-    "pinyin": "bai wei",
-    "category": "清热药",
-    "nature": "寒",
-    "taste": "苦、咸",
-    "meridian": "胃、肝、肾",
-    "pharmacopoeiaMin": 5,
-    "pharmacopoeiaMax": 10,
-    "toxicity": null
-  },
-  {
     "name": "地骨皮",
     "pinyin": "di gu pi",
     "category": "清热药",
@@ -1097,6 +668,17 @@
     "meridian": "肺、肝、肾",
     "pharmacopoeiaMin": 9,
     "pharmacopoeiaMax": 15,
+    "toxicity": null
+  },
+  {
+    "name": "白薇",
+    "pinyin": "bai wei",
+    "category": "清热药",
+    "nature": "寒",
+    "taste": "苦、咸",
+    "meridian": "胃、肝、肾",
+    "pharmacopoeiaMin": 5,
+    "pharmacopoeiaMax": 10,
     "toxicity": null
   },
   {
@@ -1188,17 +770,6 @@
     "toxicity": null
   },
   {
-    "name": "松子仁",
-    "pinyin": "song zi ren",
-    "category": "泻下药",
-    "nature": "温",
-    "taste": "甘",
-    "meridian": "肺、肝、大肠",
-    "pharmacopoeiaMin": 5,
-    "pharmacopoeiaMax": 10,
-    "toxicity": null
-  },
-  {
     "name": "甘遂",
     "pinyin": "gan sui",
     "category": "泻下药",
@@ -1207,17 +778,6 @@
     "meridian": "肺、肾、大肠",
     "pharmacopoeiaMin": 0.5,
     "pharmacopoeiaMax": 1.5,
-    "toxicity": "有毒"
-  },
-  {
-    "name": "京大戟",
-    "pinyin": "jing da ji",
-    "category": "泻下药",
-    "nature": "寒",
-    "taste": "苦",
-    "meridian": "肺、脾、肾",
-    "pharmacopoeiaMin": 1.5,
-    "pharmacopoeiaMax": 3,
     "toxicity": "有毒"
   },
   {
@@ -1232,14 +792,14 @@
     "toxicity": "有毒"
   },
   {
-    "name": "商陆",
-    "pinyin": "shang lu",
+    "name": "京大戟",
+    "pinyin": "jing da ji",
     "category": "泻下药",
     "nature": "寒",
     "taste": "苦",
-    "meridian": "肺、脾、肾、大肠",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
+    "meridian": "肺、脾、肾",
+    "pharmacopoeiaMin": 1.5,
+    "pharmacopoeiaMax": 3,
     "toxicity": "有毒"
   },
   {
@@ -1251,28 +811,6 @@
     "meridian": "肺、肾、大肠",
     "pharmacopoeiaMin": 3,
     "pharmacopoeiaMax": 6,
-    "toxicity": "有毒"
-  },
-  {
-    "name": "巴豆霜",
-    "pinyin": "ba dou shuang",
-    "category": "泻下药",
-    "nature": "热",
-    "taste": "辛",
-    "meridian": "胃、大肠",
-    "pharmacopoeiaMin": 0.1,
-    "pharmacopoeiaMax": 0.3,
-    "toxicity": "有大毒"
-  },
-  {
-    "name": "千金子",
-    "pinyin": "qian jin zi",
-    "category": "泻下药",
-    "nature": "温",
-    "taste": "辛",
-    "meridian": "肝、肾、大肠",
-    "pharmacopoeiaMin": 1,
-    "pharmacopoeiaMax": 2,
     "toxicity": "有毒"
   },
   {
@@ -1353,116 +891,6 @@
     "toxicity": null
   },
   {
-    "name": "蚕沙",
-    "pinyin": "can sha",
-    "category": "祛风湿药",
-    "nature": "温",
-    "taste": "甘、辛",
-    "meridian": "肝、脾、胃",
-    "pharmacopoeiaMin": 5,
-    "pharmacopoeiaMax": 15,
-    "toxicity": null
-  },
-  {
-    "name": "伸筋草",
-    "pinyin": "shen jin cao",
-    "category": "祛风湿药",
-    "nature": "温",
-    "taste": "微苦、辛",
-    "meridian": "肝、脾、肾",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 12,
-    "toxicity": null
-  },
-  {
-    "name": "寻骨风",
-    "pinyin": "xun gu feng",
-    "category": "祛风湿药",
-    "nature": "平",
-    "taste": "辛、苦",
-    "meridian": "肝",
-    "pharmacopoeiaMin": 10,
-    "pharmacopoeiaMax": 15,
-    "toxicity": null
-  },
-  {
-    "name": "松节",
-    "pinyin": "song jie",
-    "category": "祛风湿药",
-    "nature": "温",
-    "taste": "苦、辛",
-    "meridian": "肝、肾",
-    "pharmacopoeiaMin": 9,
-    "pharmacopoeiaMax": 15,
-    "toxicity": null
-  },
-  {
-    "name": "海风藤",
-    "pinyin": "hai feng teng",
-    "category": "祛风湿药",
-    "nature": "微温",
-    "taste": "辛、苦",
-    "meridian": "肝",
-    "pharmacopoeiaMin": 6,
-    "pharmacopoeiaMax": 12,
-    "toxicity": null
-  },
-  {
-    "name": "青风藤",
-    "pinyin": "qing feng teng",
-    "category": "祛风湿药",
-    "nature": "平",
-    "taste": "苦、辛",
-    "meridian": "肝、脾",
-    "pharmacopoeiaMin": 6,
-    "pharmacopoeiaMax": 12,
-    "toxicity": null
-  },
-  {
-    "name": "丁公藤",
-    "pinyin": "ding gong teng",
-    "category": "祛风湿药",
-    "nature": "温",
-    "taste": "辛",
-    "meridian": "肝、脾、胃",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 6,
-    "toxicity": "有小毒"
-  },
-  {
-    "name": "昆明山海棠",
-    "pinyin": "kun ming shan hai tang",
-    "category": "祛风湿药",
-    "nature": "温",
-    "taste": "苦、辛",
-    "meridian": "肝、脾、肾",
-    "pharmacopoeiaMin": 6,
-    "pharmacopoeiaMax": 15,
-    "toxicity": "有毒"
-  },
-  {
-    "name": "雪上一枝蒿",
-    "pinyin": "xue shang yi zhi hao",
-    "category": "祛风湿药",
-    "nature": "温",
-    "taste": "苦、辛",
-    "meridian": "肝",
-    "pharmacopoeiaMin": 0.025,
-    "pharmacopoeiaMax": 0.05,
-    "toxicity": "有大毒"
-  },
-  {
-    "name": "路路通",
-    "pinyin": "lu lu tong",
-    "category": "祛风湿药",
-    "nature": "平",
-    "taste": "苦",
-    "meridian": "肝、肾",
-    "pharmacopoeiaMin": 5,
-    "pharmacopoeiaMax": 10,
-    "toxicity": null
-  },
-  {
     "name": "秦艽",
     "pinyin": "qin jiao",
     "category": "祛风湿药",
@@ -1478,21 +906,10 @@
     "pinyin": "fang ji",
     "category": "祛风湿药",
     "nature": "寒",
-    "taste": "苦、辛",
+    "taste": "苦",
     "meridian": "膀胱、肺",
     "pharmacopoeiaMin": 5,
     "pharmacopoeiaMax": 10,
-    "toxicity": null
-  },
-  {
-    "name": "桑枝",
-    "pinyin": "sang zhi",
-    "category": "祛风湿药",
-    "nature": "平",
-    "taste": "微苦",
-    "meridian": "肝",
-    "pharmacopoeiaMin": 9,
-    "pharmacopoeiaMax": 15,
     "toxicity": null
   },
   {
@@ -1507,17 +924,6 @@
     "toxicity": null
   },
   {
-    "name": "臭梧桐",
-    "pinyin": "chou wu tong",
-    "category": "祛风湿药",
-    "nature": "凉",
-    "taste": "辛、苦、甘",
-    "meridian": "肝",
-    "pharmacopoeiaMin": 5,
-    "pharmacopoeiaMax": 15,
-    "toxicity": null
-  },
-  {
     "name": "海桐皮",
     "pinyin": "hai tong pi",
     "category": "祛风湿药",
@@ -1529,6 +935,17 @@
     "toxicity": null
   },
   {
+    "name": "桑枝",
+    "pinyin": "sang zhi",
+    "category": "祛风湿药",
+    "nature": "平",
+    "taste": "微苦",
+    "meridian": "肝",
+    "pharmacopoeiaMin": 9,
+    "pharmacopoeiaMax": 15,
+    "toxicity": null
+  },
+  {
     "name": "络石藤",
     "pinyin": "luo shi teng",
     "category": "祛风湿药",
@@ -1536,50 +953,6 @@
     "taste": "苦",
     "meridian": "心、肝、肾",
     "pharmacopoeiaMin": 6,
-    "pharmacopoeiaMax": 12,
-    "toxicity": null
-  },
-  {
-    "name": "雷公藤",
-    "pinyin": "lei gong teng",
-    "category": "祛风湿药",
-    "nature": "凉",
-    "taste": "苦、辛",
-    "meridian": "肝、肾",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 6,
-    "toxicity": "有大毒"
-  },
-  {
-    "name": "老鹳草",
-    "pinyin": "lao guan cao",
-    "category": "祛风湿药",
-    "nature": "平",
-    "taste": "辛、苦",
-    "meridian": "肝、肾、脾",
-    "pharmacopoeiaMin": 9,
-    "pharmacopoeiaMax": 15,
-    "toxicity": null
-  },
-  {
-    "name": "穿山龙",
-    "pinyin": "chuan shan long",
-    "category": "祛风湿药",
-    "nature": "温",
-    "taste": "甘、苦",
-    "meridian": "肝、肾、肺",
-    "pharmacopoeiaMin": 9,
-    "pharmacopoeiaMax": 15,
-    "toxicity": null
-  },
-  {
-    "name": "丝瓜络",
-    "pinyin": "si gua luo",
-    "category": "祛风湿药",
-    "nature": "平",
-    "taste": "甘",
-    "meridian": "肺、胃、肝",
-    "pharmacopoeiaMin": 5,
     "pharmacopoeiaMax": 12,
     "toxicity": null
   },
@@ -1615,50 +988,6 @@
     "pharmacopoeiaMin": 6,
     "pharmacopoeiaMax": 12,
     "toxicity": null
-  },
-  {
-    "name": "千年健",
-    "pinyin": "qian nian jian",
-    "category": "祛风湿药",
-    "nature": "温",
-    "taste": "苦、辛",
-    "meridian": "肝、肾",
-    "pharmacopoeiaMin": 5,
-    "pharmacopoeiaMax": 10,
-    "toxicity": null
-  },
-  {
-    "name": "雪莲花",
-    "pinyin": "xue lian hua",
-    "category": "祛风湿药",
-    "nature": "温",
-    "taste": "甘、微苦",
-    "meridian": "肝、肾",
-    "pharmacopoeiaMin": 6,
-    "pharmacopoeiaMax": 15,
-    "toxicity": "有小毒"
-  },
-  {
-    "name": "鹿衔草",
-    "pinyin": "lu xian cao",
-    "category": "祛风湿药",
-    "nature": "温",
-    "taste": "甘、苦",
-    "meridian": "肝、肾",
-    "pharmacopoeiaMin": 9,
-    "pharmacopoeiaMax": 15,
-    "toxicity": null
-  },
-  {
-    "name": "天山雪莲",
-    "pinyin": "tian shan xue lian",
-    "category": "祛风湿药",
-    "nature": "温",
-    "taste": "微苦",
-    "meridian": "肝、脾、肾",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 6,
-    "toxicity": "有小毒"
   },
   {
     "name": "广藿香",
@@ -1760,17 +1089,6 @@
     "toxicity": null
   },
   {
-    "name": "茯神",
-    "pinyin": "fu shen",
-    "category": "利水渗湿药",
-    "nature": "平",
-    "taste": "甘、淡",
-    "meridian": "心、脾",
-    "pharmacopoeiaMin": 10,
-    "pharmacopoeiaMax": 15,
-    "toxicity": null
-  },
-  {
     "name": "薏苡仁",
     "pinyin": "yi yi ren",
     "category": "利水渗湿药",
@@ -1804,94 +1122,6 @@
     "toxicity": null
   },
   {
-    "name": "冬瓜皮",
-    "pinyin": "dong gua pi",
-    "category": "利水渗湿药",
-    "nature": "凉",
-    "taste": "甘",
-    "meridian": "脾、小肠",
-    "pharmacopoeiaMin": 9,
-    "pharmacopoeiaMax": 30,
-    "toxicity": null
-  },
-  {
-    "name": "玉米须",
-    "pinyin": "yu mi xu",
-    "category": "利水渗湿药",
-    "nature": "平",
-    "taste": "甘",
-    "meridian": "膀胱、肝、胆",
-    "pharmacopoeiaMin": 15,
-    "pharmacopoeiaMax": 30,
-    "toxicity": null
-  },
-  {
-    "name": "葫芦",
-    "pinyin": "hu lu",
-    "category": "利水渗湿药",
-    "nature": "平",
-    "taste": "甘",
-    "meridian": "肺、小肠",
-    "pharmacopoeiaMin": 15,
-    "pharmacopoeiaMax": 30,
-    "toxicity": null
-  },
-  {
-    "name": "香加皮",
-    "pinyin": "xiang jia pi",
-    "category": "利水渗湿药",
-    "nature": "温",
-    "taste": "辛、苦",
-    "meridian": "肝、肾、心",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 6,
-    "toxicity": "有毒"
-  },
-  {
-    "name": "枳椇子",
-    "pinyin": "zhi ju zi",
-    "category": "利水渗湿药",
-    "nature": "平",
-    "taste": "甘、酸",
-    "meridian": "心、脾",
-    "pharmacopoeiaMin": 10,
-    "pharmacopoeiaMax": 15,
-    "toxicity": null
-  },
-  {
-    "name": "泽漆",
-    "pinyin": "ze qi",
-    "category": "利水渗湿药",
-    "nature": "微寒",
-    "taste": "辛、苦",
-    "meridian": "肺、小肠、大肠",
-    "pharmacopoeiaMin": 5,
-    "pharmacopoeiaMax": 10,
-    "toxicity": "有毒"
-  },
-  {
-    "name": "蝼蛄",
-    "pinyin": "lou gu",
-    "category": "利水渗湿药",
-    "nature": "寒",
-    "taste": "咸",
-    "meridian": "膀胱、大肠、小肠",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 4.5,
-    "toxicity": null
-  },
-  {
-    "name": "荠菜",
-    "pinyin": "ji cai",
-    "category": "利水渗湿药",
-    "nature": "凉",
-    "taste": "甘",
-    "meridian": "肝、胃",
-    "pharmacopoeiaMin": 15,
-    "pharmacopoeiaMax": 30,
-    "toxicity": null
-  },
-  {
     "name": "车前子",
     "pinyin": "che qian zi",
     "category": "利水渗湿药",
@@ -1900,17 +1130,6 @@
     "meridian": "肝、肾、肺、小肠",
     "pharmacopoeiaMin": 9,
     "pharmacopoeiaMax": 15,
-    "toxicity": null
-  },
-  {
-    "name": "车前草",
-    "pinyin": "che qian cao",
-    "category": "利水渗湿药",
-    "nature": "寒",
-    "taste": "甘",
-    "meridian": "肝、肾、肺、小肠",
-    "pharmacopoeiaMin": 9,
-    "pharmacopoeiaMax": 30,
     "toxicity": null
   },
   {
@@ -2002,30 +1221,8 @@
     "toxicity": null
   },
   {
-    "name": "冬葵子",
-    "pinyin": "dong kui zi",
-    "category": "利水渗湿药",
-    "nature": "凉",
-    "taste": "甘、涩",
-    "meridian": "大肠、小肠、膀胱",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
-    "name": "灯心草",
-    "pinyin": "deng xin cao",
-    "category": "利水渗湿药",
-    "nature": "微寒",
-    "taste": "甘、淡",
-    "meridian": "心、肺、小肠",
-    "pharmacopoeiaMin": 1,
-    "pharmacopoeiaMax": 3,
-    "toxicity": null
-  },
-  {
-    "name": "萆薢",
-    "pinyin": "bi xie",
+    "name": "绵萆薢",
+    "pinyin": "mian bi xie",
     "category": "利水渗湿药",
     "nature": "平",
     "taste": "苦",
@@ -2065,50 +1262,6 @@
     "meridian": "肝、胆、肺",
     "pharmacopoeiaMin": 9,
     "pharmacopoeiaMax": 15,
-    "toxicity": null
-  },
-  {
-    "name": "地耳草",
-    "pinyin": "di er cao",
-    "category": "利水渗湿药",
-    "nature": "凉",
-    "taste": "苦、甘",
-    "meridian": "肝、胆",
-    "pharmacopoeiaMin": 15,
-    "pharmacopoeiaMax": 30,
-    "toxicity": null
-  },
-  {
-    "name": "垂盆草",
-    "pinyin": "chui pen cao",
-    "category": "利水渗湿药",
-    "nature": "凉",
-    "taste": "甘、淡、微酸",
-    "meridian": "肝、胆、小肠",
-    "pharmacopoeiaMin": 15,
-    "pharmacopoeiaMax": 30,
-    "toxicity": null
-  },
-  {
-    "name": "鸡骨草",
-    "pinyin": "ji gu cao",
-    "category": "利水渗湿药",
-    "nature": "凉",
-    "taste": "甘、微苦",
-    "meridian": "肝、胃",
-    "pharmacopoeiaMin": 15,
-    "pharmacopoeiaMax": 30,
-    "toxicity": null
-  },
-  {
-    "name": "珍珠草",
-    "pinyin": "zhen zhu cao",
-    "category": "利水渗湿药",
-    "nature": "凉",
-    "taste": "甘、苦",
-    "meridian": "肝、肺",
-    "pharmacopoeiaMin": 15,
-    "pharmacopoeiaMax": 30,
     "toxicity": null
   },
   {
@@ -2156,6 +1309,17 @@
     "toxicity": "有小毒"
   },
   {
+    "name": "荜茇",
+    "pinyin": "bi ba",
+    "category": "温里药",
+    "nature": "热",
+    "taste": "辛",
+    "meridian": "胃、大肠",
+    "pharmacopoeiaMin": 1,
+    "pharmacopoeiaMax": 3,
+    "toxicity": null
+  },
+  {
     "name": "小茴香",
     "pinyin": "xiao hui xiang",
     "category": "温里药",
@@ -2189,17 +1353,6 @@
     "toxicity": null
   },
   {
-    "name": "胡椒",
-    "pinyin": "hu jiao",
-    "category": "温里药",
-    "nature": "热",
-    "taste": "辛",
-    "meridian": "胃、大肠",
-    "pharmacopoeiaMin": 0.6,
-    "pharmacopoeiaMax": 1.5,
-    "toxicity": null
-  },
-  {
     "name": "花椒",
     "pinyin": "hua jiao",
     "category": "温里药",
@@ -2211,25 +1364,14 @@
     "toxicity": null
   },
   {
-    "name": "荜茇",
-    "pinyin": "bi ba",
+    "name": "胡椒",
+    "pinyin": "hu jiao",
     "category": "温里药",
     "nature": "热",
     "taste": "辛",
     "meridian": "胃、大肠",
-    "pharmacopoeiaMin": 1,
-    "pharmacopoeiaMax": 3,
-    "toxicity": null
-  },
-  {
-    "name": "荜澄茄",
-    "pinyin": "bi cheng qie",
-    "category": "温里药",
-    "nature": "温",
-    "taste": "辛",
-    "meridian": "脾、胃、肾、膀胱",
-    "pharmacopoeiaMin": 1,
-    "pharmacopoeiaMax": 3,
+    "pharmacopoeiaMin": 0.6,
+    "pharmacopoeiaMax": 1.5,
     "toxicity": null
   },
   {
@@ -2237,8 +1379,8 @@
     "pinyin": "chen pi",
     "category": "理气药",
     "nature": "温",
-    "taste": "苦、辛",
-    "meridian": "肺、脾",
+    "taste": "辛、苦",
+    "meridian": "脾、肺",
     "pharmacopoeiaMin": 3,
     "pharmacopoeiaMax": 10,
     "toxicity": null
@@ -2257,17 +1399,6 @@
   {
     "name": "枳实",
     "pinyin": "zhi shi",
-    "category": "理气药",
-    "nature": "微寒",
-    "taste": "苦、辛、酸",
-    "meridian": "脾、胃",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 10,
-    "toxicity": null
-  },
-  {
-    "name": "枳壳",
-    "pinyin": "zhi ke",
     "category": "理气药",
     "nature": "微寒",
     "taste": "苦、辛、酸",
@@ -2332,17 +1463,6 @@
     "toxicity": null
   },
   {
-    "name": "荔枝核",
-    "pinyin": "li zhi he",
-    "category": "理气药",
-    "nature": "温",
-    "taste": "甘、微苦",
-    "meridian": "肝、肾",
-    "pharmacopoeiaMin": 5,
-    "pharmacopoeiaMax": 10,
-    "toxicity": null
-  },
-  {
     "name": "香附",
     "pinyin": "xiang fu",
     "category": "理气药",
@@ -2362,50 +1482,6 @@
     "meridian": "肝、脾、胃、肺",
     "pharmacopoeiaMin": 3,
     "pharmacopoeiaMax": 10,
-    "toxicity": null
-  },
-  {
-    "name": "香橼",
-    "pinyin": "xiang yuan",
-    "category": "理气药",
-    "nature": "温",
-    "taste": "辛、苦、酸",
-    "meridian": "肝、脾、肺",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 10,
-    "toxicity": null
-  },
-  {
-    "name": "玫瑰花",
-    "pinyin": "mei gui hua",
-    "category": "理气药",
-    "nature": "温",
-    "taste": "甘、微苦",
-    "meridian": "肝、脾",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 6,
-    "toxicity": null
-  },
-  {
-    "name": "绿萼梅",
-    "pinyin": "lv e mei",
-    "category": "理气药",
-    "nature": "平",
-    "taste": "微酸、涩",
-    "meridian": "肝、胃、肺",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 5,
-    "toxicity": null
-  },
-  {
-    "name": "娑罗子",
-    "pinyin": "suo luo zi",
-    "category": "理气药",
-    "nature": "温",
-    "taste": "甘",
-    "meridian": "肝、胃",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
     "toxicity": null
   },
   {
@@ -2442,14 +1518,14 @@
     "toxicity": null
   },
   {
-    "name": "刀豆",
-    "pinyin": "dao dou",
+    "name": "甘松",
+    "pinyin": "gan song",
     "category": "理气药",
     "nature": "温",
-    "taste": "甘",
-    "meridian": "胃、肾",
-    "pharmacopoeiaMin": 6,
-    "pharmacopoeiaMax": 9,
+    "taste": "辛、甘",
+    "meridian": "脾、胃",
+    "pharmacopoeiaMin": 3,
+    "pharmacopoeiaMax": 6,
     "toxicity": null
   },
   {
@@ -2486,17 +1562,6 @@
     "toxicity": null
   },
   {
-    "name": "稻芽",
-    "pinyin": "dao ya",
-    "category": "消食药",
-    "nature": "温",
-    "taste": "甘",
-    "meridian": "脾、胃",
-    "pharmacopoeiaMin": 9,
-    "pharmacopoeiaMax": 15,
-    "toxicity": null
-  },
-  {
     "name": "莱菔子",
     "pinyin": "lai fu zi",
     "category": "消食药",
@@ -2519,14 +1584,14 @@
     "toxicity": null
   },
   {
-    "name": "阿魏",
-    "pinyin": "a wei",
+    "name": "稻芽",
+    "pinyin": "dao ya",
     "category": "消食药",
     "nature": "温",
-    "taste": "苦、辛",
+    "taste": "甘",
     "meridian": "脾、胃",
-    "pharmacopoeiaMin": 1,
-    "pharmacopoeiaMax": 1.5,
+    "pharmacopoeiaMin": 9,
+    "pharmacopoeiaMax": 15,
     "toxicity": null
   },
   {
@@ -2541,17 +1606,6 @@
     "toxicity": null
   },
   {
-    "name": "苦楝皮",
-    "pinyin": "ku lian pi",
-    "category": "驱虫药",
-    "nature": "寒",
-    "taste": "苦",
-    "meridian": "肝、脾、胃",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 6,
-    "toxicity": "有毒"
-  },
-  {
     "name": "槟榔",
     "pinyin": "bing lang",
     "category": "驱虫药",
@@ -2563,26 +1617,15 @@
     "toxicity": null
   },
   {
-    "name": "南瓜子",
-    "pinyin": "nan gua zi",
+    "name": "苦楝皮",
+    "pinyin": "ku lian pi",
     "category": "驱虫药",
-    "nature": "平",
-    "taste": "甘",
-    "meridian": "胃、大肠",
-    "pharmacopoeiaMin": 60,
-    "pharmacopoeiaMax": 120,
-    "toxicity": null
-  },
-  {
-    "name": "鹤草芽",
-    "pinyin": "he cao ya",
-    "category": "驱虫药",
-    "nature": "凉",
-    "taste": "苦、涩",
-    "meridian": "肝、小肠、大肠",
-    "pharmacopoeiaMin": 30,
-    "pharmacopoeiaMax": 50,
-    "toxicity": null
+    "nature": "寒",
+    "taste": "苦",
+    "meridian": "肝、脾、胃",
+    "pharmacopoeiaMin": 3,
+    "pharmacopoeiaMax": 6,
+    "toxicity": "有毒"
   },
   {
     "name": "雷丸",
@@ -2596,47 +1639,14 @@
     "toxicity": "有小毒"
   },
   {
-    "name": "鹤虱",
-    "pinyin": "he shi",
-    "category": "驱虫药",
-    "nature": "平",
-    "taste": "苦、辛",
-    "meridian": "脾、胃",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
-    "toxicity": "有小毒"
-  },
-  {
-    "name": "榧子",
-    "pinyin": "fei zi",
+    "name": "南瓜子",
+    "pinyin": "nan gua zi",
     "category": "驱虫药",
     "nature": "平",
     "taste": "甘",
-    "meridian": "肺、胃、大肠",
-    "pharmacopoeiaMin": 9,
-    "pharmacopoeiaMax": 15,
-    "toxicity": null
-  },
-  {
-    "name": "芜荑",
-    "pinyin": "wu yi",
-    "category": "驱虫药",
-    "nature": "温",
-    "taste": "辛、苦",
-    "meridian": "脾、胃",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 10,
-    "toxicity": null
-  },
-  {
-    "name": "小蓟",
-    "pinyin": "xiao ji",
-    "category": "止血药",
-    "nature": "凉",
-    "taste": "甘、苦",
-    "meridian": "心、肝",
-    "pharmacopoeiaMin": 5,
-    "pharmacopoeiaMax": 12,
+    "meridian": "胃、大肠",
+    "pharmacopoeiaMin": 60,
+    "pharmacopoeiaMax": 120,
     "toxicity": null
   },
   {
@@ -2648,6 +1658,17 @@
     "meridian": "心、肝",
     "pharmacopoeiaMin": 9,
     "pharmacopoeiaMax": 15,
+    "toxicity": null
+  },
+  {
+    "name": "小蓟",
+    "pinyin": "xiao ji",
+    "category": "止血药",
+    "nature": "凉",
+    "taste": "甘、苦",
+    "meridian": "心、肝",
+    "pharmacopoeiaMin": 5,
+    "pharmacopoeiaMax": 12,
     "toxicity": null
   },
   {
@@ -2673,17 +1694,6 @@
     "toxicity": null
   },
   {
-    "name": "槐角",
-    "pinyin": "huai jiao",
-    "category": "止血药",
-    "nature": "寒",
-    "taste": "苦",
-    "meridian": "肝、大肠",
-    "pharmacopoeiaMin": 6,
-    "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
     "name": "侧柏叶",
     "pinyin": "ce bai ye",
     "category": "止血药",
@@ -2703,28 +1713,6 @@
     "meridian": "肺、胃、膀胱",
     "pharmacopoeiaMin": 9,
     "pharmacopoeiaMax": 30,
-    "toxicity": null
-  },
-  {
-    "name": "苎麻根",
-    "pinyin": "zhu ma gen",
-    "category": "止血药",
-    "nature": "寒",
-    "taste": "甘",
-    "meridian": "心、肝",
-    "pharmacopoeiaMin": 10,
-    "pharmacopoeiaMax": 30,
-    "toxicity": null
-  },
-  {
-    "name": "羊蹄",
-    "pinyin": "yang ti",
-    "category": "止血药",
-    "nature": "寒",
-    "taste": "苦、涩",
-    "meridian": "心、肝、大肠",
-    "pharmacopoeiaMin": 10,
-    "pharmacopoeiaMax": 15,
     "toxicity": null
   },
   {
@@ -2761,17 +1749,6 @@
     "toxicity": null
   },
   {
-    "name": "花蕊石",
-    "pinyin": "hua rui shi",
-    "category": "止血药",
-    "nature": "平",
-    "taste": "酸、涩",
-    "meridian": "肝",
-    "pharmacopoeiaMin": 10,
-    "pharmacopoeiaMax": 15,
-    "toxicity": null
-  },
-  {
     "name": "降香",
     "pinyin": "jiang xiang",
     "category": "止血药",
@@ -2805,47 +1782,14 @@
     "toxicity": null
   },
   {
-    "name": "紫珠",
-    "pinyin": "zi zhu",
-    "category": "止血药",
-    "nature": "凉",
-    "taste": "苦、涩",
-    "meridian": "肝、肺、胃",
-    "pharmacopoeiaMin": 10,
-    "pharmacopoeiaMax": 15,
-    "toxicity": null
-  },
-  {
     "name": "棕榈炭",
-    "pinyin": "zong lv tan",
+    "pinyin": "zong lü tan",
     "category": "止血药",
     "nature": "平",
     "taste": "苦、涩",
     "meridian": "肝、肺、大肠",
     "pharmacopoeiaMin": 3,
     "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
-    "name": "血余炭",
-    "pinyin": "xue yu tan",
-    "category": "止血药",
-    "nature": "平",
-    "taste": "苦",
-    "meridian": "肝、胃",
-    "pharmacopoeiaMin": 5,
-    "pharmacopoeiaMax": 10,
-    "toxicity": null
-  },
-  {
-    "name": "藕节",
-    "pinyin": "ou jie",
-    "category": "止血药",
-    "nature": "平",
-    "taste": "甘、涩",
-    "meridian": "肝、肺、胃",
-    "pharmacopoeiaMin": 9,
-    "pharmacopoeiaMax": 15,
     "toxicity": null
   },
   {
@@ -2863,22 +1807,11 @@
     "name": "炮姜",
     "pinyin": "pao jiang",
     "category": "止血药",
-    "nature": "温",
-    "taste": "苦、涩、辛",
+    "nature": "热",
+    "taste": "辛",
     "meridian": "脾、肝",
     "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 6,
-    "toxicity": null
-  },
-  {
-    "name": "灶心土",
-    "pinyin": "zao xin tu",
-    "category": "止血药",
-    "nature": "温",
-    "taste": "辛",
-    "meridian": "脾、胃",
-    "pharmacopoeiaMin": 15,
-    "pharmacopoeiaMax": 30,
+    "pharmacopoeiaMax": 9,
     "toxicity": null
   },
   {
@@ -2898,7 +1831,7 @@
     "category": "活血化瘀药",
     "nature": "温",
     "taste": "辛、苦",
-    "meridian": "心、肝、脾",
+    "meridian": "肝、脾",
     "pharmacopoeiaMin": 3,
     "pharmacopoeiaMax": 10,
     "toxicity": null
@@ -2909,7 +1842,7 @@
     "category": "活血化瘀药",
     "nature": "寒",
     "taste": "辛、苦",
-    "meridian": "心、肝、胆",
+    "meridian": "肝、心、肺",
     "pharmacopoeiaMin": 3,
     "pharmacopoeiaMax": 10,
     "toxicity": null
@@ -2933,7 +1866,7 @@
     "taste": "辛、苦",
     "meridian": "心、肝、脾",
     "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
+    "pharmacopoeiaMax": 5,
     "toxicity": null
   },
   {
@@ -2941,21 +1874,10 @@
     "pinyin": "mo yao",
     "category": "活血化瘀药",
     "nature": "平",
-    "taste": "苦",
+    "taste": "辛、苦",
     "meridian": "心、肝、脾",
     "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
-    "name": "五灵脂",
-    "pinyin": "wu ling zhi",
-    "category": "活血化瘀药",
-    "nature": "温",
-    "taste": "咸、甘",
-    "meridian": "肝",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 10,
+    "pharmacopoeiaMax": 5,
     "toxicity": null
   },
   {
@@ -3003,17 +1925,6 @@
     "toxicity": null
   },
   {
-    "name": "泽兰",
-    "pinyin": "ze lan",
-    "category": "活血化瘀药",
-    "nature": "微温",
-    "taste": "苦、辛",
-    "meridian": "肝、脾",
-    "pharmacopoeiaMin": 6,
-    "pharmacopoeiaMax": 12,
-    "toxicity": null
-  },
-  {
     "name": "牛膝",
     "pinyin": "niu xi",
     "category": "活血化瘀药",
@@ -3025,58 +1936,25 @@
     "toxicity": null
   },
   {
-    "name": "川牛膝",
-    "pinyin": "chuan niu xi",
-    "category": "活血化瘀药",
-    "nature": "平",
-    "taste": "甘、微苦",
-    "meridian": "肝、肾",
-    "pharmacopoeiaMin": 5,
-    "pharmacopoeiaMax": 10,
-    "toxicity": null
-  },
-  {
     "name": "鸡血藤",
     "pinyin": "ji xue teng",
     "category": "活血化瘀药",
     "nature": "温",
-    "taste": "甘、苦",
+    "taste": "苦、甘",
     "meridian": "肝、肾",
     "pharmacopoeiaMin": 9,
     "pharmacopoeiaMax": 15,
     "toxicity": null
   },
   {
-    "name": "王不留行",
-    "pinyin": "wang bu liu xing",
+    "name": "泽兰",
+    "pinyin": "ze lan",
     "category": "活血化瘀药",
-    "nature": "平",
-    "taste": "苦",
-    "meridian": "肝、胃",
-    "pharmacopoeiaMin": 5,
-    "pharmacopoeiaMax": 10,
-    "toxicity": null
-  },
-  {
-    "name": "月季花",
-    "pinyin": "yue ji hua",
-    "category": "活血化瘀药",
-    "nature": "温",
-    "taste": "甘",
-    "meridian": "肝",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 6,
-    "toxicity": null
-  },
-  {
-    "name": "凌霄花",
-    "pinyin": "ling xiao hua",
-    "category": "活血化瘀药",
-    "nature": "微寒",
-    "taste": "甘、酸",
-    "meridian": "肝、心包",
-    "pharmacopoeiaMin": 5,
-    "pharmacopoeiaMax": 9,
+    "nature": "微温",
+    "taste": "苦、辛",
+    "meridian": "肝、脾",
+    "pharmacopoeiaMin": 6,
+    "pharmacopoeiaMax": 12,
     "toxicity": null
   },
   {
@@ -3087,30 +1965,30 @@
     "taste": "咸",
     "meridian": "肝",
     "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
+    "pharmacopoeiaMax": 10,
     "toxicity": "有小毒"
   },
   {
-    "name": "水蛭",
-    "pinyin": "shui zhi",
+    "name": "骨碎补",
+    "pinyin": "gu sui bu",
     "category": "活血化瘀药",
-    "nature": "平",
-    "taste": "咸、苦",
-    "meridian": "肝",
-    "pharmacopoeiaMin": 1,
-    "pharmacopoeiaMax": 3,
-    "toxicity": "有小毒"
-  },
-  {
-    "name": "虻虫",
-    "pinyin": "meng chong",
-    "category": "活血化瘀药",
-    "nature": "微寒",
+    "nature": "温",
     "taste": "苦",
-    "meridian": "肝",
-    "pharmacopoeiaMin": 1,
-    "pharmacopoeiaMax": 3,
-    "toxicity": "有小毒"
+    "meridian": "肝、肾",
+    "pharmacopoeiaMin": 3,
+    "pharmacopoeiaMax": 9,
+    "toxicity": null
+  },
+  {
+    "name": "马钱子",
+    "pinyin": "ma qian zi",
+    "category": "活血化瘀药",
+    "nature": "温",
+    "taste": "苦",
+    "meridian": "肝、脾",
+    "pharmacopoeiaMin": 0.3,
+    "pharmacopoeiaMax": 0.6,
+    "toxicity": "有大毒"
   },
   {
     "name": "三棱",
@@ -3135,6 +2013,17 @@
     "toxicity": null
   },
   {
+    "name": "水蛭",
+    "pinyin": "shui zhi",
+    "category": "活血化瘀药",
+    "nature": "平",
+    "taste": "咸、苦",
+    "meridian": "肝",
+    "pharmacopoeiaMin": 1,
+    "pharmacopoeiaMax": 3,
+    "toxicity": "有毒"
+  },
+  {
     "name": "穿山甲",
     "pinyin": "chuan shan jia",
     "category": "活血化瘀药",
@@ -3142,74 +2031,8 @@
     "taste": "咸",
     "meridian": "肝、胃",
     "pharmacopoeiaMin": 5,
-    "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
-    "name": "鬼箭羽",
-    "pinyin": "gui jian yu",
-    "category": "活血化瘀药",
-    "nature": "寒",
-    "taste": "苦",
-    "meridian": "肝",
-    "pharmacopoeiaMin": 5,
     "pharmacopoeiaMax": 10,
     "toxicity": null
-  },
-  {
-    "name": "刘寄奴",
-    "pinyin": "liu ji nu",
-    "category": "活血化瘀药",
-    "nature": "温",
-    "taste": "苦、辛",
-    "meridian": "心、肝、脾",
-    "pharmacopoeiaMin": 6,
-    "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
-    "name": "自然铜",
-    "pinyin": "zi ran tong",
-    "category": "活血化瘀药",
-    "nature": "平",
-    "taste": "辛",
-    "meridian": "肝",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
-    "name": "苏木",
-    "pinyin": "su mu",
-    "category": "活血化瘀药",
-    "nature": "平",
-    "taste": "甘、咸、辛",
-    "meridian": "心、肝",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
-    "name": "骨碎补",
-    "pinyin": "gu sui bu",
-    "category": "活血化瘀药",
-    "nature": "温",
-    "taste": "苦",
-    "meridian": "肝、肾",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
-    "name": "马钱子",
-    "pinyin": "ma qian zi",
-    "category": "活血化瘀药",
-    "nature": "温",
-    "taste": "苦",
-    "meridian": "肝、脾",
-    "pharmacopoeiaMin": 0.3,
-    "pharmacopoeiaMax": 0.6,
-    "toxicity": "有大毒"
   },
   {
     "name": "半夏",
@@ -3238,44 +2061,11 @@
     "pinyin": "bai fu zi",
     "category": "化痰止咳平喘药",
     "nature": "温",
-    "taste": "辛、甘",
+    "taste": "辛",
     "meridian": "胃、肝",
     "pharmacopoeiaMin": 3,
     "pharmacopoeiaMax": 6,
     "toxicity": "有毒"
-  },
-  {
-    "name": "白芥子",
-    "pinyin": "bai jie zi",
-    "category": "化痰止咳平喘药",
-    "nature": "温",
-    "taste": "辛",
-    "meridian": "肺",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
-    "name": "皂荚",
-    "pinyin": "zao jia",
-    "category": "化痰止咳平喘药",
-    "nature": "温",
-    "taste": "辛、咸",
-    "meridian": "肺、大肠",
-    "pharmacopoeiaMin": 1,
-    "pharmacopoeiaMax": 1.5,
-    "toxicity": "有小毒"
-  },
-  {
-    "name": "桔梗",
-    "pinyin": "jie geng",
-    "category": "化痰止咳平喘药",
-    "nature": "平",
-    "taste": "苦、辛",
-    "meridian": "肺",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 10,
-    "toxicity": null
   },
   {
     "name": "旋覆花",
@@ -3293,10 +2083,10 @@
     "pinyin": "bai qian",
     "category": "化痰止咳平喘药",
     "nature": "微温",
-    "taste": "辛、甘",
+    "taste": "辛、苦",
     "meridian": "肺",
     "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
+    "pharmacopoeiaMax": 10,
     "toxicity": null
   },
   {
@@ -3307,18 +2097,29 @@
     "taste": "苦、辛",
     "meridian": "肺",
     "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
+    "pharmacopoeiaMax": 10,
     "toxicity": null
   },
   {
-    "name": "瓜蒌",
-    "pinyin": "gua lou",
+    "name": "桔梗",
+    "pinyin": "jie geng",
     "category": "化痰止咳平喘药",
-    "nature": "寒",
-    "taste": "甘、微苦",
-    "meridian": "肺、胃、大肠",
-    "pharmacopoeiaMin": 9,
-    "pharmacopoeiaMax": 15,
+    "nature": "平",
+    "taste": "苦、辛",
+    "meridian": "肺",
+    "pharmacopoeiaMin": 3,
+    "pharmacopoeiaMax": 10,
+    "toxicity": null
+  },
+  {
+    "name": "川贝母",
+    "pinyin": "chuan bei mu",
+    "category": "化痰止咳平喘药",
+    "nature": "微寒",
+    "taste": "苦、甘",
+    "meridian": "肺、心",
+    "pharmacopoeiaMin": 3,
+    "pharmacopoeiaMax": 10,
     "toxicity": null
   },
   {
@@ -3333,25 +2134,14 @@
     "toxicity": null
   },
   {
-    "name": "川贝母",
-    "pinyin": "chuan bei mu",
-    "category": "化痰止咳平喘药",
-    "nature": "微寒",
-    "taste": "苦、甘",
-    "meridian": "肺、心",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
-    "name": "天竺黄",
-    "pinyin": "tian zhu huang",
+    "name": "瓜蒌",
+    "pinyin": "gua lou",
     "category": "化痰止咳平喘药",
     "nature": "寒",
-    "taste": "甘",
-    "meridian": "心、肝",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
+    "taste": "甘、微苦",
+    "meridian": "肺、胃、大肠",
+    "pharmacopoeiaMin": 9,
+    "pharmacopoeiaMax": 15,
     "toxicity": null
   },
   {
@@ -3371,9 +2161,20 @@
     "category": "化痰止咳平喘药",
     "nature": "寒",
     "taste": "甘",
-    "meridian": "心、肺、胃",
+    "meridian": "心、肺、肝",
     "pharmacopoeiaMin": 15,
     "pharmacopoeiaMax": 30,
+    "toxicity": null
+  },
+  {
+    "name": "天竺黄",
+    "pinyin": "tian zhu huang",
+    "category": "化痰止咳平喘药",
+    "nature": "寒",
+    "taste": "甘",
+    "meridian": "心、肝",
+    "pharmacopoeiaMin": 3,
+    "pharmacopoeiaMax": 9,
     "toxicity": null
   },
   {
@@ -3428,7 +2229,40 @@
     "taste": "辛",
     "meridian": "肺、大肠",
     "pharmacopoeiaMin": 3,
+    "pharmacopoeiaMax": 10,
+    "toxicity": null
+  },
+  {
+    "name": "百部",
+    "pinyin": "bai bu",
+    "category": "化痰止咳平喘药",
+    "nature": "微温",
+    "taste": "甘、苦",
+    "meridian": "肺",
+    "pharmacopoeiaMin": 3,
     "pharmacopoeiaMax": 9,
+    "toxicity": null
+  },
+  {
+    "name": "款冬花",
+    "pinyin": "kuan dong hua",
+    "category": "化痰止咳平喘药",
+    "nature": "温",
+    "taste": "辛、微苦",
+    "meridian": "肺",
+    "pharmacopoeiaMin": 5,
+    "pharmacopoeiaMax": 10,
+    "toxicity": null
+  },
+  {
+    "name": "紫菀",
+    "pinyin": "zi wan",
+    "category": "化痰止咳平喘药",
+    "nature": "微温",
+    "taste": "辛、苦",
+    "meridian": "肺",
+    "pharmacopoeiaMin": 5,
+    "pharmacopoeiaMax": 10,
     "toxicity": null
   },
   {
@@ -3450,52 +2284,8 @@
     "taste": "辛、苦",
     "meridian": "肺、膀胱",
     "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
-    "name": "百部",
-    "pinyin": "bai bu",
-    "category": "化痰止咳平喘药",
-    "nature": "微温",
-    "taste": "甘、苦",
-    "meridian": "肺",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
-    "name": "紫菀",
-    "pinyin": "zi wan",
-    "category": "化痰止咳平喘药",
-    "nature": "微温",
-    "taste": "辛、苦",
-    "meridian": "肺",
-    "pharmacopoeiaMin": 5,
     "pharmacopoeiaMax": 10,
     "toxicity": null
-  },
-  {
-    "name": "款冬花",
-    "pinyin": "kuan dong hua",
-    "category": "化痰止咳平喘药",
-    "nature": "温",
-    "taste": "辛、甘",
-    "meridian": "肺",
-    "pharmacopoeiaMin": 5,
-    "pharmacopoeiaMax": 10,
-    "toxicity": null
-  },
-  {
-    "name": "马兜铃",
-    "pinyin": "ma dou ling",
-    "category": "化痰止咳平喘药",
-    "nature": "微寒",
-    "taste": "苦",
-    "meridian": "肺、大肠",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
-    "toxicity": "有小毒"
   },
   {
     "name": "枇杷叶",
@@ -3509,87 +2299,21 @@
     "toxicity": null
   },
   {
-    "name": "白果",
-    "pinyin": "bai guo",
+    "name": "马兜铃",
+    "pinyin": "ma dou ling",
     "category": "化痰止咳平喘药",
-    "nature": "平",
-    "taste": "甘、苦、涩",
-    "meridian": "肺、肾",
-    "pharmacopoeiaMin": 5,
-    "pharmacopoeiaMax": 10,
-    "toxicity": "有小毒"
-  },
-  {
-    "name": "矮地茶",
-    "pinyin": "ai di cha",
-    "category": "化痰止咳平喘药",
-    "nature": "平",
-    "taste": "苦、辛",
-    "meridian": "肺、肝",
-    "pharmacopoeiaMin": 15,
-    "pharmacopoeiaMax": 30,
-    "toxicity": null
-  },
-  {
-    "name": "洋金花",
-    "pinyin": "yang jin hua",
-    "category": "化痰止咳平喘药",
-    "nature": "温",
-    "taste": "辛",
-    "meridian": "肺、肝",
-    "pharmacopoeiaMin": 0.3,
-    "pharmacopoeiaMax": 0.6,
+    "nature": "微寒",
+    "taste": "苦",
+    "meridian": "肺、大肠",
+    "pharmacopoeiaMin": 3,
+    "pharmacopoeiaMax": 9,
     "toxicity": "有毒"
-  },
-  {
-    "name": "磠石",
-    "pinyin": "meng shi",
-    "category": "化痰止咳平喘药",
-    "nature": "平",
-    "taste": "甘、咸",
-    "meridian": "肺、肝",
-    "pharmacopoeiaMin": 10,
-    "pharmacopoeiaMax": 15,
-    "toxicity": null
-  },
-  {
-    "name": "海浮石",
-    "pinyin": "hai fu shi",
-    "category": "化痰止咳平喘药",
-    "nature": "寒",
-    "taste": "咸",
-    "meridian": "肺",
-    "pharmacopoeiaMin": 10,
-    "pharmacopoeiaMax": 15,
-    "toxicity": null
-  },
-  {
-    "name": "海蛤壳",
-    "pinyin": "hai ge qiao",
-    "category": "化痰止咳平喘药",
-    "nature": "寒",
-    "taste": "咸",
-    "meridian": "肺、胃",
-    "pharmacopoeiaMin": 10,
-    "pharmacopoeiaMax": 15,
-    "toxicity": null
-  },
-  {
-    "name": "瓦楞子",
-    "pinyin": "wa leng zi",
-    "category": "化痰止咳平喘药",
-    "nature": "平",
-    "taste": "甘、咸",
-    "meridian": "肺、胃、肝",
-    "pharmacopoeiaMin": 10,
-    "pharmacopoeiaMax": 15,
-    "toxicity": null
   },
   {
     "name": "朱砂",
     "pinyin": "zhu sha",
     "category": "安神药",
-    "nature": "寒",
+    "nature": "微寒",
     "taste": "甘",
     "meridian": "心",
     "pharmacopoeiaMin": 0.1,
@@ -3601,7 +2325,7 @@
     "pinyin": "ci shi",
     "category": "安神药",
     "nature": "寒",
-    "taste": "辛、咸",
+    "taste": "咸",
     "meridian": "肝、心、肾",
     "pharmacopoeiaMin": 9,
     "pharmacopoeiaMax": 30,
@@ -3619,24 +2343,13 @@
     "toxicity": null
   },
   {
-    "name": "龙齿",
-    "pinyin": "long chi",
-    "category": "安神药",
-    "nature": "凉",
-    "taste": "甘、涩",
-    "meridian": "心、肝",
-    "pharmacopoeiaMin": 9,
-    "pharmacopoeiaMax": 15,
-    "toxicity": null
-  },
-  {
     "name": "琥珀",
     "pinyin": "hu po",
     "category": "安神药",
     "nature": "平",
     "taste": "甘",
     "meridian": "心、肝、膀胱",
-    "pharmacopoeiaMin": 1,
+    "pharmacopoeiaMin": 1.5,
     "pharmacopoeiaMax": 3,
     "toxicity": null
   },
@@ -3646,7 +2359,7 @@
     "category": "安神药",
     "nature": "平",
     "taste": "甘、酸",
-    "meridian": "心、肝、胆",
+    "meridian": "肝、胆、心",
     "pharmacopoeiaMin": 10,
     "pharmacopoeiaMax": 15,
     "toxicity": null
@@ -3659,7 +2372,7 @@
     "taste": "甘",
     "meridian": "心、肾、大肠",
     "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
+    "pharmacopoeiaMax": 10,
     "toxicity": null
   },
   {
@@ -3670,7 +2383,7 @@
     "taste": "苦、辛",
     "meridian": "心、肾、肺",
     "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
+    "pharmacopoeiaMax": 10,
     "toxicity": null
   },
   {
@@ -3682,17 +2395,6 @@
     "meridian": "心、肝、肺",
     "pharmacopoeiaMin": 6,
     "pharmacopoeiaMax": 12,
-    "toxicity": null
-  },
-  {
-    "name": "合欢花",
-    "pinyin": "he huan hua",
-    "category": "安神药",
-    "nature": "平",
-    "taste": "甘",
-    "meridian": "心、肝",
-    "pharmacopoeiaMin": 5,
-    "pharmacopoeiaMax": 9,
     "toxicity": null
   },
   {
@@ -3715,17 +2417,6 @@
     "meridian": "心、肺、肝、肾",
     "pharmacopoeiaMin": 6,
     "pharmacopoeiaMax": 12,
-    "toxicity": null
-  },
-  {
-    "name": "小麦",
-    "pinyin": "xiao mai",
-    "category": "安神药",
-    "nature": "平",
-    "taste": "甘",
-    "meridian": "心",
-    "pharmacopoeiaMin": 15,
-    "pharmacopoeiaMax": 30,
     "toxicity": null
   },
   {
@@ -3767,7 +2458,7 @@
     "category": "平肝息风药",
     "nature": "寒",
     "taste": "苦",
-    "meridian": "肝、心",
+    "meridian": "肝、心、肺、胃",
     "pharmacopoeiaMin": 9,
     "pharmacopoeiaMax": 30,
     "toxicity": null
@@ -3780,7 +2471,7 @@
     "taste": "辛、苦",
     "meridian": "肝",
     "pharmacopoeiaMin": 6,
-    "pharmacopoeiaMax": 9,
+    "pharmacopoeiaMax": 10,
     "toxicity": null
   },
   {
@@ -3792,6 +2483,17 @@
     "meridian": "肝",
     "pharmacopoeiaMin": 6,
     "pharmacopoeiaMax": 12,
+    "toxicity": null
+  },
+  {
+    "name": "羚羊角",
+    "pinyin": "ling yang jiao",
+    "category": "平肝息风药",
+    "nature": "寒",
+    "taste": "咸",
+    "meridian": "肝、心",
+    "pharmacopoeiaMin": 1,
+    "pharmacopoeiaMax": 3,
     "toxicity": null
   },
   {
@@ -3813,29 +2515,7 @@
     "taste": "甘",
     "meridian": "肝",
     "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
-    "name": "羚羊角",
-    "pinyin": "ling yang jiao",
-    "category": "平肝息风药",
-    "nature": "寒",
-    "taste": "咸",
-    "meridian": "肝、心",
-    "pharmacopoeiaMin": 0.3,
-    "pharmacopoeiaMax": 0.6,
-    "toxicity": null
-  },
-  {
-    "name": "牛黄",
-    "pinyin": "niu huang",
-    "category": "平肝息风药",
-    "nature": "凉",
-    "taste": "甘",
-    "meridian": "肝、心",
-    "pharmacopoeiaMin": 0.15,
-    "pharmacopoeiaMax": 0.35,
+    "pharmacopoeiaMax": 10,
     "toxicity": null
   },
   {
@@ -3861,23 +2541,23 @@
     "toxicity": "有毒"
   },
   {
-    "name": "僵蚕",
-    "pinyin": "jiang can",
-    "category": "平肝息风药",
-    "nature": "平",
-    "taste": "咸、辛",
-    "meridian": "肝、肺、胃",
-    "pharmacopoeiaMin": 5,
-    "pharmacopoeiaMax": 10,
-    "toxicity": null
-  },
-  {
     "name": "地龙",
     "pinyin": "di long",
     "category": "平肝息风药",
     "nature": "寒",
     "taste": "咸",
     "meridian": "肝、脾、膀胱",
+    "pharmacopoeiaMin": 5,
+    "pharmacopoeiaMax": 10,
+    "toxicity": null
+  },
+  {
+    "name": "白僵蚕",
+    "pinyin": "bai jiang can",
+    "category": "平肝息风药",
+    "nature": "平",
+    "taste": "咸、辛",
+    "meridian": "肝、肺、胃",
     "pharmacopoeiaMin": 5,
     "pharmacopoeiaMax": 10,
     "toxicity": null
@@ -3905,6 +2585,17 @@
     "toxicity": null
   },
   {
+    "name": "石菖蒲",
+    "pinyin": "shi chang pu",
+    "category": "开窍药",
+    "nature": "温",
+    "taste": "辛、苦",
+    "meridian": "心、胃",
+    "pharmacopoeiaMin": 3,
+    "pharmacopoeiaMax": 10,
+    "toxicity": null
+  },
+  {
     "name": "苏合香",
     "pinyin": "su he xiang",
     "category": "开窍药",
@@ -3914,28 +2605,6 @@
     "pharmacopoeiaMin": 0.3,
     "pharmacopoeiaMax": 1,
     "toxicity": null
-  },
-  {
-    "name": "石菖蒲",
-    "pinyin": "shi chang pu",
-    "category": "开窍药",
-    "nature": "温",
-    "taste": "辛、苦",
-    "meridian": "心、胃",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
-    "name": "鳕酥",
-    "pinyin": "chan chu",
-    "category": "开窍药",
-    "nature": "温",
-    "taste": "辛",
-    "meridian": "心、胃",
-    "pharmacopoeiaMin": 0.015,
-    "pharmacopoeiaMax": 0.03,
-    "toxicity": "有毒"
   },
   {
     "name": "安息香",
@@ -3960,17 +2629,6 @@
     "toxicity": null
   },
   {
-    "name": "西洋参",
-    "pinyin": "xi yang shen",
-    "category": "补虚药",
-    "nature": "凉",
-    "taste": "甘、微苦",
-    "meridian": "心、肺、肾",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 6,
-    "toxicity": null
-  },
-  {
     "name": "党参",
     "pinyin": "dang shen",
     "category": "补虚药",
@@ -3979,6 +2637,17 @@
     "meridian": "脾、肺",
     "pharmacopoeiaMin": 9,
     "pharmacopoeiaMax": 30,
+    "toxicity": null
+  },
+  {
+    "name": "西洋参",
+    "pinyin": "xi yang shen",
+    "category": "补虚药",
+    "nature": "凉",
+    "taste": "甘、微苦",
+    "meridian": "心、肺、肾",
+    "pharmacopoeiaMin": 3,
+    "pharmacopoeiaMax": 6,
     "toxicity": null
   },
   {
@@ -3998,7 +2667,7 @@
     "category": "补虚药",
     "nature": "微温",
     "taste": "甘",
-    "meridian": "脾、肺",
+    "meridian": "肺、脾",
     "pharmacopoeiaMin": 9,
     "pharmacopoeiaMax": 30,
     "toxicity": null
@@ -4026,17 +2695,6 @@
     "toxicity": null
   },
   {
-    "name": "白扁豆",
-    "pinyin": "bai bian dou",
-    "category": "补虚药",
-    "nature": "微温",
-    "taste": "甘",
-    "meridian": "脾、胃",
-    "pharmacopoeiaMin": 9,
-    "pharmacopoeiaMax": 15,
-    "toxicity": null
-  },
-  {
     "name": "甘草",
     "pinyin": "gan cao",
     "category": "补虚药",
@@ -4059,17 +2717,6 @@
     "toxicity": null
   },
   {
-    "name": "饴糖",
-    "pinyin": "yi tang",
-    "category": "补虚药",
-    "nature": "温",
-    "taste": "甘",
-    "meridian": "脾、胃、肺",
-    "pharmacopoeiaMin": 15,
-    "pharmacopoeiaMax": 30,
-    "toxicity": null
-  },
-  {
     "name": "蜂蜜",
     "pinyin": "feng mi",
     "category": "补虚药",
@@ -4078,17 +2725,6 @@
     "meridian": "肺、脾、大肠",
     "pharmacopoeiaMin": 15,
     "pharmacopoeiaMax": 30,
-    "toxicity": null
-  },
-  {
-    "name": "红景天",
-    "pinyin": "hong jing tian",
-    "category": "补虚药",
-    "nature": "平",
-    "taste": "甘、苦",
-    "meridian": "肺、心",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
     "toxicity": null
   },
   {
@@ -4103,17 +2739,6 @@
     "toxicity": null
   },
   {
-    "name": "巴戟天",
-    "pinyin": "ba ji tian",
-    "category": "补虚药",
-    "nature": "微温",
-    "taste": "辛、甘",
-    "meridian": "肾、肝",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 10,
-    "toxicity": null
-  },
-  {
     "name": "淫羊藿",
     "pinyin": "yin yang huo",
     "category": "补虚药",
@@ -4125,58 +2750,14 @@
     "toxicity": null
   },
   {
-    "name": "仙茅",
-    "pinyin": "xian mao",
+    "name": "巴戟天",
+    "pinyin": "ba ji tian",
     "category": "补虚药",
-    "nature": "热",
-    "taste": "辛",
-    "meridian": "肾、肝、脾",
+    "nature": "微温",
+    "taste": "甘、辛",
+    "meridian": "肾、肝",
     "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
-    "toxicity": "有毒"
-  },
-  {
-    "name": "补骨脂",
-    "pinyin": "bu gu zhi",
-    "category": "补虚药",
-    "nature": "温",
-    "taste": "辛、苦",
-    "meridian": "肾、脾",
-    "pharmacopoeiaMin": 6,
     "pharmacopoeiaMax": 10,
-    "toxicity": null
-  },
-  {
-    "name": "益智仁",
-    "pinyin": "yi zhi ren",
-    "category": "补虚药",
-    "nature": "温",
-    "taste": "辛",
-    "meridian": "脾、肾",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
-    "name": "菟丝子",
-    "pinyin": "tu si zi",
-    "category": "补虚药",
-    "nature": "平",
-    "taste": "辛、甘",
-    "meridian": "肝、肾、脾",
-    "pharmacopoeiaMin": 6,
-    "pharmacopoeiaMax": 12,
-    "toxicity": null
-  },
-  {
-    "name": "沙苑子",
-    "pinyin": "sha yuan zi",
-    "category": "补虚药",
-    "nature": "温",
-    "taste": "甘",
-    "meridian": "肝、肾",
-    "pharmacopoeiaMin": 9,
-    "pharmacopoeiaMax": 15,
     "toxicity": null
   },
   {
@@ -4224,14 +2805,47 @@
     "toxicity": null
   },
   {
-    "name": "紫河车",
-    "pinyin": "zi he che",
+    "name": "补骨脂",
+    "pinyin": "bu gu zhi",
     "category": "补虚药",
     "nature": "温",
-    "taste": "甘、咸",
-    "meridian": "肺、肝、肾",
-    "pharmacopoeiaMin": 1.5,
-    "pharmacopoeiaMax": 3,
+    "taste": "辛、苦",
+    "meridian": "肾、脾",
+    "pharmacopoeiaMin": 6,
+    "pharmacopoeiaMax": 10,
+    "toxicity": null
+  },
+  {
+    "name": "菟丝子",
+    "pinyin": "tu si zi",
+    "category": "补虚药",
+    "nature": "平",
+    "taste": "辛、甘",
+    "meridian": "肝、肾、脾",
+    "pharmacopoeiaMin": 6,
+    "pharmacopoeiaMax": 12,
+    "toxicity": null
+  },
+  {
+    "name": "沙苑子",
+    "pinyin": "sha yuan zi",
+    "category": "补虚药",
+    "nature": "温",
+    "taste": "甘",
+    "meridian": "肝、肾",
+    "pharmacopoeiaMin": 9,
+    "pharmacopoeiaMax": 15,
+    "toxicity": null
+  },
+  {
+    "name": "冬虫夏草",
+    "pinyin": "dong chong xia cao",
+    "category": "补虚药",
+    "nature": "平",
+    "taste": "甘",
+    "meridian": "肺、肾",
+    "pharmacopoeiaMin": 3,
+    "pharmacopoeiaMax": 9,
     "toxicity": null
   },
   {
@@ -4257,47 +2871,14 @@
     "toxicity": null
   },
   {
-    "name": "冬虫夏草",
-    "pinyin": "dong chong xia cao",
-    "category": "补虚药",
-    "nature": "平",
-    "taste": "甘",
-    "meridian": "肺、肾",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
-    "name": "狗脊",
-    "pinyin": "gou ji",
+    "name": "紫河车",
+    "pinyin": "zi he che",
     "category": "补虚药",
     "nature": "温",
-    "taste": "苦、甘",
-    "meridian": "肝、肾",
-    "pharmacopoeiaMin": 6,
-    "pharmacopoeiaMax": 12,
-    "toxicity": null
-  },
-  {
-    "name": "韭菜子",
-    "pinyin": "jiu cai zi",
-    "category": "补虚药",
-    "nature": "温",
-    "taste": "辛、甘",
-    "meridian": "肝、肾",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
-    "name": "阳起石",
-    "pinyin": "yang qi shi",
-    "category": "补虚药",
-    "nature": "温",
-    "taste": "咸",
-    "meridian": "肾",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 6,
+    "taste": "甘、咸",
+    "meridian": "肺、肝、肾",
+    "pharmacopoeiaMin": 2,
+    "pharmacopoeiaMax": 3,
     "toxicity": null
   },
   {
@@ -4334,17 +2915,6 @@
     "toxicity": null
   },
   {
-    "name": "何首乌",
-    "pinyin": "he shou wu",
-    "category": "补虚药",
-    "nature": "微温",
-    "taste": "苦、甘、涩",
-    "meridian": "肝、心、肾",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 6,
-    "toxicity": null
-  },
-  {
     "name": "阿胶",
     "pinyin": "e jiao",
     "category": "补虚药",
@@ -4353,6 +2923,17 @@
     "meridian": "肺、肝、肾",
     "pharmacopoeiaMin": 3,
     "pharmacopoeiaMax": 9,
+    "toxicity": null
+  },
+  {
+    "name": "何首乌",
+    "pinyin": "he shou wu",
+    "category": "补虚药",
+    "nature": "温",
+    "taste": "苦、甘、涩",
+    "meridian": "肝、心、肾",
+    "pharmacopoeiaMin": 6,
+    "pharmacopoeiaMax": 12,
     "toxicity": null
   },
   {
@@ -4371,7 +2952,7 @@
     "pinyin": "bei sha shen",
     "category": "补虚药",
     "nature": "微寒",
-    "taste": "甘",
+    "taste": "甘、微苦",
     "meridian": "肺、胃",
     "pharmacopoeiaMin": 5,
     "pharmacopoeiaMax": 12,
@@ -4389,17 +2970,6 @@
     "toxicity": null
   },
   {
-    "name": "百合",
-    "pinyin": "bai he",
-    "category": "补虚药",
-    "nature": "微寒",
-    "taste": "甘",
-    "meridian": "心、肺",
-    "pharmacopoeiaMin": 6,
-    "pharmacopoeiaMax": 12,
-    "toxicity": null
-  },
-  {
     "name": "麦冬",
     "pinyin": "mai dong",
     "category": "补虚药",
@@ -4414,9 +2984,20 @@
     "name": "天冬",
     "pinyin": "tian dong",
     "category": "补虚药",
-    "nature": "大寒",
+    "nature": "寒",
     "taste": "甘、苦",
     "meridian": "肺、肾",
+    "pharmacopoeiaMin": 6,
+    "pharmacopoeiaMax": 12,
+    "toxicity": null
+  },
+  {
+    "name": "百合",
+    "pinyin": "bai he",
+    "category": "补虚药",
+    "nature": "微寒",
+    "taste": "甘",
+    "meridian": "心、肺",
     "pharmacopoeiaMin": 6,
     "pharmacopoeiaMax": 12,
     "toxicity": null
@@ -4444,17 +3025,6 @@
     "toxicity": null
   },
   {
-    "name": "黄精",
-    "pinyin": "huang jing",
-    "category": "补虚药",
-    "nature": "平",
-    "taste": "甘",
-    "meridian": "脾、肺、肾",
-    "pharmacopoeiaMin": 9,
-    "pharmacopoeiaMax": 15,
-    "toxicity": null
-  },
-  {
     "name": "枸杞子",
     "pinyin": "gou qi zi",
     "category": "补虚药",
@@ -4463,28 +3033,6 @@
     "meridian": "肝、肾",
     "pharmacopoeiaMin": 6,
     "pharmacopoeiaMax": 12,
-    "toxicity": null
-  },
-  {
-    "name": "桑椹",
-    "pinyin": "sang shen",
-    "category": "补虚药",
-    "nature": "寒",
-    "taste": "甘、酸",
-    "meridian": "心、肝、肾",
-    "pharmacopoeiaMin": 9,
-    "pharmacopoeiaMax": 15,
-    "toxicity": null
-  },
-  {
-    "name": "银耳",
-    "pinyin": "yin er",
-    "category": "补虚药",
-    "nature": "平",
-    "taste": "甘",
-    "meridian": "肺、胃",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
     "toxicity": null
   },
   {
@@ -4504,7 +3052,7 @@
     "category": "补虚药",
     "nature": "寒",
     "taste": "甘、酸",
-    "meridian": "肝、肾",
+    "meridian": "肾、肝",
     "pharmacopoeiaMin": 6,
     "pharmacopoeiaMax": 12,
     "toxicity": null
@@ -4515,20 +3063,9 @@
     "category": "补虚药",
     "nature": "微寒",
     "taste": "咸、甘",
-    "meridian": "肾、肝、心",
+    "meridian": "肝、肾、心",
     "pharmacopoeiaMin": 9,
     "pharmacopoeiaMax": 24,
-    "toxicity": null
-  },
-  {
-    "name": "龟甲胶",
-    "pinyin": "gui jia jiao",
-    "category": "补虚药",
-    "nature": "平",
-    "taste": "甘、咸",
-    "meridian": "肾、肝",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
     "toxicity": null
   },
   {
@@ -4543,6 +3080,28 @@
     "toxicity": null
   },
   {
+    "name": "黄精",
+    "pinyin": "huang jing",
+    "category": "补虚药",
+    "nature": "平",
+    "taste": "甘",
+    "meridian": "脾、肺、肾",
+    "pharmacopoeiaMin": 9,
+    "pharmacopoeiaMax": 15,
+    "toxicity": null
+  },
+  {
+    "name": "桑椹",
+    "pinyin": "sang shen",
+    "category": "补虚药",
+    "nature": "寒",
+    "taste": "甘、酸",
+    "meridian": "心、肝、肾",
+    "pharmacopoeiaMin": 9,
+    "pharmacopoeiaMax": 15,
+    "toxicity": null
+  },
+  {
     "name": "五味子",
     "pinyin": "wu wei zi",
     "category": "收涩药",
@@ -4551,17 +3110,6 @@
     "meridian": "肺、心、肾",
     "pharmacopoeiaMin": 2,
     "pharmacopoeiaMax": 6,
-    "toxicity": null
-  },
-  {
-    "name": "乌梅",
-    "pinyin": "wu mei",
-    "category": "收涩药",
-    "nature": "平",
-    "taste": "酸、涩",
-    "meridian": "肝、脾、肺、大肠",
-    "pharmacopoeiaMin": 6,
-    "pharmacopoeiaMax": 12,
     "toxicity": null
   },
   {
@@ -4587,6 +3135,17 @@
     "toxicity": null
   },
   {
+    "name": "糯稻根",
+    "pinyin": "nuo dao gen",
+    "category": "收涩药",
+    "nature": "平",
+    "taste": "甘",
+    "meridian": "心、肝",
+    "pharmacopoeiaMin": 15,
+    "pharmacopoeiaMax": 30,
+    "toxicity": null
+  },
+  {
     "name": "诃子",
     "pinyin": "he zi",
     "category": "收涩药",
@@ -4594,7 +3153,7 @@
     "taste": "苦、酸、涩",
     "meridian": "肺、大肠",
     "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
+    "pharmacopoeiaMax": 10,
     "toxicity": null
   },
   {
@@ -4605,7 +3164,18 @@
     "taste": "辛",
     "meridian": "脾、胃、大肠",
     "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
+    "pharmacopoeiaMax": 10,
+    "toxicity": null
+  },
+  {
+    "name": "乌梅",
+    "pinyin": "wu mei",
+    "category": "收涩药",
+    "nature": "平",
+    "taste": "酸、涩",
+    "meridian": "肝、脾、肺、大肠",
+    "pharmacopoeiaMin": 6,
+    "pharmacopoeiaMax": 12,
     "toxicity": null
   },
   {
@@ -4613,41 +3183,19 @@
     "pinyin": "chi shi zhi",
     "category": "收涩药",
     "nature": "温",
-    "taste": "甘、涩、酸",
-    "meridian": "大肠、胃",
+    "taste": "甘、酸、涩",
+    "meridian": "胃、大肠",
     "pharmacopoeiaMin": 9,
     "pharmacopoeiaMax": 12,
     "toxicity": null
   },
   {
-    "name": "罂粟壳",
-    "pinyin": "ying su qiao",
-    "category": "收涩药",
-    "nature": "平",
-    "taste": "酸、涩",
-    "meridian": "肺、大肠、肾",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 6,
-    "toxicity": "有毒"
-  },
-  {
-    "name": "莲子",
-    "pinyin": "lian zi",
+    "name": "禹余粮",
+    "pinyin": "yu yu liang",
     "category": "收涩药",
     "nature": "平",
     "taste": "甘、涩",
-    "meridian": "脾、肾、心",
-    "pharmacopoeiaMin": 6,
-    "pharmacopoeiaMax": 15,
-    "toxicity": null
-  },
-  {
-    "name": "芡实",
-    "pinyin": "qian shi",
-    "category": "收涩药",
-    "nature": "平",
-    "taste": "甘、涩",
-    "meridian": "脾、肾",
+    "meridian": "胃、大肠",
     "pharmacopoeiaMin": 9,
     "pharmacopoeiaMax": 15,
     "toxicity": null
@@ -4659,6 +3207,17 @@
     "nature": "微温",
     "taste": "酸、涩",
     "meridian": "肝、肾",
+    "pharmacopoeiaMin": 6,
+    "pharmacopoeiaMax": 12,
+    "toxicity": null
+  },
+  {
+    "name": "覆盆子",
+    "pinyin": "fu pen zi",
+    "category": "收涩药",
+    "nature": "温",
+    "taste": "甘、酸",
+    "meridian": "肝、肾、膀胱",
     "pharmacopoeiaMin": 6,
     "pharmacopoeiaMax": 12,
     "toxicity": null
@@ -4686,58 +3245,25 @@
     "toxicity": null
   },
   {
-    "name": "覆盆子",
-    "pinyin": "fu pen zi",
-    "category": "收涩药",
-    "nature": "温",
-    "taste": "甘、酸",
-    "meridian": "肝、肾、膀胱",
-    "pharmacopoeiaMin": 6,
-    "pharmacopoeiaMax": 12,
-    "toxicity": null
-  },
-  {
-    "name": "海螵蛸",
-    "pinyin": "hai piao xiao",
-    "category": "收涩药",
-    "nature": "温",
-    "taste": "咸、涩",
-    "meridian": "脾、肾",
-    "pharmacopoeiaMin": 5,
-    "pharmacopoeiaMax": 10,
-    "toxicity": null
-  },
-  {
-    "name": "刺猬皮",
-    "pinyin": "ci wei pi",
+    "name": "莲子",
+    "pinyin": "lian zi",
     "category": "收涩药",
     "nature": "平",
-    "taste": "苦、甘",
-    "meridian": "肾、胃、大肠",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 6,
-    "toxicity": null
-  },
-  {
-    "name": "椿皮",
-    "pinyin": "chun pi",
-    "category": "收涩药",
-    "nature": "寒",
-    "taste": "苦、涩",
-    "meridian": "大肠、胃、肝",
-    "pharmacopoeiaMin": 6,
-    "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
-    "name": "鸡冠花",
-    "pinyin": "ji guan hua",
-    "category": "收涩药",
-    "nature": "凉",
     "taste": "甘、涩",
-    "meridian": "肝、大肠",
+    "meridian": "脾、肾、心",
     "pharmacopoeiaMin": 6,
-    "pharmacopoeiaMax": 12,
+    "pharmacopoeiaMax": 15,
+    "toxicity": null
+  },
+  {
+    "name": "芡实",
+    "pinyin": "qian shi",
+    "category": "收涩药",
+    "nature": "平",
+    "taste": "甘、涩",
+    "meridian": "脾、肾",
+    "pharmacopoeiaMin": 9,
+    "pharmacopoeiaMax": 15,
     "toxicity": null
   },
   {
@@ -4760,17 +3286,6 @@
     "meridian": "胃",
     "pharmacopoeiaMin": 0.3,
     "pharmacopoeiaMax": 1,
-    "toxicity": "有小毒"
-  },
-  {
-    "name": "藜芦",
-    "pinyin": "li lu",
-    "category": "涌吐药",
-    "nature": "寒",
-    "taste": "苦、辛",
-    "meridian": "肺、胃、肝",
-    "pharmacopoeiaMin": 0.3,
-    "pharmacopoeiaMax": 0.6,
     "toxicity": "有毒"
   },
   {
@@ -4778,16 +3293,27 @@
     "pinyin": "dan fan",
     "category": "涌吐药",
     "nature": "寒",
-    "taste": "酸、涩、辛",
+    "taste": "酸、辛",
     "meridian": "肝、胆",
     "pharmacopoeiaMin": 0.3,
     "pharmacopoeiaMax": 0.6,
     "toxicity": "有毒"
   },
   {
+    "name": "雄黄",
+    "pinyin": "xiong huang",
+    "category": "攻毒杀虫止痒药",
+    "nature": "温",
+    "taste": "辛",
+    "meridian": "肝、大肠",
+    "pharmacopoeiaMin": 0.05,
+    "pharmacopoeiaMax": 0.1,
+    "toxicity": "有毒"
+  },
+  {
     "name": "硫黄",
     "pinyin": "liu huang",
-    "category": "外用药",
+    "category": "攻毒杀虫止痒药",
     "nature": "温",
     "taste": "酸",
     "meridian": "肾、大肠",
@@ -4796,86 +3322,9 @@
     "toxicity": "有毒"
   },
   {
-    "name": "雄黄",
-    "pinyin": "xiong huang",
-    "category": "外用药",
-    "nature": "温",
-    "taste": "辛、苦",
-    "meridian": "肝、胃",
-    "pharmacopoeiaMin": 0.05,
-    "pharmacopoeiaMax": 0.1,
-    "toxicity": "有毒"
-  },
-  {
-    "name": "砒石",
-    "pinyin": "pi shi",
-    "category": "外用药",
-    "nature": "热",
-    "taste": "辛",
-    "meridian": "肺、脾、胃",
-    "pharmacopoeiaMin": 0.002,
-    "pharmacopoeiaMax": 0.004,
-    "toxicity": "有大毒"
-  },
-  {
-    "name": "轻粉",
-    "pinyin": "qing fen",
-    "category": "外用药",
-    "nature": "寒",
-    "taste": "辛",
-    "meridian": "大肠、小肠",
-    "pharmacopoeiaMin": 0.1,
-    "pharmacopoeiaMax": 0.2,
-    "toxicity": "有毒"
-  },
-  {
-    "name": "升药",
-    "pinyin": "sheng yao",
-    "category": "外用药",
-    "nature": "热",
-    "taste": "辛",
-    "meridian": "肺、脾",
-    "pharmacopoeiaMin": null,
-    "pharmacopoeiaMax": null,
-    "toxicity": "有大毒"
-  },
-  {
-    "name": "铅丹",
-    "pinyin": "qian dan",
-    "category": "外用药",
-    "nature": "微寒",
-    "taste": "辛",
-    "meridian": "心、脾、肝",
-    "pharmacopoeiaMin": 0.3,
-    "pharmacopoeiaMax": 0.6,
-    "toxicity": "有毒"
-  },
-  {
-    "name": "炉甘石",
-    "pinyin": "lu gan shi",
-    "category": "外用药",
-    "nature": "平",
-    "taste": "甘",
-    "meridian": "肝、脾",
-    "pharmacopoeiaMin": null,
-    "pharmacopoeiaMax": null,
-    "toxicity": null
-  },
-  {
-    "name": "硼砂",
-    "pinyin": "peng sha",
-    "category": "外用药",
-    "nature": "凉",
-    "taste": "甘、咸",
-    "meridian": "肺、胃",
-    "pharmacopoeiaMin": 1.5,
-    "pharmacopoeiaMax": 3,
-    "toxicity": null
-  },
-  {
     "name": "白矾",
     "pinyin": "bai fan",
-    "category": "外用药",
+    "category": "攻毒杀虫止痒药",
     "nature": "寒",
     "taste": "酸、涩",
     "meridian": "肺、脾、肝、大肠",
@@ -4884,86 +3333,20 @@
     "toxicity": null
   },
   {
-    "name": "大蒜",
-    "pinyin": "da suan",
-    "category": "外用药",
-    "nature": "温",
-    "taste": "辛",
-    "meridian": "脾、胃、肺",
-    "pharmacopoeiaMin": 5,
-    "pharmacopoeiaMax": 10,
-    "toxicity": null
-  },
-  {
-    "name": "斑蝥",
-    "pinyin": "ban mao",
-    "category": "外用药",
-    "nature": "热",
-    "taste": "辛",
-    "meridian": "肝、胃、肾",
-    "pharmacopoeiaMin": 0.03,
-    "pharmacopoeiaMax": 0.06,
-    "toxicity": "有大毒"
-  },
-  {
-    "name": "蟾酥",
-    "pinyin": "chan su",
-    "category": "外用药",
-    "nature": "温",
-    "taste": "辛",
-    "meridian": "心、胃",
-    "pharmacopoeiaMin": 0.015,
-    "pharmacopoeiaMax": 0.03,
-    "toxicity": "有毒"
-  },
-  {
-    "name": "马齿苋",
-    "pinyin": "ma chi xian",
-    "category": "外用药",
-    "nature": "寒",
-    "taste": "酸",
-    "meridian": "肝、大肠",
-    "pharmacopoeiaMin": 9,
-    "pharmacopoeiaMax": 15,
-    "toxicity": null
-  },
-  {
     "name": "蛇床子",
     "pinyin": "she chuang zi",
-    "category": "外用药",
+    "category": "攻毒杀虫止痒药",
     "nature": "温",
     "taste": "辛、苦",
     "meridian": "肾",
     "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
+    "pharmacopoeiaMax": 10,
     "toxicity": "有小毒"
-  },
-  {
-    "name": "木鳖子",
-    "pinyin": "mu bie zi",
-    "category": "外用药",
-    "nature": "温",
-    "taste": "苦、微甘",
-    "meridian": "肝、脾、胃",
-    "pharmacopoeiaMin": 0.9,
-    "pharmacopoeiaMax": 1.2,
-    "toxicity": "有毒"
-  },
-  {
-    "name": "儿茶",
-    "pinyin": "er cha",
-    "category": "外用药",
-    "nature": "凉",
-    "taste": "苦、涩",
-    "meridian": "肺",
-    "pharmacopoeiaMin": 1,
-    "pharmacopoeiaMax": 3,
-    "toxicity": null
   },
   {
     "name": "土荆皮",
     "pinyin": "tu jing pi",
-    "category": "外用药",
+    "category": "攻毒杀虫止痒药",
     "nature": "温",
     "taste": "辛",
     "meridian": "肺、脾",
@@ -4974,65 +3357,87 @@
   {
     "name": "蜂房",
     "pinyin": "feng fang",
-    "category": "外用药",
+    "category": "攻毒杀虫止痒药",
     "nature": "平",
     "taste": "甘",
     "meridian": "胃",
     "pharmacopoeiaMin": 3,
     "pharmacopoeiaMax": 5,
-    "toxicity": "有小毒"
+    "toxicity": null
   },
   {
-    "name": "樟脑",
-    "pinyin": "zhang nao",
-    "category": "外用药",
+    "name": "蟾酥",
+    "pinyin": "chan su",
+    "category": "攻毒杀虫止痒药",
+    "nature": "温",
+    "taste": "辛",
+    "meridian": "心",
+    "pharmacopoeiaMin": 0.015,
+    "pharmacopoeiaMax": 0.03,
+    "toxicity": "有毒"
+  },
+  {
+    "name": "大蒜",
+    "pinyin": "da suan",
+    "category": "攻毒杀虫止痒药",
+    "nature": "温",
+    "taste": "辛",
+    "meridian": "脾、胃、肺",
+    "pharmacopoeiaMin": 9,
+    "pharmacopoeiaMax": 15,
+    "toxicity": null
+  },
+  {
+    "name": "红粉",
+    "pinyin": "hong fen",
+    "category": "拔毒化腐生肌药",
     "nature": "热",
     "taste": "辛",
-    "meridian": "心、脾",
+    "meridian": "肺、脾",
+    "pharmacopoeiaMin": null,
+    "pharmacopoeiaMax": null,
+    "toxicity": "有大毒"
+  },
+  {
+    "name": "轻粉",
+    "pinyin": "qing fen",
+    "category": "拔毒化腐生肌药",
+    "nature": "寒",
+    "taste": "辛",
+    "meridian": "肝、肾",
     "pharmacopoeiaMin": 0.1,
     "pharmacopoeiaMax": 0.2,
     "toxicity": "有毒"
   },
   {
-    "name": "大风子",
-    "pinyin": "da feng zi",
-    "category": "外用药",
+    "name": "砒石",
+    "pinyin": "pi shi",
+    "category": "拔毒化腐生肌药",
     "nature": "热",
     "taste": "辛",
-    "meridian": "肝、脾",
-    "pharmacopoeiaMin": 0.3,
-    "pharmacopoeiaMax": 1,
-    "toxicity": "有毒"
+    "meridian": "肺、肝",
+    "pharmacopoeiaMin": 0.002,
+    "pharmacopoeiaMax": 0.004,
+    "toxicity": "有大毒"
   },
   {
-    "name": "木槿皮",
-    "pinyin": "mu jin pi",
-    "category": "外用药",
-    "nature": "微寒",
-    "taste": "甘、苦",
-    "meridian": "大肠、肝",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
-    "name": "松香",
-    "pinyin": "song xiang",
-    "category": "外用药",
-    "nature": "温",
-    "taste": "苦、甘",
-    "meridian": "肝、脾",
-    "pharmacopoeiaMin": 1,
+    "name": "硼砂",
+    "pinyin": "peng sha",
+    "category": "拔毒化腐生肌药",
+    "nature": "凉",
+    "taste": "甘、咸",
+    "meridian": "肺、胃",
+    "pharmacopoeiaMin": 1.5,
     "pharmacopoeiaMax": 3,
     "toxicity": null
   },
   {
-    "name": "铜绿",
-    "pinyin": "tong lv",
-    "category": "外用药",
+    "name": "炉甘石",
+    "pinyin": "lu gan shi",
+    "category": "拔毒化腐生肌药",
     "nature": "平",
-    "taste": "酸",
-    "meridian": "肝、胆",
+    "taste": "甘",
+    "meridian": "肝、脾",
     "pharmacopoeiaMin": null,
     "pharmacopoeiaMax": null,
     "toxicity": null
@@ -5040,595 +3445,12 @@
   {
     "name": "密陀僧",
     "pinyin": "mi tuo seng",
-    "category": "外用药",
+    "category": "拔毒化腐生肌药",
     "nature": "平",
     "taste": "咸、辛",
     "meridian": "肝、脾",
     "pharmacopoeiaMin": 0.3,
     "pharmacopoeiaMax": 0.9,
     "toxicity": "有毒"
-  },
-  {
-    "name": "藤黄",
-    "pinyin": "teng huang",
-    "category": "外用药",
-    "nature": "寒",
-    "taste": "酸、涩",
-    "meridian": "脾、胃、大肠",
-    "pharmacopoeiaMin": 0.03,
-    "pharmacopoeiaMax": 0.06,
-    "toxicity": "有毒"
-  },
-  {
-    "name": "血竭",
-    "pinyin": "xue jie",
-    "category": "外用药",
-    "nature": "平",
-    "taste": "甘、咸",
-    "meridian": "心、肝",
-    "pharmacopoeiaMin": 1,
-    "pharmacopoeiaMax": 2,
-    "toxicity": null
-  },
-  {
-    "name": "象皮",
-    "pinyin": "xiang pi",
-    "category": "外用药",
-    "nature": "温",
-    "taste": "甘、咸",
-    "meridian": "脾",
-    "pharmacopoeiaMin": 5,
-    "pharmacopoeiaMax": 10,
-    "toxicity": null
-  },
-  {
-    "name": "守宫",
-    "pinyin": "shou gong",
-    "category": "外用药",
-    "nature": "寒",
-    "taste": "咸",
-    "meridian": "肝",
-    "pharmacopoeiaMin": 1.5,
-    "pharmacopoeiaMax": 3,
-    "toxicity": "有小毒"
-  },
-  {
-    "name": "牡丹皮",
-    "pinyin": "mu dan pi",
-    "category": "清热药",
-    "nature": "微寒",
-    "taste": "苦、辛",
-    "meridian": "心、肝、肾",
-    "pharmacopoeiaMin": 6,
-    "pharmacopoeiaMax": 12,
-    "toxicity": null
-  },
-  {
-    "name": "赤芍",
-    "pinyin": "chi shao",
-    "category": "清热药",
-    "nature": "微寒",
-    "taste": "苦",
-    "meridian": "肝",
-    "pharmacopoeiaMin": 6,
-    "pharmacopoeiaMax": 12,
-    "toxicity": null
-  },
-  {
-    "name": "紫草",
-    "pinyin": "zi cao",
-    "category": "清热药",
-    "nature": "寒",
-    "taste": "甘、咸",
-    "meridian": "心、肝",
-    "pharmacopoeiaMin": 5,
-    "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
-    "name": "白头翁",
-    "pinyin": "bai tou weng",
-    "category": "清热药",
-    "nature": "寒",
-    "taste": "苦",
-    "meridian": "胃、大肠",
-    "pharmacopoeiaMin": 9,
-    "pharmacopoeiaMax": 15,
-    "toxicity": null
-  },
-  {
-    "name": "马勃",
-    "pinyin": "ma bo",
-    "category": "清热药",
-    "nature": "平",
-    "taste": "辛",
-    "meridian": "肺",
-    "pharmacopoeiaMin": 2,
-    "pharmacopoeiaMax": 6,
-    "toxicity": null
-  },
-  {
-    "name": "木蝴蝶",
-    "pinyin": "mu hu die",
-    "category": "清热药",
-    "nature": "凉",
-    "taste": "苦、甘",
-    "meridian": "肺、肝、胃",
-    "pharmacopoeiaMin": 1.5,
-    "pharmacopoeiaMax": 3,
-    "toxicity": null
-  },
-  {
-    "name": "山慈菇",
-    "pinyin": "shan ci gu",
-    "category": "清热药",
-    "nature": "寒",
-    "taste": "甘、微辛",
-    "meridian": "肝、脾",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
-    "name": "金荞麦",
-    "pinyin": "jin qiao mai",
-    "category": "清热药",
-    "nature": "凉",
-    "taste": "微辛、涩",
-    "meridian": "肺",
-    "pharmacopoeiaMin": 15,
-    "pharmacopoeiaMax": 45,
-    "toxicity": null
-  },
-  {
-    "name": "山豆根",
-    "pinyin": "shan dou gen",
-    "category": "清热药",
-    "nature": "寒",
-    "taste": "苦",
-    "meridian": "肺、胃",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 6,
-    "toxicity": "有毒"
-  },
-  {
-    "name": "北豆根",
-    "pinyin": "bei dou gen",
-    "category": "清热药",
-    "nature": "寒",
-    "taste": "苦",
-    "meridian": "肺、胃、大肠",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
-    "toxicity": "有小毒"
-  },
-  {
-    "name": "漏芦",
-    "pinyin": "lou lu",
-    "category": "清热药",
-    "nature": "寒",
-    "taste": "苦",
-    "meridian": "胃",
-    "pharmacopoeiaMin": 5,
-    "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
-    "name": "枳椇子",
-    "pinyin": "zhi ju zi",
-    "category": "利水渗湿药",
-    "nature": "平",
-    "taste": "甘",
-    "meridian": "胃",
-    "pharmacopoeiaMin": 10,
-    "pharmacopoeiaMax": 15,
-    "toxicity": null
-  },
-  {
-    "name": "玉米须",
-    "pinyin": "yu mi xu",
-    "category": "利水渗湿药",
-    "nature": "平",
-    "taste": "甘",
-    "meridian": "膀胱、肝、胆",
-    "pharmacopoeiaMin": 15,
-    "pharmacopoeiaMax": 30,
-    "toxicity": null
-  },
-  {
-    "name": "小通草",
-    "pinyin": "xiao tong cao",
-    "category": "利水渗湿药",
-    "nature": "寒",
-    "taste": "甘、淡",
-    "meridian": "肺、胃、膀胱",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 6,
-    "toxicity": null
-  },
-  {
-    "name": "三白草",
-    "pinyin": "san bai cao",
-    "category": "利水渗湿药",
-    "nature": "寒",
-    "taste": "甘、辛",
-    "meridian": "肺、膀胱",
-    "pharmacopoeiaMin": 15,
-    "pharmacopoeiaMax": 30,
-    "toxicity": null
-  },
-  {
-    "name": "乌梢蛇",
-    "pinyin": "wu shao she",
-    "category": "祛风湿药",
-    "nature": "平",
-    "taste": "甘",
-    "meridian": "肝",
-    "pharmacopoeiaMin": 9,
-    "pharmacopoeiaMax": 12,
-    "toxicity": null
-  },
-  {
-    "name": "徐长卿",
-    "pinyin": "xu chang qing",
-    "category": "祛风湿药",
-    "nature": "温",
-    "taste": "辛",
-    "meridian": "肝、胃",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 12,
-    "toxicity": null
-  },
-  {
-    "name": "鹿衔草",
-    "pinyin": "lu xian cao",
-    "category": "祛风湿药",
-    "nature": "温",
-    "taste": "甘、苦",
-    "meridian": "肝、肾",
-    "pharmacopoeiaMin": 9,
-    "pharmacopoeiaMax": 15,
-    "toxicity": null
-  },
-  {
-    "name": "夏天无",
-    "pinyin": "xia tian wu",
-    "category": "活血化瘀药",
-    "nature": "温",
-    "taste": "苦、微辛",
-    "meridian": "肝",
-    "pharmacopoeiaMin": 6,
-    "pharmacopoeiaMax": 12,
-    "toxicity": null
-  },
-  {
-    "name": "灯盏细辛",
-    "pinyin": "deng zhan xi xin",
-    "category": "活血化瘀药",
-    "nature": "温",
-    "taste": "辛、微苦",
-    "meridian": "心、肝",
-    "pharmacopoeiaMin": 9,
-    "pharmacopoeiaMax": 15,
-    "toxicity": null
-  },
-  {
-    "name": "黄药子",
-    "pinyin": "huang yao zi",
-    "category": "化痰止咳平喘药",
-    "nature": "寒",
-    "taste": "苦",
-    "meridian": "肺、肝",
-    "pharmacopoeiaMin": 5,
-    "pharmacopoeiaMax": 9,
-    "toxicity": "有毒"
-  },
-  {
-    "name": "华山参",
-    "pinyin": "hua shan shen",
-    "category": "化痰止咳平喘药",
-    "nature": "热",
-    "taste": "甘、微苦",
-    "meridian": "肺",
-    "pharmacopoeiaMin": 0.3,
-    "pharmacopoeiaMax": 0.9,
-    "toxicity": "有毒"
-  },
-  {
-    "name": "满山红",
-    "pinyin": "man shan hong",
-    "category": "化痰止咳平喘药",
-    "nature": "温",
-    "taste": "辛、苦",
-    "meridian": "肺、脾",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
-    "name": "胡颓子叶",
-    "pinyin": "hu tui zi ye",
-    "category": "化痰止咳平喘药",
-    "nature": "平",
-    "taste": "酸",
-    "meridian": "肺",
-    "pharmacopoeiaMin": 9,
-    "pharmacopoeiaMax": 15,
-    "toxicity": null
-  },
-  {
-    "name": "绞股蓝",
-    "pinyin": "jiao gu lan",
-    "category": "补虚药",
-    "nature": "凉",
-    "taste": "苦、微甘",
-    "meridian": "肺、脾、肾",
-    "pharmacopoeiaMin": 15,
-    "pharmacopoeiaMax": 30,
-    "toxicity": null
-  },
-  {
-    "name": "沙棘",
-    "pinyin": "sha ji",
-    "category": "补虚药",
-    "nature": "温",
-    "taste": "酸、涩",
-    "meridian": "脾、胃、肺、心",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
-    "name": "鹿角",
-    "pinyin": "lu jiao",
-    "category": "补虚药",
-    "nature": "温",
-    "taste": "咸",
-    "meridian": "肝、肾",
-    "pharmacopoeiaMin": 6,
-    "pharmacopoeiaMax": 15,
-    "toxicity": null
-  },
-  {
-    "name": "鹿角胶",
-    "pinyin": "lu jiao jiao",
-    "category": "补虚药",
-    "nature": "温",
-    "taste": "甘、咸",
-    "meridian": "肝、肾",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
-    "name": "海马",
-    "pinyin": "hai ma",
-    "category": "补虚药",
-    "nature": "温",
-    "taste": "甘",
-    "meridian": "肝、肾",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
-    "name": "海龙",
-    "pinyin": "hai long",
-    "category": "补虚药",
-    "nature": "温",
-    "taste": "甘",
-    "meridian": "肝、肾",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
-    "name": "黑芝麻",
-    "pinyin": "hei zhi ma",
-    "category": "补虚药",
-    "nature": "平",
-    "taste": "甘",
-    "meridian": "肝、肾、大肠",
-    "pharmacopoeiaMin": 9,
-    "pharmacopoeiaMax": 15,
-    "toxicity": null
-  },
-  {
-    "name": "甘松",
-    "pinyin": "gan song",
-    "category": "理气药",
-    "nature": "温",
-    "taste": "辛、甘",
-    "meridian": "脾、胃",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 6,
-    "toxicity": null
-  },
-  {
-    "name": "九香虫",
-    "pinyin": "jiu xiang chong",
-    "category": "理气药",
-    "nature": "温",
-    "taste": "咸",
-    "meridian": "肝、脾、肾",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
-    "name": "刀豆",
-    "pinyin": "dao dou",
-    "category": "理气药",
-    "nature": "温",
-    "taste": "甘",
-    "meridian": "胃、肾",
-    "pharmacopoeiaMin": 6,
-    "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
-    "name": "天仙藤",
-    "pinyin": "tian xian teng",
-    "category": "理气药",
-    "nature": "温",
-    "taste": "苦",
-    "meridian": "肝、脾",
-    "pharmacopoeiaMin": 4.5,
-    "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
-    "name": "独一味",
-    "pinyin": "du yi wei",
-    "category": "止血药",
-    "nature": "平",
-    "taste": "甘、苦",
-    "meridian": "肝",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 6,
-    "toxicity": null
-  },
-  {
-    "name": "莲房",
-    "pinyin": "lian fang",
-    "category": "止血药",
-    "nature": "平",
-    "taste": "苦、涩",
-    "meridian": "肝",
-    "pharmacopoeiaMin": 5,
-    "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
-    "name": "枫香脂",
-    "pinyin": "feng xiang zhi",
-    "category": "活血化瘀药",
-    "nature": "平",
-    "taste": "辛、微苦",
-    "meridian": "肺、脾",
-    "pharmacopoeiaMin": 1.5,
-    "pharmacopoeiaMax": 3,
-    "toxicity": null
-  },
-  {
-    "name": "珠子参",
-    "pinyin": "zhu zi shen",
-    "category": "补虚药",
-    "nature": "微寒",
-    "taste": "苦、甘",
-    "meridian": "肝、肺、胃",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
-    "name": "穿破石",
-    "pinyin": "chuan po shi",
-    "category": "祛风湿药",
-    "nature": "平",
-    "taste": "微苦",
-    "meridian": "肝",
-    "pharmacopoeiaMin": 9,
-    "pharmacopoeiaMax": 15,
-    "toxicity": null
-  },
-  {
-    "name": "金钱白花蛇",
-    "pinyin": "jin qian bai hua she",
-    "category": "祛风湿药",
-    "nature": "温",
-    "taste": "甘、咸",
-    "meridian": "肝",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 4.5,
-    "toxicity": "有毒"
-  },
-  {
-    "name": "臭梧桐",
-    "pinyin": "chou wu tong",
-    "category": "祛风湿药",
-    "nature": "凉",
-    "taste": "苦、甘",
-    "meridian": "肝",
-    "pharmacopoeiaMin": 9,
-    "pharmacopoeiaMax": 15,
-    "toxicity": null
-  },
-  {
-    "name": "绿萼梅",
-    "pinyin": "lv e mei",
-    "category": "理气药",
-    "nature": "平",
-    "taste": "微酸、涩",
-    "meridian": "肝、胃、肺",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 6,
-    "toxicity": null
-  },
-  {
-    "name": "娑罗子",
-    "pinyin": "suo luo zi",
-    "category": "理气药",
-    "nature": "温",
-    "taste": "甘",
-    "meridian": "肝、胃",
-    "pharmacopoeiaMin": 3,
-    "pharmacopoeiaMax": 9,
-    "toxicity": null
-  },
-  {
-    "name": "五指毛桃",
-    "pinyin": "wu zhi mao tao",
-    "category": "补虚药",
-    "nature": "平",
-    "taste": "甘",
-    "meridian": "脾、肺、肝",
-    "pharmacopoeiaMin": 15,
-    "pharmacopoeiaMax": 30,
-    "toxicity": null
-  },
-  {
-    "name": "布渣叶",
-    "pinyin": "bu zha ye",
-    "category": "清热药",
-    "nature": "凉",
-    "taste": "酸",
-    "meridian": "脾、胃",
-    "pharmacopoeiaMin": 15,
-    "pharmacopoeiaMax": 30,
-    "toxicity": null
-  },
-  {
-    "name": "岗梅",
-    "pinyin": "gang mei",
-    "category": "清热药",
-    "nature": "凉",
-    "taste": "苦、甘",
-    "meridian": "肺、胃",
-    "pharmacopoeiaMin": 15,
-    "pharmacopoeiaMax": 30,
-    "toxicity": null
-  },
-  {
-    "name": "火炭母",
-    "pinyin": "huo tan mu",
-    "category": "清热药",
-    "nature": "凉",
-    "taste": "微酸、涩",
-    "meridian": "肝、脾",
-    "pharmacopoeiaMin": 15,
-    "pharmacopoeiaMax": 30,
-    "toxicity": null
-  },
-  {
-    "name": "鸡蛋花",
-    "pinyin": "ji dan hua",
-    "category": "清热药",
-    "nature": "凉",
-    "taste": "甘、微苦",
-    "meridian": "肺、大肠",
-    "pharmacopoeiaMin": 5,
-    "pharmacopoeiaMax": 10,
-    "toxicity": null
   }
 ]

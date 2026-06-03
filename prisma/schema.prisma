@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
@@ -19,6 +20,7 @@ model User {
 
   consultations Consultation[]
   editedPrescriptions Prescription[] @relation("PrescriptionEditor")
+  createdPatients   Patient[]
   auditLogs     AuditLog[]
 }
 
@@ -34,9 +36,11 @@ model Patient {
   constitution  String?
   chronicDisease String?
   notes         String?
+  createdBy     String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
+  creator       User?           @relation(fields: [createdBy], references: [id])
   consultations Consultation[]
 }
 

@@ -21,7 +21,8 @@ export async function analyzeImage(req: VisionRequest): Promise<string> {
     throw new Error("火山引擎视觉API密钥未配置 — 需设置 VOLCENGINE_ARK_API_KEY 或 VOLCENGINE_ACCESS_KEY_ID + VOLCENGINE_SECRET_ACCESS_KEY");
   }
 
-  const model = process.env.VOLCENGINE_VISION_MODEL || "doubao-seed-2-0-pro-260215";
+  // doubao-seed-2-0-lite: official recommended vision model per Volcengine docs
+  const model = process.env.VOLCENGINE_VISION_MODEL || "doubao-seed-2-0-lite-260215";
 
   const body = {
     model,
@@ -38,7 +39,7 @@ export async function analyzeImage(req: VisionRequest): Promise<string> {
       },
     ],
     temperature: req.temperature ?? 0.1,
-    max_tokens: req.maxTokens ?? 1024,
+    max_tokens: req.maxTokens ?? 512,
   };
 
   const payload = JSON.stringify(body);
@@ -51,7 +52,6 @@ export async function analyzeImage(req: VisionRequest): Promise<string> {
   if (apiKey) {
     headers["Authorization"] = `Bearer ${apiKey}`;
   } else {
-    // Pre-compute X-Date so it matches the signed headers
     const now = new Date();
     const yyyymmdd = now.toISOString().slice(0, 10).replace(/-/g, "");
     const hhmmss = now.toISOString().slice(11, 19).replace(/:/g, "");
@@ -77,19 +77,27 @@ export async function analyzeImage(req: VisionRequest): Promise<string> {
     headers["X-Date"] = xDate;
   }
 
-  const res = await fetch(ARK_BASE, {
-    method: "POST",
-    headers,
-    body: payload,
-  });
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 300000);
 
-  if (!res.ok) {
-    const errText = await res.text().catch(() => "");
-    throw new Error(`视觉模型调用失败 (${res.status}): ${errText}`);
+  try {
+    const res = await fetch(ARK_BASE, {
+      method: "POST",
+      headers,
+      body: payload,
+      signal: controller.signal,
+    });
+
+    if (!res.ok) {
+      const errText = await res.text().catch(() => "");
+      throw new Error(`视觉模型调用失败 (${res.status}): ${errText.slice(0, 300)}`);
+    }
+
+    const json = await res.json();
+    const text = json?.choices?.[0]?.message?.content;
+    if (!text) throw new Error("视觉模型返回为空");
+    return text;
+  } finally {
+    clearTimeout(timer);
   }
-
-  const json = await res.json();
-  const text = json?.choices?.[0]?.message?.content;
-  if (!text) throw new Error("视觉模型返回为空");
-  return text;
 }

@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { PrismaLibSql } from "@prisma/adapter-libsql";
 import fs from "fs";
 import path from "path";
 
@@ -10,10 +11,9 @@ const globalForPrisma = globalThis as unknown as {
 };
 
 function getDbPath(): string {
-  if (process.env.VERCEL) return "/tmp/dev.db";
+  if (process.env.VERCEL && !process.env.TURSO_DATABASE_URL) return "/tmp/dev.db";
   const url = (process.env.DATABASE_URL || "file:./dev.db").replace(/^"|"$/g, "");
   let dbPath = url.replace("file:", "");
-  // Resolve relative paths against DATA_DIR (or cwd) for macOS app bundle support
   if (!path.isAbsolute(dbPath)) {
     dbPath = path.resolve(process.env.DATA_DIR || process.cwd(), dbPath);
   }
@@ -22,27 +22,43 @@ function getDbPath(): string {
 
 function ensureDbDir() {
   if (globalForPrisma.dbReady) return;
+  // Skip for Turso — no local file to create
+  if (process.env.TURSO_DATABASE_URL) {
+    globalForPrisma.dbReady = true;
+    return;
+  }
   const dbPath = getDbPath();
   const dir = path.dirname(dbPath);
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
   globalForPrisma.dbReady = true;
 }
 
+function isTursoAvailable(): boolean {
+  return !!(process.env.TURSO_DATABASE_URL && process.env.TURSO_AUTH_TOKEN);
+}
+
 async function initSchema(prisma: PrismaClient) {
+  const usingTurso = isTursoAvailable();
+
   // Check if schema exists — retry on locked database
   for (let attempt = 0; attempt < 5; attempt++) {
     try {
       await prisma.$executeRaw`SELECT 1 FROM User LIMIT 1`;
       console.log("[DB] Schema already exists, running incremental migrations...");
-      const newColumns = [
-        `ALTER TABLE Consultation ADD COLUMN "faceImage" TEXT`,
-        `ALTER TABLE Consultation ADD COLUMN "tongueAnalysis" TEXT`,
-        `ALTER TABLE Consultation ADD COLUMN "faceAnalysis" TEXT`,
-        `ALTER TABLE Patient ADD COLUMN "address" TEXT`,
-      ];
-      for (const sql of newColumns) {
-        try { await prisma.$executeRawUnsafe(sql); } catch { /* column may exist */ }
+      if (!usingTurso) {
+        const newColumns = [
+          `ALTER TABLE Consultation ADD COLUMN "faceImage" TEXT`,
+          `ALTER TABLE Consultation ADD COLUMN "tongueAnalysis" TEXT`,
+          `ALTER TABLE Consultation ADD COLUMN "faceAnalysis" TEXT`,
+          `ALTER TABLE Patient ADD COLUMN "address" TEXT`,
+          `ALTER TABLE Patient ADD COLUMN "createdBy" TEXT REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE`,
+        ];
+        for (const sql of newColumns) {
+          try { await prisma.$executeRawUnsafe(sql); } catch { /* column may exist */ }
+        }
       }
+      // Seed data (idempotent upserts)
+      await seedData(prisma);
       return;
     } catch (e: unknown) {
       const msg = (e as { message?: string })?.message || "";
@@ -50,18 +66,24 @@ async function initSchema(prisma: PrismaClient) {
         await new Promise((r) => setTimeout(r, 200 * (attempt + 1)));
         continue;
       }
-      // Table doesn't exist or other error — proceed to schema creation
       break;
     }
   }
 
+  // Turso: schema should already exist via prisma db push, just seed
+  if (usingTurso) {
+    console.log("[DB] Turso — seeding data...");
+    await seedData(prisma);
+    return;
+  }
+
+  // Local SQLite: create schema from migration file
   console.log("[DB] Creating schema...");
   const rootDir = process.env.DATA_DIR || process.cwd();
   const schemaPath = path.join(rootDir, "prisma/migrations/20260601043216_init/migration.sql");
   if (!fs.existsSync(schemaPath)) { console.log("[DB] No migration file at", schemaPath); return; }
   const schema = fs.readFileSync(schemaPath, "utf8");
 
-  // Execute each statement wrapped in BEGIN/COMMIT to avoid locking issues
   const stmts = schema
     .split(";")
     .map((s) => s.trim())
@@ -71,27 +93,50 @@ async function initSchema(prisma: PrismaClient) {
   }
   console.log("[DB] Schema created.");
 
-  // Import herbs
+  await seedData(prisma);
+}
+
+async function seedData(prisma: PrismaClient) {
+  // Import herbs — always check and fill if missing
+  const rootDir = process.env.DATA_DIR || process.cwd();
   const herbsPath = path.join(rootDir, "prisma/data/herbs.json");
   if (fs.existsSync(herbsPath)) {
-    const herbs = JSON.parse(fs.readFileSync(herbsPath, "utf8"));
-    console.log(`[DB] Importing ${herbs.length} herbs...`);
-    for (const h of herbs) {
-      await prisma.herbReference.upsert({
-        where: { name: h.name },
-        create: {
-          name: h.name, pinyin: h.pinyin || null, category: h.category || null,
-          nature: h.nature || null, taste: h.taste || null, meridian: h.meridian || null,
-          pharmacopoeiaMin: h.pharmacopoeiaMin ?? null, pharmacopoeiaMax: h.pharmacopoeiaMax ?? null,
-          toxicity: h.toxicity || null,
-        },
-        update: {},
-      });
-    }
-    console.log("[DB] Herbs imported.");
+    try {
+      const herbCount = await prisma.herbReference.count();
+      if (herbCount < 100) {
+        const herbs = JSON.parse(fs.readFileSync(herbsPath, "utf8"));
+        console.log(`[DB] Importing ${herbs.length} herbs from 中国药典...`);
+        for (const h of herbs) {
+          await prisma.herbReference.upsert({
+            where: { name: h.name },
+            create: {
+              name: h.name, pinyin: h.pinyin || null, category: h.category || null,
+              nature: h.nature || null, taste: h.taste || null, meridian: h.meridian || null,
+              pharmacopoeiaMin: h.pharmacopoeiaMin ?? null, pharmacopoeiaMax: h.pharmacopoeiaMax ?? null,
+              toxicity: h.toxicity || null,
+            },
+            update: {
+              pinyin: h.pinyin || null, category: h.category || null,
+              nature: h.nature || null, taste: h.taste || null, meridian: h.meridian || null,
+              pharmacopoeiaMin: h.pharmacopoeiaMin ?? null, pharmacopoeiaMax: h.pharmacopoeiaMax ?? null,
+              toxicity: h.toxicity || null,
+            },
+          });
+        }
+        console.log("[DB] Herbs imported.");
+      } else {
+        console.log(`[DB] ${herbCount} herbs already present, skip import.`);
+      }
+    } catch (e) { console.error("[DB] Herb import error:", e); }
   }
 
-  // Default users — use deterministic IDs so JWTs survive Vercel cold starts
+  // Skip user seeding if already done
+  try {
+    const count = await prisma.user.count();
+    if (count > 0) { console.log("[DB] Users already seeded, skip."); return; }
+  } catch { /* table might not exist */ }
+
+  // Default users
   const bcrypt = await import("bcryptjs");
   const hash = (pw: string) => bcrypt.default.hashSync(pw, 10);
   const users = [
@@ -142,18 +187,59 @@ async function initSchema(prisma: PrismaClient) {
     });
   }
   console.log("[DB] Compliance rules seeded.");
+
+  // Seed herb prices
+  const pricesPath = path.join(rootDir, "prisma/data/herb-prices.json");
+  if (fs.existsSync(pricesPath)) {
+    const herbPrices: Record<string, { retailPrice: number; spec: string; origin: string }> = JSON.parse(fs.readFileSync(pricesPath, "utf8"));
+    const entries = Object.entries(herbPrices);
+    let seeded = 0;
+    for (const [name, data] of entries) {
+      const herb = await prisma.herbReference.findUnique({ where: { name } });
+      if (herb) {
+        await prisma.herbPrice.upsert({
+          where: { id: `price-${name}` },
+          update: { retailPrice: data.retailPrice, spec: data.spec, origin: data.origin },
+          create: {
+            id: `price-${name}`,
+            herbId: herb.id,
+            retailPrice: data.retailPrice,
+            wholesalePrice: Math.round(data.retailPrice * 0.65 * 100) / 100,
+            spec: data.spec,
+            origin: data.origin,
+            unit: "g",
+            sourceNote: "广东同仁堂零售参考价 2024-2025",
+          },
+        }).catch(() => { /* skip if duplicate */ });
+        seeded++;
+      }
+    }
+    console.log(`[DB] ${seeded} herb prices seeded.`);
+  }
 }
 
 ensureDbDir();
 
-const _prisma = globalForPrisma.prisma ?? new PrismaClient();
+function createPrismaClient(): PrismaClient {
+  if (isTursoAvailable()) {
+    console.log("[DB] Using Turso (libsql) adapter");
+    const adapter = new PrismaLibSql({
+      url: process.env.TURSO_DATABASE_URL!,
+      authToken: process.env.TURSO_AUTH_TOKEN,
+    });
+    return new PrismaClient({ adapter });
+  }
+
+  // Local SQLite
+  return new PrismaClient();
+}
+
+const _prisma = globalForPrisma.prisma ?? createPrismaClient();
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = _prisma;
 
 function triggerInit() {
   if (!globalForPrisma.initPromise && process.env.DATABASE_URL) {
-    // Synchronous flag prevents any chance of double-entry
     if (globalForPrisma.initStarted) {
-      // Another call is already constructing the promise; spin-wait briefly
       return globalForPrisma.initPromise;
     }
     globalForPrisma.initStarted = true;

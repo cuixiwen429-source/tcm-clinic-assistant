@@ -121,26 +121,26 @@ export default function PatientDetailPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => router.push("/patients")}>
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2 sm:gap-4 min-w-0">
+          <Button variant="ghost" size="icon" className="flex-shrink-0" onClick={() => router.push("/patients")}>
             <ArrowLeft className="h-4 w-4" />
           </Button>
-          <div>
-            <h1 className="text-2xl font-bold">{patient.name}</h1>
-            <p className="text-muted-foreground text-sm">
+          <div className="min-w-0">
+            <h1 className="text-xl sm:text-2xl font-bold truncate">{patient.name}</h1>
+            <p className="text-muted-foreground text-xs sm:text-sm truncate">
               {patient.gender && `${patient.gender} · `}
               {patient.age && `${patient.age}岁 · `}
               {patient.phone || "无手机号"}
             </p>
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-1.5 sm:gap-2 flex-shrink-0">
           <Dialog open={editOpen} onOpenChange={setEditOpen}>
             <DialogTrigger asChild>
-              <Button variant="outline">
-                <Edit className="mr-2 h-4 w-4" />
-                编辑
+              <Button variant="outline" size="sm" className="sm:[&:not([size])]:h-9">
+                <Edit className="sm:mr-2 h-4 w-4" />
+                <span className="hidden sm:inline">编辑</span>
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-full sm:max-w-2xl">
@@ -164,9 +164,9 @@ export default function PatientDetailPage() {
               />
             </DialogContent>
           </Dialog>
-          <Button onClick={() => router.push(`/consultations/new?patientId=${patient.id}`)}>
-            <Plus className="mr-2 h-4 w-4" />
-            新建就诊
+          <Button size="sm" onClick={() => router.push(`/consultations/new?patientId=${patient.id}`)}>
+            <Plus className="sm:mr-2 h-4 w-4" />
+            <span className="hidden sm:inline">新建就诊</span>
           </Button>
         </div>
       </div>
@@ -283,7 +283,8 @@ export default function PatientDetailPage() {
                             className="text-xs text-primary hover:underline"
                             onClick={(e) => {
                               e.stopPropagation();
-                              router.push(`/consultations/${c.id}/ai`);
+                              const isDone = c.status === "FINALIZED" || c.status === "ARCHIVED";
+                              router.push(isDone ? `/consultations/${c.id}` : `/consultations/${c.id}/ai`);
                             }}
                           >
                             进入诊疗 →

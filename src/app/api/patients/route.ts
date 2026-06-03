@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
-import { getValidatedSession } from "@/lib/auth/jwt";
+import { getSession } from "@/lib/auth/jwt";
 
 export async function GET(request: NextRequest) {
-  const session = await getValidatedSession();
+  const session = await getSession();
   if (!session) return NextResponse.json({ error: "未登录" }, { status: 401 });
 
   const { searchParams } = new URL(request.url);
@@ -12,7 +12,17 @@ export async function GET(request: NextRequest) {
   const limit = parseInt(searchParams.get("limit") || "20");
   const skip = (page - 1) * limit;
 
-  const where = q
+  // Data isolation: show patients created by this user, or consulted by this user
+  const baseFilter = session.role === "ADMIN"
+    ? {}
+    : {
+        OR: [
+          { createdBy: session.userId },
+          { consultations: { some: { doctorId: session.userId } } },
+        ],
+      };
+
+  const searchFilter = q
     ? {
         OR: [
           { name: { contains: q } },
@@ -20,6 +30,10 @@ export async function GET(request: NextRequest) {
         ],
       }
     : {};
+
+  const where = {
+    AND: [baseFilter, searchFilter],
+  };
 
   const [patients, total] = await Promise.all([
     prisma.patient.findMany({
@@ -42,7 +56,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await getValidatedSession();
+    const session = await getSession();
     if (!session) return NextResponse.json({ error: "未登录" }, { status: 401 });
 
     const body = await request.json();
@@ -64,6 +78,7 @@ export async function POST(request: NextRequest) {
         constitution: constitution || null,
         chronicDisease: chronicDisease || null,
         notes: notes || null,
+        createdBy: session.userId,
       },
     });
 

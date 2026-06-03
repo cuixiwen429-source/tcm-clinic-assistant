@@ -31,6 +31,42 @@ function NewConsultationContent() {
   const [creatingConsultation, setCreatingConsultation] = useState(false);
   const [autoCreating, setAutoCreating] = useState(!!searchParams.get("patientId"));
 
+  // Auto-save: sync tongue/face data to DB whenever it changes
+  useEffect(() => {
+    if (!store.consultationId) return;
+    if (store.step !== "tongue" && store.step !== "face") return;
+    const body: Record<string, unknown> = { patientId: store.patientId };
+    if (store.tongueImages.length > 0) body.tongueImage = JSON.stringify(store.tongueImages);
+    if (store.tongueAnalysis) body.tongueAnalysis = JSON.stringify(store.tongueAnalysis);
+    if (store.faceImages.length > 0) body.faceImage = JSON.stringify(store.faceImages);
+    if (store.faceAnalysis) body.faceAnalysis = JSON.stringify(store.faceAnalysis);
+    const timer = setTimeout(() => {
+      fetch(`/api/consultations/${store.consultationId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      }).catch(() => {});
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [store.consultationId, store.tongueImages, store.tongueAnalysis, store.faceImages, store.faceAnalysis, store.step, store.patientId]);
+
+  // Auto-save: sync raw text to DB (debounced)
+  useEffect(() => {
+    if (!store.consultationId || store.step !== "transcribe") return;
+    if (!store.rawText.trim()) return;
+    const timer = setTimeout(() => {
+      fetch(`/api/consultations/${store.consultationId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          patientId: store.patientId,
+          rawTranscription: store.rawText,
+        }),
+      }).catch(() => {});
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [store.consultationId, store.rawText, store.step, store.patientId]);
+
   // If patientId is in URL, auto-select and create consultation before showing any step
   const urlPatientId = searchParams.get("patientId");
   useEffect(() => {
@@ -489,30 +525,30 @@ function NewConsultationContent() {
               </Card>
             )}
 
-            <div className="flex justify-between">
-              <Button variant="ghost" onClick={() => store.setStep("patient")}>
+            <div className="flex flex-col sm:flex-row sm:justify-between gap-3">
+              <Button variant="ghost" onClick={() => store.setStep("patient")} className="self-start">
                 返回选择患者
               </Button>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 {analyzed && (
                   <>
-                    <Button variant="outline" onClick={handleAnalyzeTongue} disabled={store.isAnalyzingTongue}>
+                    <Button variant="outline" size="sm" onClick={handleAnalyzeTongue} disabled={store.isAnalyzingTongue}>
                       {store.isAnalyzingTongue ? <Loader2 className="mr-1 h-4 w-4 animate-spin" /> : null}
                       重新分析
                     </Button>
-                    <Button onClick={handleConfirmTongue} className="bg-green-600 hover:bg-green-700">
-                      确认舌象分析，进入面相 <ChevronRight className="ml-1 h-4 w-4" />
+                    <Button size="sm" onClick={handleConfirmTongue} className="bg-green-600 hover:bg-green-700">
+                      确认进入面相 <ChevronRight className="ml-1 h-4 w-4" />
                     </Button>
                   </>
                 )}
                 {!analyzed && store.tongueImages.length > 0 && (
-                  <Button variant="ghost" onClick={() => store.setStep("face")}>
-                    跳过，直接进入面相 <ChevronRight className="ml-1 h-4 w-4" />
+                  <Button variant="ghost" size="sm" onClick={() => store.setStep("face")}>
+                    跳过进入面相 <ChevronRight className="ml-1 h-4 w-4" />
                   </Button>
                 )}
                 {store.tongueImages.length === 0 && (
-                  <Button variant="ghost" onClick={() => store.setStep("face")}>
-                    跳过，直接进入面相 <ChevronRight className="ml-1 h-4 w-4" />
+                  <Button variant="ghost" size="sm" onClick={() => store.setStep("face")}>
+                    跳过进入面相 <ChevronRight className="ml-1 h-4 w-4" />
                   </Button>
                 )}
               </div>
@@ -671,30 +707,30 @@ function NewConsultationContent() {
               </Card>
             )}
 
-            <div className="flex justify-between">
-              <Button variant="ghost" onClick={() => store.setStep("tongue")}>
+            <div className="flex flex-col sm:flex-row sm:justify-between gap-3">
+              <Button variant="ghost" onClick={() => store.setStep("tongue")} className="self-start">
                 返回舌诊
               </Button>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 {analyzed && (
                   <>
-                    <Button variant="outline" onClick={handleAnalyzeFace} disabled={store.isAnalyzingFace}>
+                    <Button variant="outline" size="sm" onClick={handleAnalyzeFace} disabled={store.isAnalyzingFace}>
                       {store.isAnalyzingFace ? <Loader2 className="mr-1 h-4 w-4 animate-spin" /> : null}
                       重新分析
                     </Button>
-                    <Button onClick={handleConfirmFace} className="bg-blue-600 hover:bg-blue-700">
-                      确认面相分析，进入问诊 <ChevronRight className="ml-1 h-4 w-4" />
+                    <Button size="sm" onClick={handleConfirmFace} className="bg-blue-600 hover:bg-blue-700">
+                      确认进入问诊 <ChevronRight className="ml-1 h-4 w-4" />
                     </Button>
                   </>
                 )}
                 {!analyzed && store.faceImages.length > 0 && (
-                  <Button variant="ghost" onClick={() => store.setStep("transcribe")}>
-                    跳过，直接进入问诊 <ChevronRight className="ml-1 h-4 w-4" />
+                  <Button variant="ghost" size="sm" onClick={() => store.setStep("transcribe")}>
+                    跳过进入问诊 <ChevronRight className="ml-1 h-4 w-4" />
                   </Button>
                 )}
                 {store.faceImages.length === 0 && (
-                  <Button variant="ghost" onClick={() => store.setStep("transcribe")}>
-                    跳过，直接进入问诊 <ChevronRight className="ml-1 h-4 w-4" />
+                  <Button variant="ghost" size="sm" onClick={() => store.setStep("transcribe")}>
+                    跳过进入问诊 <ChevronRight className="ml-1 h-4 w-4" />
                   </Button>
                 )}
               </div>
@@ -741,11 +777,11 @@ function NewConsultationContent() {
                 已输入 {store.rawText.length} 字符
               </p>
             </div>
-            <div className="flex justify-between">
-              <Button variant="ghost" onClick={() => store.setStep("face")}>
+            <div className="flex flex-col sm:flex-row sm:justify-between gap-3">
+              <Button variant="ghost" onClick={() => store.setStep("face")} className="self-start">
                 返回面诊
               </Button>
-              <Button onClick={handleTranscribe} disabled={store.isTranscribing}>
+              <Button onClick={handleTranscribe} disabled={store.isTranscribing} className="self-start sm:self-auto">
                 {store.isTranscribing ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -849,11 +885,11 @@ function NewConsultationContent() {
           </div>
         </div>
 
-        <div className="flex justify-between">
-          <Button variant="ghost" onClick={() => store.setStep("transcribe")}>
+        <div className="flex flex-col sm:flex-row sm:justify-between gap-3">
+          <Button variant="ghost" onClick={() => store.setStep("transcribe")} className="self-start">
             返回修改文本
           </Button>
-          <Button onClick={handleConfirmHistory}>
+          <Button onClick={handleConfirmHistory} className="self-start sm:self-auto">
             确认病史，进入AI辨证 <ChevronRight className="ml-1 h-4 w-4" />
           </Button>
         </div>
