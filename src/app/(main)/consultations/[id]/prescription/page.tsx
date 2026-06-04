@@ -611,7 +611,7 @@ export default function PrescriptionPage() {
             </div>
             <div className="space-y-2">
               <Label>剂数</Label>
-              <Input type="number" value={totalDoses} onChange={(e) => setTotalDoses(parseInt(e.target.value) || 7)} />
+              <Input type="number" value={totalDoses} onChange={(e) => { const v = e.target.value; if (v === "") { setTotalDoses(0); } else { const n = parseInt(v); if (!isNaN(n) && n >= 0) setTotalDoses(n); } }} />
             </div>
           </div>
 
