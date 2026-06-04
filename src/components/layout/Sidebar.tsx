@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils/cn";
 import { useAuthStore } from "@/stores/auth-store";
 import {
   LayoutDashboard, Users, Leaf, Shield,
-  Stethoscope, ShieldCheck,
+  Stethoscope, ShieldCheck, ClipboardList,
 } from "lucide-react";
 import { BrandLogo } from "@/components/BrandLogo";
 
@@ -22,6 +22,7 @@ const navItems: NavItem[] = [
   { href: "/patients", label: "患者管理", icon: Users },
   { href: "/consultations/new", label: "新建就诊", icon: Stethoscope },
   { href: "/settings/herbs", label: "药材管理", icon: Leaf, roles: ["ADMIN", "DOCTOR"] },
+  { href: "/prescriptions", label: "处方管理", icon: ClipboardList, roles: ["ADMIN", "DOCTOR"] },
   { href: "/settings/rules", label: "规则配置", icon: Shield, roles: ["ADMIN"] },
   { href: "/admin", label: "系统管理", icon: ShieldCheck, roles: ["ADMIN"] },
 ];
