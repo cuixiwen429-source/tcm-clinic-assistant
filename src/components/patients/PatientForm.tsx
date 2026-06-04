@@ -126,6 +126,7 @@ export function PatientForm({ defaultValues, onSubmit, isLoading }: PatientFormP
           <VoiceInput
             onAppend={(text) => setUnstructuredText((prev) => prev + text)}
             disabled={parsing}
+            compact
           />
         </div>
         <Textarea

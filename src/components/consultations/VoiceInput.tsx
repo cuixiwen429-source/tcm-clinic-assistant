@@ -20,6 +20,8 @@ export interface VoiceInputProps {
   onElapsed?: (elapsed: number) => void;
   /** Report language changes for global recording bar */
   onLangChange?: (lang: string) => void;
+  /** Compact mode: small inline mic button only, no timer/levels/pulse */
+  compact?: boolean;
 }
 
 const LANGS = [
@@ -80,6 +82,7 @@ export function VoiceInput({
   visible = true,
   onElapsed,
   onLangChange,
+  compact = false,
 }: VoiceInputProps) {
   const [listening, setListening] = useState(false);
   const [lang, setLang] = useState<string>(LANGS[0].code);
@@ -290,6 +293,43 @@ export function VoiceInput({
 
   // Hidden mode: suppress UI, recording continues in background
   if (!visible) return null;
+
+  // Compact mode: small inline mic button
+  if (compact) {
+    if (supported === null) {
+      return <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />;
+    }
+    if (!supported) {
+      return <MicOff className="h-4 w-4 text-destructive" />;
+    }
+    if (listening) {
+      return (
+        <button
+          type="button"
+          onClick={stopListening}
+          className="inline-flex items-center gap-1.5 rounded-full bg-red-500 hover:bg-red-600 px-2.5 py-1 text-xs text-white font-medium transition-colors"
+        >
+          <Square className="h-3 w-3 fill-white" />
+          录音中 {formatTime(elapsed)}
+        </button>
+      );
+    }
+    if (processing) {
+      return <Loader2 className="h-4 w-4 animate-spin text-primary" />;
+    }
+    return (
+      <button
+        type="button"
+        onClick={startListening}
+        disabled={disabled}
+        className="inline-flex items-center gap-1 rounded-full border bg-background hover:bg-accent px-2.5 py-1 text-xs font-medium transition-colors disabled:opacity-50"
+      >
+        <Mic className="h-3.5 w-3.5" />
+        录音
+      </button>
+    );
+  }
+
   if (supported === null) {
     return (
       <div className="flex flex-col items-center gap-3 py-6">
