@@ -92,11 +92,12 @@ export function PatientForm({ defaultValues, onSubmit, isLoading }: PatientFormP
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: unstructuredText }),
       });
-      const data = await res.json();
       if (!res.ok) {
+        const data = await res.json().catch(() => ({ error: "AI解析失败" }));
         toast.error(data.error || "AI解析失败");
         return;
       }
+      const data = await res.json();
       // Auto-fill fields
       if (data.name) setValue("name", data.name);
       if (data.gender) setValue("gender", data.gender);
@@ -108,7 +109,8 @@ export function PatientForm({ defaultValues, onSubmit, isLoading }: PatientFormP
       if (data.chronicDisease) setValue("chronicDisease", data.chronicDisease);
       if (data.notes) setValue("notes", data.notes);
       toast.success("AI解析完成，已自动填充表单");
-    } catch {
+    } catch (e) {
+      console.error("AI parse error:", e);
       toast.error("网络错误，请重试");
     } finally {
       setParsing(false);

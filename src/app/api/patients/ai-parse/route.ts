@@ -3,18 +3,20 @@ import { getSession } from "@/lib/auth/jwt";
 import { callDeepSeekJson } from "@/lib/ai/client";
 import { z } from "zod";
 
+// Coerce all values to string — DeepSeek may return numbers for age etc.
+const coerceString = z.union([z.string(), z.number(), z.boolean()]).transform((v) => String(v));
 const patientParseSchema = z.object({
   name: z.string().optional(),
   gender: z.string().optional(),
-  age: z.string().optional(),
-  phone: z.string().optional(),
+  age: coerceString.optional(),
+  phone: coerceString.optional(),
   address: z.string().optional(),
   allergies: z.string().optional(),
   constitution: z.string().optional(),
   chronicDisease: z.string().optional(),
   notes: z.string().optional(),
   _raw: z.string().optional(),
-});
+}).passthrough();
 
 const SYSTEM_PROMPT = `你是一个中医诊所的患者信息录入助手。请从非结构化的医患对话或描述文本中，提取患者的基本信息。
 
