@@ -4,13 +4,14 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils/cn";
-import { Pill, LayoutDashboard, History, LogOut, Menu, X } from "lucide-react";
+import { Pill, LayoutDashboard, History, LogOut, Menu, X, ScanLine } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 
 const NAV_ITEMS = [
   { href: "/pharmacy/dashboard", label: "工作台", icon: LayoutDashboard },
   { href: "/pharmacy/herbs", label: "药材价格", icon: Pill },
+  { href: "/pharmacy/prescriptions/recognize", label: "处方识别", icon: ScanLine },
   { href: "/pharmacy/history", label: "历史记录", icon: History },
 ];
 
