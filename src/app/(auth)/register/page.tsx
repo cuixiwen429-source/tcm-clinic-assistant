@@ -31,7 +31,9 @@ export default function RegisterPage() {
   const searchDoctors = useCallback(async (q: string) => {
     setSearchingDoctors(true);
     try {
-      const res = await fetch(`/api/doctors?q=${encodeURIComponent(q)}&limit=10`);
+      const params = new URLSearchParams({ limit: "10" });
+      if (q.trim()) params.set("q", q.trim());
+      const res = await fetch(`/api/doctors?${params.toString()}`);
       if (res.ok) {
         const data = await res.json();
         setDoctors(data.doctors);
@@ -39,6 +41,11 @@ export default function RegisterPage() {
     } catch { /* ignore */ }
     finally { setSearchingDoctors(false); }
   }, []);
+
+  // Auto-load doctors on input focus
+  const handleDoctorInputFocus = useCallback(() => {
+    if (doctors.length === 0) searchDoctors("");
+  }, [doctors.length, searchDoctors]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -193,9 +200,10 @@ export default function RegisterPage() {
                     <div className="relative">
                       <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                       <Input
-                        placeholder="搜索执业药师姓名..."
+                        placeholder="点击输入框查看已注册医师，或输入姓名搜索..."
                         value={doctorSearch}
                         onChange={(e) => setDoctorSearch(e.target.value)}
+                        onFocus={handleDoctorInputFocus}
                         className="pl-9 border-primary/15"
                       />
                     </div>

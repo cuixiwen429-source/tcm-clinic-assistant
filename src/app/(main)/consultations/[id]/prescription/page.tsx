@@ -561,6 +561,43 @@ export default function PrescriptionPage() {
         </CardContent>
       </Card>
 
+      {/* Diagnosis & Symptoms from Consultation */}
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-base sm:text-lg">诊断与症状</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div>
+              <Label className="text-xs text-muted-foreground">主诉</Label>
+              <p className="text-sm font-medium">{(consultation?.chiefComplaint as string) || "未填写"}</p>
+            </div>
+            <div>
+              <Label className="text-xs text-muted-foreground">临床诊断</Label>
+              <p className="text-sm font-medium text-primary">{(consultation?.doctorFinalPattern as string) || "未确认"}</p>
+            </div>
+          </div>
+          <div>
+            <Label className="text-xs text-muted-foreground">现病史</Label>
+            <p className="text-sm">{(consultation?.presentIllness as string) || "未填写"}</p>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-3">
+            <div>
+              <Label className="text-xs text-muted-foreground">体质</Label>
+              <p className="text-sm">{((consultation?.patient as Record<string, unknown>)?.constitution as string) || ((consultation as Record<string, unknown>)?.constitution as string) || "-"}</p>
+            </div>
+            <div>
+              <Label className="text-xs text-muted-foreground">过敏史</Label>
+              <p className="text-sm text-red-600">{((consultation?.patient as Record<string, unknown>)?.allergies as string) || "-"}</p>
+            </div>
+            <div>
+              <Label className="text-xs text-muted-foreground">慢性病史</Label>
+              <p className="text-sm">{((consultation?.patient as Record<string, unknown>)?.chronicDisease as string) || "-"}</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Formula Info */}
       <Card>
         <CardHeader className="pb-3">
@@ -635,7 +672,11 @@ export default function PrescriptionPage() {
           <div className="min-w-0">
             <h1 className="text-lg sm:text-2xl font-bold">处方编辑</h1>
             <p className="text-muted-foreground text-xs sm:text-sm truncate">
-              患者：{patient.name as string} · 版本 v{(currentVersion?.version as number) || 1}
+              患者：{patient.name as string}
+              {((patient as Record<string, unknown>)?._count as Record<string, number>)?.consultations > 1 && (
+                <Badge variant="outline" className="ml-1.5 border-amber-500 text-amber-600 text-[10px] align-middle">复诊</Badge>
+              )}
+              {" · "}版本 v{(currentVersion?.version as number) || 1}
             </p>
           </div>
         </div>

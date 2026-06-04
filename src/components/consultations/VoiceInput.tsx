@@ -100,10 +100,12 @@ export function VoiceInput({
   const onRecordingChangeRef = useRef(onRecordingChange);
   const onAudioLevelRef = useRef(onAudioLevel);
   const onElapsedRef = useRef(onElapsed);
+  const onLangChangeRef = useRef(onLangChange);
   onAppendRef.current = onAppend;
   onRecordingChangeRef.current = onRecordingChange;
   onAudioLevelRef.current = onAudioLevel;
   onElapsedRef.current = onElapsed;
+  onLangChangeRef.current = onLangChange;
 
   const notifyRecording = useCallback((rec: boolean) => {
     onRecordingChangeRef.current?.(rec);
@@ -113,8 +115,8 @@ export function VoiceInput({
     onAudioLevelRef.current?.(lvl);
   }, []);
 
-  // Sync language to store
-  useEffect(() => { onLangChange?.(lang); }, [lang, onLangChange]);
+  // Sync language to store (use ref to avoid re-fire on callback identity change)
+  useEffect(() => { onLangChangeRef.current?.(lang); }, [lang]);
 
   useEffect(() => {
     const ok =

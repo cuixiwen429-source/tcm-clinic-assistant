@@ -15,7 +15,9 @@ export async function GET(
   const consultation = await prisma.consultation.findFirst({
     where: consultationAccessWhere(session, id),
     include: {
-      patient: true,
+      patient: {
+        include: { _count: { select: { consultations: true } } },
+      },
       doctor: { select: { name: true } },
       prescriptions: { orderBy: { version: "desc" } },
       riskPredictions: { orderBy: { createdAt: "desc" }, take: 1 },

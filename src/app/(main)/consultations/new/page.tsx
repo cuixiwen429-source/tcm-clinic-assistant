@@ -13,7 +13,7 @@ import { AIDisclaimer } from "@/components/shared/AIDisclaimer";
 import { PatientForm, PatientFormValues } from "@/components/patients/PatientForm";
 import { useConsultationStore } from "@/stores/consultation-store";
 import { toast } from "sonner";
-import { Search, Plus, User, Loader2, ChevronRight, ArrowRight } from "lucide-react";
+import { Search, Plus, User, Loader2, ChevronRight, ArrowRight, ChevronDown, ChevronUp, BookOpen } from "lucide-react";
 import { VoiceInput } from "@/components/consultations/VoiceInput";
 import { GlobalRecordingBar } from "@/components/consultations/GlobalRecordingBar";
 import { ImageUpload } from "@/components/consultations/ImageUpload";
@@ -59,6 +59,9 @@ function NewConsultationContent() {
   const [autoCreating, setAutoCreating] = useState(
     !!searchParams.get("patientId") || !!searchParams.get("consultationId")
   );
+
+  // TCM guidance accordion
+  const [guidanceOpen, setGuidanceOpen] = useState(false);
 
   // Auto-save: sync tongue/face data to DB whenever it changes
   useEffect(() => {
@@ -247,7 +250,8 @@ function NewConsultationContent() {
       setCreatingPatient(false);
       // Create consultation
       await createConsultation(patient.id);
-    } catch {
+    } catch (e) {
+      console.error("handleCreatePatient error:", e);
       toast.error("网络错误");
     } finally {
       setCreatingPatient(false);
@@ -270,7 +274,8 @@ function NewConsultationContent() {
       const consultation = await res.json();
       store.setConsultationId(consultation.id);
       store.setStep("transcribe");
-    } catch {
+    } catch (e) {
+      console.error("createConsultation error:", e);
       toast.error("网络错误");
     } finally {
       setCreatingConsultation(false);
@@ -511,6 +516,60 @@ function NewConsultationContent() {
             <p className="text-muted-foreground">第2步：录入问诊内容</p>
           </div>
           <AIDisclaimer />
+
+          {/* TCM Consultation Guidance */}
+          <Card className="border-primary/20 bg-gradient-to-br from-primary/3 to-accent/30">
+            <button
+              type="button"
+              onClick={() => setGuidanceOpen(!guidanceOpen)}
+              className="w-full flex items-center justify-between px-4 py-3"
+            >
+              <div className="flex items-center gap-2">
+                <BookOpen className="h-4 w-4 text-primary" />
+                <span className="text-sm font-medium text-primary">四诊提问引导（临证参考）</span>
+              </div>
+              {guidanceOpen ? <ChevronUp className="h-4 w-4 text-muted-foreground" /> : <ChevronDown className="h-4 w-4 text-muted-foreground" />}
+            </button>
+            {guidanceOpen && (
+              <div className="px-4 pb-4 space-y-3 text-sm">
+                <div>
+                  <p className="font-semibold text-foreground mb-1">一、八纲阴阳（起病诱因与体质）</p>
+                  <ul className="list-disc list-inside space-y-0.5 text-muted-foreground pl-2">
+                    <li>何时起病？起因（外感/内伤/情志/饮食/劳逸）？</li>
+                    <li>平素畏寒还是畏热？手足温凉？</li>
+                    <li>易汗出否？自汗/盗汗？</li>
+                    <li>面色偏红/偏白？舌脉初步印象？</li>
+                  </ul>
+                </div>
+                <div>
+                  <p className="font-semibold text-foreground mb-1">二、六经辨证（循经问诊）</p>
+                  <ul className="list-disc list-inside space-y-0.5 text-muted-foreground pl-2">
+                    <li><span className="text-foreground font-medium">太阳：</span>头项强痛？恶风恶寒？发热汗出？鼻塞流涕？身痛？</li>
+                    <li><span className="text-foreground font-medium">阳明：</span>身大热？大汗出？口渴喜冷饮？大便干结难解？腹胀满痛？</li>
+                    <li><span className="text-foreground font-medium">少阳：</span>寒热往来？口苦咽干？胸胁苦满？默默不欲饮食？心烦喜呕？</li>
+                    <li><span className="text-foreground font-medium">太阴：</span>腹满而吐？食不下？自利益甚？时腹自痛？喜温喜按？</li>
+                    <li><span className="text-foreground font-medium">少阴：</span>脉微细、但欲寐？四肢厥冷？下利清谷？畏寒蜷卧？</li>
+                    <li><span className="text-foreground font-medium">厥阴：</span>消渴？气上撞心、心中疼热？饥不欲食？手足厥逆与发热交替？</li>
+                  </ul>
+                </div>
+                <div>
+                  <p className="font-semibold text-foreground mb-1">三、饮食二便眠痛与情志</p>
+                  <ul className="list-disc list-inside space-y-0.5 text-muted-foreground pl-2">
+                    <li>饮食：食欲如何？喜冷喜热？口干口渴？口味（苦/淡/甜/黏/酸）？</li>
+                    <li>二便：大便（干/溏/黏/秘/血）？小便（清长/短赤/频数/涩痛）？</li>
+                    <li>睡眠：入睡困难？多梦易醒？昼夜颠倒？</li>
+                    <li>疼痛：部位？性质（刺痛/胀痛/隐痛/冷痛/灼痛）？喜按拒按？</li>
+                    <li>情志：心烦易怒？抑郁寡欢？思虑过度？惊恐不安？</li>
+                    <li>妇人：月经（期/量/色/质/痛）？带下？孕产？</li>
+                  </ul>
+                </div>
+                <p className="text-xs text-muted-foreground/60 border-t pt-2 mt-1">
+                  以上为伤寒六经辨证问诊提纲，临证可据病情灵活增删，不必全询。问诊完毕后切换至&quot;舌象采集&quot;步骤继续四诊。
+                </p>
+              </div>
+            )}
+          </Card>
+
           <Card>
             <CardHeader>
               <CardTitle className="text-lg">问诊转写文本</CardTitle>

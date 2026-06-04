@@ -131,7 +131,12 @@ export default function PatientDetailPage() {
             <ArrowLeft className="h-4 w-4" />
           </Button>
           <div className="min-w-0">
-            <h1 className="text-xl sm:text-2xl font-bold truncate">{patient.name}</h1>
+            <h1 className="text-xl sm:text-2xl font-bold truncate">
+              {patient.name}
+              {patient.consultations.length > 1 && (
+                <Badge variant="outline" className="ml-2 border-amber-500 text-amber-600 align-middle">复诊</Badge>
+              )}
+            </h1>
             <p className="text-muted-foreground text-xs sm:text-sm truncate">
               {patient.gender && `${patient.gender} · `}
               {patient.age && `${patient.age}岁 · `}
