@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -99,7 +98,7 @@ export function PrescriptionRecognizer({ apiEndpoint }: PrescriptionRecognizerPr
             />
           </CardTitle>
           <CardDescription className="text-xs">
-            口述或输入处方内容，如："小柴胡汤加减，柴胡12克，黄芩9克，半夏9克，党参9克，炙甘草6克，生姜9克，大枣4枚"
+            口述或输入处方内容，如：小柴胡汤加减，柴胡12克，黄芩9克，半夏9克，党参9克，炙甘草6克，生姜9克，大枣4枚
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
