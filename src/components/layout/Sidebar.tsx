@@ -66,7 +66,13 @@ export function Sidebar({ onNavClick }: SidebarProps) {
       <nav className="flex flex-col gap-0.5 p-2 mt-1">
         {filteredItems.map((item) => {
           const Icon = item.icon;
-          const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+          const isExact = pathname === item.href;
+          const isChild = pathname.startsWith(item.href + "/");
+          // Don't highlight parent if a more specific sibling nav item matches (e.g. /prescriptions vs /prescriptions/recognize)
+          const overridden = isChild && filteredItems.some(
+            (other) => other.href !== item.href && other.href.startsWith(item.href + "/") && (pathname === other.href || pathname.startsWith(other.href + "/"))
+          );
+          const isActive = isExact || (isChild && !overridden);
           return (
             <Link
               key={item.href}
