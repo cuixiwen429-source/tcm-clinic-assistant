@@ -15,23 +15,33 @@ const patientParseSchema = z.object({
   constitution: z.string().optional(),
   chronicDisease: z.string().optional(),
   notes: z.string().optional(),
-  _raw: z.string().optional(),
 }).passthrough();
 
-const SYSTEM_PROMPT = `你是一个中医诊所的患者信息录入助手。请从非结构化的医患对话或描述文本中，提取患者的基本信息。
+const SYSTEM_PROMPT = `你是一个中医诊所的患者信息录入助手。从用户输入的文本中提取患者信息，严格按照下面的JSON格式输出。
+
+你必须输出一个JSON对象，包含以下字段（未提及的字段设为空字符串""）：
+
+{
+  "name": "患者姓名",
+  "gender": "男或女",
+  "age": "年龄数字",
+  "phone": "手机号",
+  "address": "地址",
+  "allergies": "过敏史",
+  "constitution": "中医体质类型",
+  "chronicDisease": "慢性病史",
+  "notes": "备注"
+}
 
 规则：
-1. 只提取明确提到的信息，不要猜测或编造
-2. 性别：只返回"男"或"女"
-3. 年龄：返回数字字符串，如"35"
-4. 手机号：中国大陆11位手机号，或文本中明确提到的电话号码
-5. 过敏史：对药物、食物等的过敏信息
-6. 基础病史：慢性病如高血压、糖尿病等
-7. 体质类型：中医体质分类如气虚质、阳虚质、湿热质等
-8. 地址：居住地址
-9. 备注：其他可能有用的信息
+1. 只提取明确提到的信息，未提及的字段返回空字符串""
+2. 性别只返回"男"或"女"，无法判断返回""
+3. 年龄、手机号也以字符串形式返回（如"35"、"13800138000"）
+4. 过敏史包括药物、食物过敏
+5. 体质类型如：气虚质、阳虚质、阴虚质、湿热质、痰湿质、血瘀质、气郁质、特禀质、平和质
+6. 所有字段都必须存在，即使为空也要返回空字符串
 
-请返回JSON格式数据。`;
+重要：必须严格返回上述JSON格式，每个字段都必须包含，未提及的字段值设为空字符串""。`;
 
 export async function POST(request: NextRequest) {
   const session = await getSession();
