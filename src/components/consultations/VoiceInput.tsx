@@ -5,9 +5,21 @@ import { Button } from "@/components/ui/button";
 import { Mic, MicOff, Square, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
-interface VoiceInputProps {
+export interface VoiceInputProps {
   onAppend: (text: string) => void;
   disabled?: boolean;
+  /** Report recording state changes for global recording bar */
+  onRecordingChange?: (recording: boolean) => void;
+  /** Expose audio level for external visualization */
+  onAudioLevel?: (level: number) => void;
+  /** Expose stop function so external components can stop recording */
+  stopRef?: React.MutableRefObject<(() => void) | null>;
+  /** Hide UI when not the active step (recording continues) */
+  visible?: boolean;
+  /** Report elapsed time for global recording bar */
+  onElapsed?: (elapsed: number) => void;
+  /** Report language changes for global recording bar */
+  onLangChange?: (lang: string) => void;
 }
 
 const LANGS = [
@@ -25,36 +37,31 @@ function formatTime(seconds: number): string {
 function encodeWav(pcm: Int16Array, sampleRate: number): ArrayBuffer {
   const numChannels = 1;
   const bitsPerSample = 16;
-  const byteRate = sampleRate * numChannels * bitsPerSample / 8;
-  const blockAlign = numChannels * bitsPerSample / 8;
+  const byteRate = (sampleRate * numChannels * bitsPerSample) / 8;
+  const blockAlign = (numChannels * bitsPerSample) / 8;
   const dataSize = pcm.length * 2;
   const headerSize = 44;
   const buf = new ArrayBuffer(headerSize + dataSize);
   const view = new DataView(buf);
 
-  // RIFF header
   writeString(view, 0, "RIFF");
   view.setUint32(4, 36 + dataSize, true);
   writeString(view, 8, "WAVE");
-  // fmt chunk
   writeString(view, 12, "fmt ");
   view.setUint32(16, 16, true);
-  view.setUint16(20, 1, true);           // PCM
+  view.setUint16(20, 1, true);
   view.setUint16(22, numChannels, true);
   view.setUint32(24, sampleRate, true);
   view.setUint32(28, byteRate, true);
   view.setUint16(32, blockAlign, true);
   view.setUint16(34, bitsPerSample, true);
-  // data chunk
   writeString(view, 36, "data");
   view.setUint32(40, dataSize, true);
 
-  // PCM samples
   const pcmView = new DataView(buf, 44);
   for (let i = 0; i < pcm.length; i++) {
     pcmView.setInt16(i * 2, pcm[i], true);
   }
-
   return buf;
 }
 
@@ -64,7 +71,16 @@ function writeString(view: DataView, offset: number, str: string) {
   }
 }
 
-export function VoiceInput({ onAppend, disabled }: VoiceInputProps) {
+export function VoiceInput({
+  onAppend,
+  disabled,
+  onRecordingChange,
+  onAudioLevel,
+  stopRef,
+  visible = true,
+  onElapsed,
+  onLangChange,
+}: VoiceInputProps) {
   const [listening, setListening] = useState(false);
   const [lang, setLang] = useState<string>(LANGS[0].code);
   const [supported, setSupported] = useState<boolean | null>(null);
@@ -81,22 +97,52 @@ export function VoiceInput({ onAppend, disabled }: VoiceInputProps) {
   const levelRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const startTimeRef = useRef(0);
   const onAppendRef = useRef(onAppend);
+  const onRecordingChangeRef = useRef(onRecordingChange);
+  const onAudioLevelRef = useRef(onAudioLevel);
+  const onElapsedRef = useRef(onElapsed);
   onAppendRef.current = onAppend;
+  onRecordingChangeRef.current = onRecordingChange;
+  onAudioLevelRef.current = onAudioLevel;
+  onElapsedRef.current = onElapsed;
+
+  const notifyRecording = useCallback((rec: boolean) => {
+    onRecordingChangeRef.current?.(rec);
+  }, []);
+
+  const notifyLevel = useCallback((lvl: number) => {
+    onAudioLevelRef.current?.(lvl);
+  }, []);
+
+  // Sync language to store
+  useEffect(() => { onLangChange?.(lang); }, [lang, onLangChange]);
 
   useEffect(() => {
-    const ok = typeof navigator !== "undefined" &&
-      !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+    const ok =
+      typeof navigator !== "undefined" &&
+      !!navigator.mediaDevices?.getUserMedia;
     setSupported(ok);
   }, []);
 
   const cleanup = useCallback(() => {
-    if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
-    if (levelRef.current) { clearInterval(levelRef.current); levelRef.current = null; }
-    try { processorRef.current?.disconnect(); } catch { /* */ }
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+    if (levelRef.current) {
+      clearInterval(levelRef.current);
+      levelRef.current = null;
+    }
+    try {
+      processorRef.current?.disconnect();
+    } catch {}
     processorRef.current = null;
-    try { ctxRef.current?.close(); } catch { /* */ }
+    try {
+      ctxRef.current?.close();
+    } catch {}
     ctxRef.current = null;
-    try { streamRef.current?.getTracks().forEach((t) => t.stop()); } catch { /* */ }
+    try {
+      streamRef.current?.getTracks().forEach((t) => t.stop());
+    } catch {}
     streamRef.current = null;
     chunksRef.current = [];
     sampleCountRef.current = 0;
@@ -120,13 +166,15 @@ export function VoiceInput({ onAppend, disabled }: VoiceInputProps) {
     form.set("file", blob, "recording.wav");
     form.set("lang", lang);
 
-    const res = await fetch("/api/voice/recognize?lang=" + encodeURIComponent(lang), {
-      method: "POST",
-      body: form,
-    });
+    const res = await fetch(
+      "/api/voice/recognize?lang=" + encodeURIComponent(lang),
+      { method: "POST", body: form }
+    );
 
     if (!res.ok) {
-      const err = await res.json().catch(() => ({ error: "语音识别失败" }));
+      const err = await res
+        .json()
+        .catch(() => ({ error: "语音识别失败" }));
       throw new Error(err.error || "语音识别失败");
     }
 
@@ -137,20 +185,32 @@ export function VoiceInput({ onAppend, disabled }: VoiceInputProps) {
   }, [lang]);
 
   const stopListening = useCallback(async () => {
-    // Stop audio capture first
-    try { processorRef.current?.disconnect(); } catch { /* */ }
+    try {
+      processorRef.current?.disconnect();
+    } catch {}
     processorRef.current = null;
-    try { ctxRef.current?.close(); } catch { /* */ }
+    try {
+      ctxRef.current?.close();
+    } catch {}
     ctxRef.current = null;
-    try { streamRef.current?.getTracks().forEach((t) => t.stop()); } catch { /* */ }
+    try {
+      streamRef.current?.getTracks().forEach((t) => t.stop());
+    } catch {}
     streamRef.current = null;
-    if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
-    if (levelRef.current) { clearInterval(levelRef.current); levelRef.current = null; }
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+    if (levelRef.current) {
+      clearInterval(levelRef.current);
+      levelRef.current = null;
+    }
     setListening(false);
+    notifyRecording(false);
     setElapsed(0);
     setLevel(0);
+    notifyLevel(0);
 
-    // Send captured audio to ASR
     if (chunksRef.current.length > 0 && sampleCountRef.current > 8000) {
       setProcessing(true);
       try {
@@ -164,7 +224,7 @@ export function VoiceInput({ onAppend, disabled }: VoiceInputProps) {
 
     chunksRef.current = [];
     sampleCountRef.current = 0;
-  }, [sendToASR]);
+  }, [sendToASR, notifyRecording, notifyLevel]);
 
   const startListening = useCallback(async () => {
     try {
@@ -195,10 +255,11 @@ export function VoiceInput({ onAppend, disabled }: VoiceInputProps) {
         chunksRef.current.push(pcm);
         sampleCountRef.current += input.length;
 
-        // Calculate audio level
         let sum = 0;
         for (let i = 0; i < input.length; i++) sum += Math.abs(input[i]);
-        setLevel(Math.min(1, (sum / input.length) * 5));
+        const lvl = Math.min(1, (sum / input.length) * 5);
+        setLevel(lvl);
+        notifyLevel(lvl);
       };
 
       source.connect(processor);
@@ -206,78 +267,151 @@ export function VoiceInput({ onAppend, disabled }: VoiceInputProps) {
 
       startTimeRef.current = Date.now();
       timerRef.current = setInterval(() => {
-        setElapsed((Date.now() - startTimeRef.current) / 1000);
+        const secs = (Date.now() - startTimeRef.current) / 1000;
+        setElapsed(secs);
+        onElapsedRef.current?.(secs);
       }, 100);
 
       setListening(true);
+      notifyRecording(true);
     } catch {
       toast.error("无法访问麦克风，请检查浏览器权限");
     }
-  }, []);
+  }, [notifyRecording, notifyLevel]);
 
-  useEffect(() => () => {
-    cleanup();
-  }, [cleanup]);
+  useEffect(() => () => cleanup(), [cleanup]);
 
+  // Expose stop function for global recording bar
+  useEffect(() => {
+    if (stopRef) stopRef.current = stopListening;
+  }, [stopRef, stopListening]);
+
+  // Hidden mode: suppress UI, recording continues in background
+  if (!visible) return null;
   if (supported === null) {
-    return <Button variant="outline" size="sm" disabled><MicOff className="h-4 w-4 mr-1" />检测中…</Button>;
+    return (
+      <div className="flex flex-col items-center gap-3 py-6">
+        <div className="w-24 h-24 rounded-full bg-muted flex items-center justify-center">
+          <Loader2 className="h-10 w-10 animate-spin text-muted-foreground" />
+        </div>
+        <p className="text-sm text-muted-foreground">检测麦克风…</p>
+      </div>
+    );
   }
   if (!supported) {
-    return <Button variant="outline" size="sm" disabled><MicOff className="h-4 w-4 mr-1" />不支持</Button>;
+    return (
+      <div className="flex flex-col items-center gap-3 py-6">
+        <div className="w-24 h-24 rounded-full bg-destructive/10 flex items-center justify-center">
+          <MicOff className="h-10 w-10 text-destructive" />
+        </div>
+        <p className="text-sm text-destructive">不支持麦克风</p>
+      </div>
+    );
   }
 
   return (
-    <div className="flex items-center gap-2">
-      {/* Language selector */}
-      <div className="flex rounded-md border border-input bg-background overflow-hidden flex-shrink-0">
+    <div className="flex flex-col items-center gap-4 py-4">
+      {/* Language selector — compact row above the big button */}
+      <div className="flex rounded-lg border border-input bg-background overflow-hidden shadow-sm">
         {LANGS.map((l) => (
           <button
             key={l.code}
             type="button"
             disabled={listening || processing || disabled}
             onClick={() => setLang(l.code)}
-            className={`px-2 py-1 text-xs transition-colors border-r last:border-r-0 ${
-              lang === l.code ? "bg-primary text-primary-foreground" : "hover:bg-accent text-muted-foreground"
-            } ${(listening || processing || disabled) ? "opacity-50 cursor-not-allowed" : ""}`}
+            className={`px-3 py-1.5 text-sm font-medium transition-colors border-r last:border-r-0 ${
+              lang === l.code
+                ? "bg-primary text-primary-foreground"
+                : "hover:bg-accent text-muted-foreground"
+            } ${listening || processing || disabled ? "opacity-50 cursor-not-allowed" : ""}`}
           >
-            <span className="hidden sm:inline">{l.label}</span>
-            <span className="sm:hidden">{l.short}</span>
+            {l.label}
           </button>
         ))}
       </div>
 
-      {/* Recording indicator */}
+      {/* Main recording area */}
       {listening ? (
-        <div className="flex items-center gap-2 rounded-md border border-red-200 bg-red-50 px-3 py-1.5">
-          <div className="flex items-end gap-0.5 h-5">
-            {[0.2, 0.4, 0.6, 0.8, 1.0].map((t, i) => (
+        <div className="flex flex-col items-center gap-4">
+          {/* Big red recording button with ripple */}
+          <div className="relative">
+            {/* Ripple rings */}
+            <div className="absolute inset-0 w-28 h-28 -translate-x-2 -translate-y-2">
+              <div className="w-28 h-28 rounded-full bg-red-500/20 animate-[ping_1.5s_ease-in-out_infinite]" />
+              <div className="absolute inset-0 w-28 h-28 rounded-full bg-red-400/15 animate-[ping_2s_ease-in-out_infinite_0.3s]" />
+            </div>
+            <button
+              type="button"
+              onClick={stopListening}
+              className="relative w-20 h-20 rounded-full bg-red-500 hover:bg-red-600 flex items-center justify-center shadow-lg shadow-red-500/40 transition-transform active:scale-95"
+            >
+              <Square className="h-8 w-8 text-white" />
+            </button>
+          </div>
+
+          {/* Audio level bars — taller visualization */}
+          <div className="flex items-end gap-1 h-12">
+            {[0.15, 0.3, 0.5, 0.65, 0.85, 1.0].map((t, i) => (
               <div
                 key={i}
-                className="w-1 rounded-full transition-all duration-100"
+                className="w-2 rounded-full transition-all duration-75"
                 style={{
-                  height: `${8 + (level > t ? 12 : 0)}px`,
-                  backgroundColor: level > t ? "#ef4444" : "#fca5a5",
+                  height: `${6 + (level > t ? 30 : 6)}px`,
+                  backgroundColor:
+                    level > t
+                      ? level > 0.7
+                        ? i > 3
+                          ? "#ef4444"
+                          : "#f97316"
+                        : "#f59e0b"
+                      : "#d1d5db",
                 }}
               />
             ))}
           </div>
-          <span className="text-sm font-mono font-medium text-red-600 tabular-nums min-w-[40px]">
+
+          {/* Timer — large prominent display */}
+          <div className="text-3xl font-mono font-bold text-red-600 tabular-nums tracking-wider">
             {formatTime(elapsed)}
-          </span>
-          <Button variant="ghost" size="icon" className="h-7 w-7 text-red-600 hover:bg-red-100" onClick={stopListening}>
-            <Square className="h-4 w-4" />
-          </Button>
+          </div>
+
+          <p className="text-sm text-muted-foreground">点击红色按钮停止录音</p>
         </div>
       ) : processing ? (
-        <Button variant="outline" size="sm" disabled>
-          <Loader2 className="h-4 w-4 mr-1 animate-spin" />
-          <span className="hidden sm:inline">识别中…</span>
-        </Button>
+        <div className="flex flex-col items-center gap-4">
+          <div className="relative w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center">
+            <Loader2 className="h-10 w-10 animate-spin text-primary" />
+          </div>
+          <div className="text-xl font-semibold text-primary animate-pulse">
+            识别中…
+          </div>
+        </div>
       ) : (
-        <Button variant="outline" size="sm" onClick={startListening} disabled={disabled}>
-          <Mic className="h-4 w-4 mr-1" />
-          <span className="hidden sm:inline">语音输入</span>
-        </Button>
+        <div className="flex flex-col items-center gap-4">
+          {/* Large idle mic button with breathing pulse */}
+          <div className="relative">
+            <div className="absolute inset-0 w-24 h-24 -translate-x-4 -translate-y-4">
+              <div className="w-24 h-24 rounded-full bg-primary/10 animate-[ping_3s_ease-in-out_infinite]" />
+              <div className="absolute inset-0 w-24 h-24 rounded-full bg-primary/5 animate-[ping_3.5s_ease-in-out_infinite_0.5s]" />
+            </div>
+            <button
+              type="button"
+              onClick={startListening}
+              disabled={disabled}
+              className="relative w-20 h-20 rounded-full bg-gradient-to-br from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 flex items-center justify-center shadow-lg shadow-primary/30 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <Mic className="h-10 w-10 text-primary-foreground" />
+            </button>
+          </div>
+          <div className="text-center">
+            <p className="text-lg font-semibold text-foreground">
+              点击开始录音
+            </p>
+            <p className="text-sm text-muted-foreground mt-1">
+              使用普通话/广东话进行医患对话录音
+            </p>
+          </div>
+        </div>
       )}
     </div>
   );

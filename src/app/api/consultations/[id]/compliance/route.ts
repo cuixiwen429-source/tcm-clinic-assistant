@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
 import { getSession } from "@/lib/auth/jwt";
+import { consultationAccessWhere } from "@/lib/auth/access";
 
 export async function POST(
   request: NextRequest,
@@ -14,16 +15,20 @@ export async function POST(
   const prescriptionId = body.prescriptionId as string | undefined;
   const herbs = body.herbs as Array<{ name: string; dose: number }> | undefined;
 
+  const consultation = await prisma.consultation.findFirst({
+    where: consultationAccessWhere(session, id),
+    include: { patient: true },
+  });
+
+  if (!consultation) {
+    return NextResponse.json({ error: "就诊记录不存在" }, { status: 404 });
+  }
+
   if (!herbs || !Array.isArray(herbs) || herbs.length === 0) {
     return NextResponse.json({ checks: [] });
   }
 
-  const consultation = await prisma.consultation.findUnique({
-    where: { id },
-    include: { patient: true },
-  });
-
-  const patient = consultation?.patient;
+  const patient = consultation.patient;
   const herbNames = herbs.map((h) => h.name);
   const checks: Array<{
     checkType: string;
@@ -105,6 +110,14 @@ export async function POST(
 
   // Save checks to DB if prescriptionId provided
   if (prescriptionId) {
+    const prescription = await prisma.prescription.findFirst({
+      where: { id: prescriptionId, consultationId: id },
+      select: { id: true },
+    });
+    if (!prescription) {
+      return NextResponse.json({ error: "处方不存在" }, { status: 404 });
+    }
+
     await prisma.complianceCheck.deleteMany({ where: { prescriptionId } }).catch(() => {});
     for (const check of checks) {
       await prisma.complianceCheck.create({

@@ -22,6 +22,8 @@ model User {
   editedPrescriptions Prescription[] @relation("PrescriptionEditor")
   createdPatients   Patient[]
   auditLogs     AuditLog[]
+  pharmacyBindings PharmacyBinding[] @relation("PharmacyBindings")
+  doctorBindings   PharmacyBinding[] @relation("PharmacyDoctors")
 }
 
 model Patient {
@@ -67,6 +69,7 @@ model Consultation {
   tongueAnalysis  String?
   faceAnalysis    String?
   status             String    @default("DRAFT")
+  pharmacyId         String?
   archivedAt         DateTime?
   createdAt          DateTime  @default(now())
   updatedAt          DateTime  @updatedAt
@@ -212,4 +215,16 @@ model AuditLog {
   createdAt  DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id])
+}
+
+model PharmacyBinding {
+  id         String   @id @default(cuid())
+  pharmacyId String
+  doctorId   String
+  createdAt  DateTime @default(now())
+
+  pharmacy   User @relation("PharmacyBindings", fields: [pharmacyId], references: [id])
+  doctor     User @relation("PharmacyDoctors", fields: [doctorId], references: [id])
+
+  @@unique([pharmacyId, doctorId])
 }

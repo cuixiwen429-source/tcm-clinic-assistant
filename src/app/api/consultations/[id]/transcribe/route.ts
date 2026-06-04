@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
 import { getSession } from "@/lib/auth/jwt";
+import { consultationAccessWhere } from "@/lib/auth/access";
 import { callDeepSeekJson } from "@/lib/ai/client";
 import { TRANSCRIBE_PROMPT } from "@/lib/ai/prompts";
 import { StructuredHistorySchema } from "@/lib/ai/types";
@@ -22,39 +23,20 @@ export async function POST(
     return NextResponse.json({ error: "问诊文本过短，请输入至少10个字符" }, { status: 400 });
   }
 
-  const patientId = String(body.patientId || "unknown");
-  const patientName = String(body.patientName || "未知");
-  const patientGender = String(body.patientGender || "未知");
-  const patientAge = String(body.patientAge || "未知");
-  const patientAllergies = String(body.patientAllergies || "无");
-  const patientChronic = String(body.patientChronicDisease || "无");
+  const consultation = await prisma.consultation.findFirst({
+    where: consultationAccessWhere(session, id),
+    include: { patient: true },
+  });
+  if (!consultation) {
+    return NextResponse.json({ error: "就诊记录不存在" }, { status: 404 });
+  }
 
-  // Ensure patient exists
-  await prisma.patient.upsert({
-    where: { id: patientId },
-    update: {},
-    create: {
-      id: patientId,
-      name: patientName,
-      gender: patientGender || null,
-      age: typeof body.patientAge === "number" ? body.patientAge : null,
-      allergies: patientAllergies,
-      chronicDisease: patientChronic,
-      constitution: String(body.patientConstitution || ""),
-    },
-  }).catch(() => {});
-
-  // Ensure consultation exists
-  await prisma.consultation.upsert({
-    where: { id },
-    update: {},
-    create: {
-      id,
-      patientId,
-      doctorId: session.userId,
-      status: "DRAFT",
-    },
-  }).catch(() => {});
+  const patientId = consultation.patientId;
+  const patientName = consultation.patient.name || "未知";
+  const patientGender = consultation.patient.gender || "未知";
+  const patientAge = consultation.patient.age ?? "未知";
+  const patientAllergies = consultation.patient.allergies || String(body.patientAllergies || "无");
+  const patientChronic = consultation.patient.chronicDisease || String(body.patientChronicDisease || "无");
 
   try {
     let analysisCtx = "";

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
 import { getSession } from "@/lib/auth/jwt";
+import { patientAccessWhere } from "@/lib/auth/access";
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,8 +13,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "请选择患者" }, { status: 400 });
     }
 
-    // Verify patient exists
-    const patient = await prisma.patient.findUnique({ where: { id: patientId } });
+    const patient = await prisma.patient.findFirst({
+      where: patientAccessWhere(session, patientId),
+    });
     if (!patient) {
       return NextResponse.json({ error: "患者不存在" }, { status: 404 });
     }

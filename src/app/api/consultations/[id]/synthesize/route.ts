@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
 import { getSession } from "@/lib/auth/jwt";
+import { consultationAccessWhere } from "@/lib/auth/access";
 import { callDeepSeekJson } from "@/lib/ai/client";
 
 export const maxDuration = 60;
@@ -22,58 +23,30 @@ export async function POST(
     return NextResponse.json({ error: "补充信息过短" }, { status: 400 });
   }
 
-  const patientId = String(body.patientId || "unknown");
-  const patientName = String(body.patientName || "未知");
-  const patientGender = String(body.patientGender || "未知");
-  const patientAge = String(body.patientAge || "未知");
-  const patientAllergies = String(body.patientAllergies || "无");
-  const patientChronic = String(body.patientChronicDisease || "无");
-  const patientConstitution = String(body.patientConstitution || "未知");
+  const consultation = await prisma.consultation.findFirst({
+    where: consultationAccessWhere(session, id),
+    include: { patient: true },
+  });
+  if (!consultation) {
+    return NextResponse.json({ error: "就诊记录不存在" }, { status: 404 });
+  }
 
-  // Ensure patient exists
-  await prisma.patient.upsert({
-    where: { id: patientId },
-    update: {},
-    create: {
-      id: patientId,
-      name: patientName,
-      gender: patientGender || null,
-      age: typeof body.patientAge === "number" ? body.patientAge : null,
-      allergies: patientAllergies,
-      chronicDisease: patientChronic,
-      constitution: patientConstitution,
-    },
-  }).catch(() => {});
-
-  // Ensure consultation exists, preserving old data if provided
-  await prisma.consultation.upsert({
-    where: { id },
-    update: {},
-    create: {
-      id,
-      patientId,
-      doctorId: session.userId,
-      status: "DRAFT",
-      editedHistory: typeof body.editedHistory === "string" ? body.editedHistory : undefined,
-      chiefComplaint: typeof body.chiefComplaint === "string" ? body.chiefComplaint : undefined,
-      presentIllness: typeof body.presentIllness === "string" ? body.presentIllness : undefined,
-      symptomSummary: typeof body.symptomSummary === "string" ? body.symptomSummary : undefined,
-      constitution: typeof body.constitution === "string" ? body.constitution : undefined,
-      tongueAnalysis: typeof body.tongueAnalysis === "string" ? body.tongueAnalysis : undefined,
-      faceAnalysis: typeof body.faceAnalysis === "string" ? body.faceAnalysis : undefined,
-    },
-  }).catch(() => {});
+  const patientName = consultation.patient.name || "未知";
+  const patientGender = consultation.patient.gender || "未知";
+  const patientAge = consultation.patient.age ?? "未知";
+  const patientAllergies = consultation.patient.allergies || String(body.patientAllergies || "无");
+  const patientChronic = consultation.patient.chronicDisease || String(body.patientChronicDisease || "无");
+  const patientConstitution = consultation.patient.constitution || String(body.patientConstitution || "未知");
 
   try {
     // Build old history from DB or client-provided data
     let oldHistory: string;
     try {
-      const c = await prisma.consultation.findUnique({ where: { id } });
-      oldHistory = c?.editedHistory || (typeof body.editedHistory === "string" ? body.editedHistory : "") || JSON.stringify({
-        chief_complaint: c?.chiefComplaint || (typeof body.chiefComplaint === "string" ? body.chiefComplaint : ""),
-        present_illness: c?.presentIllness || (typeof body.presentIllness === "string" ? body.presentIllness : ""),
-        symptom_summary: c?.symptomSummary || (typeof body.symptomSummary === "string" ? body.symptomSummary : "{}"),
-        constitution: c?.constitution || (typeof body.constitution === "string" ? body.constitution : ""),
+      oldHistory = consultation.editedHistory || (typeof body.editedHistory === "string" ? body.editedHistory : "") || JSON.stringify({
+        chief_complaint: consultation.chiefComplaint || (typeof body.chiefComplaint === "string" ? body.chiefComplaint : ""),
+        present_illness: consultation.presentIllness || (typeof body.presentIllness === "string" ? body.presentIllness : ""),
+        symptom_summary: consultation.symptomSummary || (typeof body.symptomSummary === "string" ? body.symptomSummary : "{}"),
+        constitution: consultation.constitution || (typeof body.constitution === "string" ? body.constitution : ""),
       });
     } catch {
       oldHistory = JSON.stringify({

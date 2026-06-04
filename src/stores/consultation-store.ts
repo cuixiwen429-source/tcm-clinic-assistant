@@ -62,6 +62,12 @@ interface ConsultationState {
   isAnalyzingTongue: boolean;
   isAnalyzingFace: boolean;
 
+  // Global recording state (for concurrent recording across steps)
+  isRecording: boolean;
+  recordingLang: string;
+  recordingElapsed: number;
+  audioLevel: number;
+
   // Actions
   setStep: (step: WizardStep) => void;
   setConsultationId: (id: string) => void;
@@ -81,6 +87,10 @@ interface ConsultationState {
   setFaceAnalysis: (a: Record<string, unknown> | null) => void;
   setIsAnalyzingTongue: (v: boolean) => void;
   setIsAnalyzingFace: (v: boolean) => void;
+  setRecording: (recording: boolean) => void;
+  setRecordingLang: (lang: string) => void;
+  setRecordingElapsed: (elapsed: number) => void;
+  setAudioLevel: (level: number) => void;
   reset: () => void;
 }
 
@@ -108,6 +118,10 @@ const initialState = {
   faceAnalysis: null as Record<string, unknown> | null,
   isAnalyzingTongue: false,
   isAnalyzingFace: false,
+  isRecording: false,
+  recordingLang: "zh-CN",
+  recordingElapsed: 0,
+  audioLevel: 0,
 };
 
 export const useConsultationStore = create<ConsultationState>()(
@@ -139,6 +153,10 @@ export const useConsultationStore = create<ConsultationState>()(
       setFaceAnalysis: (a) => set({ faceAnalysis: a }),
       setIsAnalyzingTongue: (v) => set({ isAnalyzingTongue: v }),
       setIsAnalyzingFace: (v) => set({ isAnalyzingFace: v }),
+      setRecording: (recording) => set({ isRecording: recording }),
+      setRecordingLang: (lang) => set({ recordingLang: lang }),
+      setRecordingElapsed: (elapsed) => set({ recordingElapsed: elapsed }),
+      setAudioLevel: (level) => set({ audioLevel: level }),
       reset: () => {
         // Clear persisted state too
         try { localStorage.removeItem("consultation-store"); } catch {}

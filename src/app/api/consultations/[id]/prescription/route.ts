@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
 import { getSession } from "@/lib/auth/jwt";
+import { consultationAccessWhere } from "@/lib/auth/access";
 
 export async function GET(
   request: NextRequest,
@@ -10,6 +11,14 @@ export async function GET(
   if (!session) return NextResponse.json({ error: "未登录" }, { status: 401 });
 
   const { id } = await params;
+
+  const consultation = await prisma.consultation.findFirst({
+    where: consultationAccessWhere(session, id),
+    select: { id: true },
+  });
+  if (!consultation) {
+    return NextResponse.json({ error: "就诊记录不存在" }, { status: 404 });
+  }
 
   const prescriptions = await prisma.prescription.findMany({
     where: { consultationId: id },
@@ -32,6 +41,14 @@ export async function POST(
 
   const { id } = await params;
   const body = await request.json();
+
+  const consultation = await prisma.consultation.findFirst({
+    where: consultationAccessWhere(session, id),
+    select: { id: true },
+  });
+  if (!consultation) {
+    return NextResponse.json({ error: "就诊记录不存在" }, { status: 404 });
+  }
 
   // Find the latest version number
   const latest = await prisma.prescription.findFirst({

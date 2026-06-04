@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
 import { getSession } from "@/lib/auth/jwt";
+import { consultationAccessWhere } from "@/lib/auth/access";
 import { callDeepSeekJson } from "@/lib/ai/client";
 
 export const maxDuration = 60;
@@ -16,30 +17,16 @@ export async function POST(
 
   const { id } = await params;
 
-  let consultation = await prisma.consultation.findUnique({
-    where: { id },
+  const consultation = await prisma.consultation.findFirst({
+    where: consultationAccessWhere(session, id),
     include: {
       patient: true,
       prescriptions: { orderBy: { version: "desc" }, take: 1 },
     },
   });
 
-  // Never block — create stub if missing
   if (!consultation) {
-    await prisma.consultation.upsert({
-      where: { id },
-      update: {},
-      create: { id, patientId: "unknown", doctorId: session.userId, status: "DRAFT" },
-    }).catch(() => {});
-    await prisma.patient.upsert({
-      where: { id: "unknown" },
-      update: {},
-      create: { id: "unknown", name: "未知患者" },
-    }).catch(() => {});
-    consultation = await prisma.consultation.findUnique({
-      where: { id },
-      include: { patient: true, prescriptions: { orderBy: { version: "desc" }, take: 1 } },
-    });
+    return NextResponse.json({ error: "就诊记录不存在" }, { status: 404 });
   }
 
   const prescription = consultation?.prescriptions?.[0];

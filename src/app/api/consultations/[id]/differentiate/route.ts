@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
 import { getSession } from "@/lib/auth/jwt";
+import { consultationAccessWhere } from "@/lib/auth/access";
 import { callDeepSeekJson } from "@/lib/ai/client";
 
 export const maxDuration = 60;
@@ -22,34 +23,18 @@ export async function POST(
   const { id } = await params;
   const body = await request.json().catch(() => ({})) as Record<string, unknown>;
 
-  const patientId = String(body.patientId || "unknown");
-  const patientName = String(body.patientName || "未知");
-  const patientGender = String(body.patientGender || "未知");
-  const patientAge = String(body.patientAge || "未知");
-  const patientConstitution = String(body.patientConstitution || "未知");
+  const consultation = await prisma.consultation.findFirst({
+    where: consultationAccessWhere(session, id),
+    include: { patient: true },
+  });
+  if (!consultation) {
+    return NextResponse.json({ error: "就诊记录不存在" }, { status: 404 });
+  }
 
-  // Ensure patient + consultation exist — never block
-  await prisma.patient.upsert({
-    where: { id: patientId },
-    update: {},
-    create: {
-      id: patientId, name: patientName,
-      gender: patientGender || null,
-      age: typeof body.patientAge === "number" ? body.patientAge : null,
-      constitution: patientConstitution,
-    },
-  }).catch(() => {});
-
-  await prisma.consultation.upsert({
-    where: { id },
-    update: {},
-    create: {
-      id, patientId, doctorId: session.userId, status: "AI_ASSISTED",
-      editedHistory: typeof body.editedHistory === "string" ? body.editedHistory : undefined,
-      tongueAnalysis: typeof body.tongueAnalysis === "string" ? body.tongueAnalysis : undefined,
-      faceAnalysis: typeof body.faceAnalysis === "string" ? body.faceAnalysis : undefined,
-    },
-  }).catch(() => {});
+  const patientName = consultation.patient.name || "未知";
+  const patientGender = consultation.patient.gender || "未知";
+  const patientAge = consultation.patient.age ?? "未知";
+  const patientConstitution = consultation.patient.constitution || String(body.patientConstitution || "未知");
 
   // Build user message from request body (always available)
   const editedHistory = (typeof body.editedHistory === "string" && body.editedHistory) ? body.editedHistory : JSON.stringify({ chief_complaint: "" });

@@ -385,7 +385,7 @@ export default function DashboardPage() {
                 <FileText className="h-6 w-6 text-muted-foreground" />
               </div>
               <p className="text-sm text-muted-foreground">暂无就诊记录</p>
-              <p className="text-xs text-muted-foreground/70 mt-1">点击右上角"接诊"按钮开始</p>
+              <p className="text-xs text-muted-foreground/70 mt-1">点击右上角“接诊”按钮开始</p>
             </div>
           ) : (
             <div className="grid gap-2 sm:grid-cols-2">

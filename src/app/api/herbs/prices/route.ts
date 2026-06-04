@@ -42,7 +42,9 @@ export async function GET(request: NextRequest) {
 // PUT: Batch update herb prices
 export async function PUT(request: NextRequest) {
   const session = await getSession();
-  if (!session) return NextResponse.json({ error: "未登录" }, { status: 401 });
+  if (!session || !["ADMIN", "DOCTOR"].includes(session.role)) {
+    return NextResponse.json({ error: "无权限" }, { status: 403 });
+  }
 
   const { prices } = await request.json();
   if (!prices || !Array.isArray(prices) || prices.length === 0) {

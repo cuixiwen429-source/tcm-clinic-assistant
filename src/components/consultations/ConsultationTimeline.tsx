@@ -4,9 +4,20 @@ import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils/cn";
 import { Badge } from "@/components/ui/badge";
 import {
-  User, Camera, Eye, FileText, Brain, CheckCircle, Pill, ClipboardCheck,
-  ChevronRight,
+  User, Camera, Eye, Mic, Brain, CheckCircle, Pill, ClipboardCheck,
 } from "lucide-react";
+import {
+  getConsultationCurrentStepKey,
+  getConsultationStepHref,
+  hasConsultationAiAnalysis,
+  hasConsultationConfirmedPrescription,
+  hasConsultationEditedHistory,
+  hasConsultationImage,
+  hasConsultationPrescription,
+  hasConsultationValue,
+  isConsultationFinalized,
+} from "@/lib/consultations/progress";
+import type { ConsultationProgressStep } from "@/lib/consultations/progress";
 
 interface ConsultationTimelineProps {
   consultationId: string;
@@ -15,6 +26,7 @@ interface ConsultationTimelineProps {
     status?: string;
     tongueImage?: string | null;
     faceImage?: string | null;
+    rawTranscription?: string | null;
     editedHistory?: string | null;
     huXishuAnalysis?: string | null;
     zhangXichunAnalysis?: string | null;
@@ -26,11 +38,10 @@ interface ConsultationTimelineProps {
 }
 
 interface StepDef {
-  key: string;
+  key: ConsultationProgressStep;
   label: string;
   icon: React.ElementType;
   check: (c: ConsultationTimelineProps["consultation"]) => boolean;
-  href?: string;
 }
 
 export function ConsultationTimeline({ consultationId, consultation }: ConsultationTimelineProps) {
@@ -38,57 +49,36 @@ export function ConsultationTimeline({ consultationId, consultation }: Consultat
 
   const steps: StepDef[] = [
     { key: "patient", label: "患者建档", icon: User,
-      check: (c) => !!c.patientId,
+      check: (c) => hasConsultationValue(c.patientId),
+    },
+    { key: "history", label: "问诊转写", icon: Mic,
+      check: (c) => hasConsultationEditedHistory(c),
     },
     { key: "tongue", label: "舌象采集", icon: Camera,
-      check: (c) => !!c.tongueImage,
+      check: (c) => hasConsultationImage(c.tongueImage),
     },
     { key: "face", label: "面相采集", icon: Eye,
-      check: (c) => !!c.faceImage,
-    },
-    { key: "history", label: "问诊转写", icon: FileText,
-      check: (c) => !!c.editedHistory,
+      check: (c) => hasConsultationImage(c.faceImage),
     },
     { key: "differentiate", label: "AI辨证", icon: Brain,
-      check: (c) => !!(c.huXishuAnalysis || c.zhangXichunAnalysis || c.niHaixiaAnalysis || c.liKeAnalysis),
+      check: (c) => hasConsultationAiAnalysis(c),
     },
     { key: "diagnosis", label: "最终诊断", icon: CheckCircle,
-      check: (c) => !!c.doctorFinalPattern,
+      check: (c) => hasConsultationValue(c.doctorFinalPattern),
     },
     { key: "formula", label: "方剂生成", icon: Pill,
-      check: (c) => (c.prescriptions?.length ?? 0) > 0,
+      check: (c) => hasConsultationPrescription(c),
     },
     { key: "confirm", label: "处方确认", icon: ClipboardCheck,
-      check: (c) => c.prescriptions?.some(p => p.isConfirmed) ?? false,
+      check: (c) => hasConsultationConfirmedPrescription(c) || isConsultationFinalized(c),
     },
   ];
 
-  // Determine current step from status
-  const statusMap: Record<string, string> = {
-    DRAFT: "patient",
-    AI_ASSISTED: "differentiate",
-    PRESCRIBED: "formula",
-    FINALIZED: "confirm",
-  };
-  const currentStepKey = statusMap[consultation.status || "DRAFT"] || "patient";
-  const currentIdx = steps.findIndex(s => s.key === currentStepKey);
-
-  const isFinalized = consultation.status === "FINALIZED" || consultation.status === "ARCHIVED";
+  const currentStepKey = getConsultationCurrentStepKey(consultation);
+  const currentIdx = Math.max(steps.findIndex(s => s.key === currentStepKey), 0);
 
   const handleStepClick = (step: StepDef) => {
-    switch (step.key) {
-      case "patient":
-        router.push(`/patients/${consultation.patientId}`);
-        break;
-      default:
-        // Finalized consultations → read-only detail view with section anchor
-        // Active consultations → wizard flow
-        if (isFinalized) {
-          router.push(`/consultations/${consultationId}#${step.key}`);
-        } else {
-          router.push(`/consultations/${consultationId}/ai`);
-        }
-    }
+    router.push(getConsultationStepHref(consultationId, consultation, step.key));
   };
 
   return (
@@ -99,7 +89,6 @@ export function ConsultationTimeline({ consultationId, consultation }: Consultat
           {steps.map((step, idx) => {
             const isCompleted = step.check(consultation);
             const isCurrent = step.key === currentStepKey;
-            const isPast = idx <= currentIdx;
             const Icon = step.icon;
 
             return (

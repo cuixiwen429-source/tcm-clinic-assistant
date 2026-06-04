@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
 import { getSession } from "@/lib/auth/jwt";
+import { patientAccessWhere } from "@/lib/auth/access";
 
 export async function GET(
   request: NextRequest,
@@ -11,8 +12,8 @@ export async function GET(
 
   const { id } = await params;
 
-  const patient = await prisma.patient.findUnique({
-    where: { id },
+  const patient = await prisma.patient.findFirst({
+    where: patientAccessWhere(session, id),
     include: {
       consultations: {
         orderBy: { visitDate: "desc" },
@@ -46,7 +47,7 @@ export async function PUT(
   const body = await request.json();
   const { name, gender, birthDate, age, phone, address, allergies, constitution, chronicDisease, notes } = body;
 
-  const existing = await prisma.patient.findUnique({ where: { id } });
+  const existing = await prisma.patient.findFirst({ where: patientAccessWhere(session, id) });
   if (!existing) {
     return NextResponse.json({ error: "患者不存在" }, { status: 404 });
   }
@@ -89,7 +90,7 @@ export async function DELETE(
 
   const { id } = await params;
 
-  const existing = await prisma.patient.findUnique({ where: { id } });
+  const existing = await prisma.patient.findFirst({ where: patientAccessWhere(session, id) });
   if (!existing) {
     return NextResponse.json({ error: "患者不存在" }, { status: 404 });
   }

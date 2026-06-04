@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
 import { getSession } from "@/lib/auth/jwt";
+import { consultationAccessWhere } from "@/lib/auth/access";
 import { callDeepSeekJson } from "@/lib/ai/client";
 import { SYSTEM_RULES } from "@/lib/ai/prompts";
 import { z } from "zod";
@@ -14,6 +15,16 @@ const TemplatesSchema = z.object({
   })),
 });
 
+function parseHerbs(value: string | null | undefined): Array<{ name: string; dose: number }> {
+  if (!value) return [];
+  try {
+    const herbs = JSON.parse(value);
+    return Array.isArray(herbs) ? herbs : [];
+  } catch {
+    return [];
+  }
+}
+
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -23,8 +34,8 @@ export async function GET(
 
   const { id } = await params;
 
-  const consultation = await prisma.consultation.findUnique({
-    where: { id },
+  const consultation = await prisma.consultation.findFirst({
+    where: consultationAccessWhere(session, id),
     include: {
       patient: true,
       prescriptions: { orderBy: { version: "desc" }, take: 1 },
@@ -32,18 +43,18 @@ export async function GET(
   });
 
   if (!consultation) {
-    return NextResponse.json({ ai: [], history: [] });
+    return NextResponse.json({ error: "就诊记录不存在" }, { status: 404 });
   }
 
   const prescription = consultation.prescriptions[0];
   const herbs: Array<{ name: string; dose: number }> = prescription
-    ? JSON.parse(prescription.herbs || "[]")
+    ? parseHerbs(prescription.herbs)
     : [];
 
   // Fetch historical decoction/usage (unique, from past prescriptions)
   const allPrescriptions = await prisma.prescription.findMany({
     where: {
-      consultation: { doctorId: session.userId },
+      consultation: session.role === "ADMIN" ? {} : { doctorId: session.userId },
       decoctionMethod: { not: null },
     },
     select: { decoctionMethod: true, usageInstruction: true, precautions: true },

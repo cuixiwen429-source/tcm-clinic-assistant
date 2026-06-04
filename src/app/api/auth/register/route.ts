@@ -5,7 +5,7 @@ import { signJWT, setSessionCookie } from "@/lib/auth/jwt";
 
 export async function POST(request: NextRequest) {
   try {
-    const { username, password, name, phone } = await request.json();
+    const { username, password, name, phone, role, doctorId } = await request.json();
 
     if (!username || !password || !name) {
       return NextResponse.json({ error: "用户名、密码和姓名为必填项" }, { status: 400 });
@@ -17,6 +17,21 @@ export async function POST(request: NextRequest) {
 
     if (password.length < 6) {
       return NextResponse.json({ error: "密码至少6位" }, { status: 400 });
+    }
+
+    const userRole = role === "PHARMACY" ? "PHARMACY" : "DOCTOR";
+
+    if (userRole === "PHARMACY") {
+      if (!doctorId) {
+        return NextResponse.json({ error: "药房注册必须绑定一位执业药师" }, { status: 400 });
+      }
+      // Verify the doctor exists and is a DOCTOR
+      const doctor = await prisma.user.findFirst({
+        where: { id: doctorId, role: "DOCTOR" },
+      });
+      if (!doctor) {
+        return NextResponse.json({ error: "所选药师不存在" }, { status: 400 });
+      }
     }
 
     // Check if username already exists
@@ -31,10 +46,20 @@ export async function POST(request: NextRequest) {
         username,
         password: hashed,
         name,
-        role: "DOCTOR", // Default role for self-registration
+        role: userRole,
         phone: phone || null,
       },
     });
+
+    // Create pharmacy binding
+    if (userRole === "PHARMACY" && doctorId) {
+      await prisma.pharmacyBinding.create({
+        data: {
+          pharmacyId: user.id,
+          doctorId,
+        },
+      });
+    }
 
     const token = await signJWT({
       userId: user.id,

@@ -488,13 +488,15 @@ export default function PrescriptionPage() {
   // ─── Shared action buttons ───
   const actionButtons = (
     <div className="flex gap-2">
-      <Button onClick={handleSave} disabled={saving} className="flex-1">
+      <Button onClick={handleSave} disabled={saving} className="min-w-0 flex-1">
         {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
-        保存为新版本
+        <span className="sm:hidden">保存</span>
+        <span className="hidden sm:inline">保存为新版本</span>
       </Button>
-      <Button variant="default" onClick={handleFinalize} className="flex-1">
+      <Button variant="default" onClick={handleFinalize} className="min-w-0 flex-1">
         <CheckCircle className="mr-2 h-4 w-4" />
-        确认为终版处方
+        <span className="sm:hidden">确认</span>
+        <span className="hidden sm:inline">确认为终版处方</span>
       </Button>
     </div>
   );
@@ -606,7 +608,7 @@ export default function PrescriptionPage() {
       </div>
 
       {/* ==================== MOBILE LAYOUT ==================== */}
-      <div className="lg:hidden">
+      <div className="pb-28 lg:hidden">
         {/* Tab bar */}
         <div className="flex rounded-lg border bg-muted p-1 sticky top-14 z-30 bg-background/95 backdrop-blur-sm">
           {([

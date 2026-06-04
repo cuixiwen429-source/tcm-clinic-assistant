@@ -10,12 +10,16 @@ export async function GET(request: NextRequest) {
 
   const { searchParams } = new URL(request.url);
   const entityType = searchParams.get("entityType");
-  const userId = searchParams.get("userId");
-  const limit = parseInt(searchParams.get("limit") || "50");
+  const requestedUserId = searchParams.get("userId");
+  const limit = Math.min(Math.max(parseInt(searchParams.get("limit") || "50"), 1), 100);
 
   const where: Record<string, unknown> = {};
   if (entityType) where.entityType = entityType;
-  if (userId) where.userId = userId;
+  if (session.role === "ADMIN") {
+    if (requestedUserId) where.userId = requestedUserId;
+  } else {
+    where.userId = session.userId;
+  }
 
   const logs = await prisma.auditLog.findMany({
     where,

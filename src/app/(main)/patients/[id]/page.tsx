@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dialog";
 import { PatientForm, PatientFormValues } from "@/components/patients/PatientForm";
 import { ConsultationTimeline } from "@/components/consultations/ConsultationTimeline";
-import { cn } from "@/lib/utils/cn";
+import { getConsultationResumeHref } from "@/lib/consultations/progress";
 
 interface Consultation {
   id: string;
@@ -27,8 +27,12 @@ interface Consultation {
   patientId?: string;
   tongueImage?: string | null;
   faceImage?: string | null;
+  rawTranscription?: string | null;
   editedHistory?: string | null;
   huXishuAnalysis?: string | null;
+  zhangXichunAnalysis?: string | null;
+  niHaixiaAnalysis?: string | null;
+  liKeAnalysis?: string | null;
   doctorFinalPattern?: string | null;
 }
 
@@ -283,8 +287,7 @@ export default function PatientDetailPage() {
                             className="text-xs text-primary hover:underline"
                             onClick={(e) => {
                               e.stopPropagation();
-                              const isDone = c.status === "FINALIZED" || c.status === "ARCHIVED";
-                              router.push(isDone ? `/consultations/${c.id}` : `/consultations/${c.id}/ai`);
+                              router.push(getConsultationResumeHref(c.id, { ...c, patientId: c.patientId ?? patient.id }));
                             }}
                           >
                             进入诊疗 →
@@ -297,8 +300,12 @@ export default function PatientDetailPage() {
                             status: c.status,
                             tongueImage: c.tongueImage ?? null,
                             faceImage: c.faceImage ?? null,
+                            rawTranscription: c.rawTranscription ?? null,
                             editedHistory: c.editedHistory ?? null,
                             huXishuAnalysis: c.huXishuAnalysis ?? null,
+                            zhangXichunAnalysis: c.zhangXichunAnalysis ?? null,
+                            niHaixiaAnalysis: c.niHaixiaAnalysis ?? null,
+                            liKeAnalysis: c.liKeAnalysis ?? null,
                             doctorFinalPattern: c.doctorFinalPattern ?? null,
                             prescriptions: c.prescriptions,
                           }}

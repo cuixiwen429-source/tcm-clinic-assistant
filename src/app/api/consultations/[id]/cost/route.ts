@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
 import { getSession } from "@/lib/auth/jwt";
+import { consultationAccessWhere } from "@/lib/auth/access";
 
 export async function GET(
   request: NextRequest,
@@ -22,11 +23,19 @@ export async function GET(
     return NextResponse.json({ error: "请提供处方ID" }, { status: 400 });
   }
 
-  const prescription = await prisma.prescription.findUnique({
-    where: { id: prescriptionId },
+  const consultation = await prisma.consultation.findFirst({
+    where: consultationAccessWhere(session, id),
+    select: { id: true },
+  });
+  if (!consultation) {
+    return NextResponse.json({ error: "就诊记录不存在" }, { status: 404 });
+  }
+
+  const prescription = await prisma.prescription.findFirst({
+    where: { id: prescriptionId, consultationId: id },
   });
 
-  if (!prescription || prescription.consultationId !== id) {
+  if (!prescription) {
     return NextResponse.json({ error: "处方不存在" }, { status: 404 });
   }
 

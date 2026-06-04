@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
 import { getSession } from "@/lib/auth/jwt";
+import { consultationAccessWhere } from "@/lib/auth/access";
 import { callDeepSeekJson } from "@/lib/ai/client";
 
 export const maxDuration = 60;
@@ -18,29 +19,22 @@ export async function POST(
   const body = await request.json() as Record<string, unknown>;
   const prescriptionId = body.prescriptionId as string | undefined;
 
-  let consultation = await prisma.consultation.findUnique({
-    where: { id },
+  const consultation = await prisma.consultation.findFirst({
+    where: consultationAccessWhere(session, id),
     include: { patient: true },
   });
 
-  // If not found, create a stub — never block
   if (!consultation) {
-    await prisma.consultation.upsert({
-      where: { id },
-      update: {},
-      create: { id, patientId: "unknown", doctorId: session.userId, status: "DRAFT" },
-    }).catch(() => {});
-    await prisma.patient.upsert({
-      where: { id: "unknown" },
-      update: {},
-      create: { id: "unknown", name: "未知患者" },
-    }).catch(() => {});
-    consultation = await prisma.consultation.findUnique({ where: { id }, include: { patient: true } });
+    return NextResponse.json({ error: "就诊记录不存在" }, { status: 404 });
   }
 
   const prescription = prescriptionId
-    ? await prisma.prescription.findUnique({ where: { id: prescriptionId } }).catch(() => null)
+    ? await prisma.prescription.findFirst({ where: { id: prescriptionId, consultationId: id } }).catch(() => null)
     : null;
+
+  if (prescriptionId && !prescription) {
+    return NextResponse.json({ error: "处方不存在" }, { status: 404 });
+  }
 
   const patient = consultation?.patient;
   const userMessage = `患者：${patient?.name || "未知"}，${patient?.gender || ""}，${patient?.age || ""}岁\n体质：${patient?.constitution || "未知"}\n过敏史：${patient?.allergies || "无"}\n\n辨证：${consultation?.doctorFinalPattern || consultation?.chiefComplaint || ""}\n\n处方：${prescription?.herbs || "[]"}\n方名：${prescription?.formulaName || ""}`;

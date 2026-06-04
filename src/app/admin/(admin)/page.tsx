@@ -235,7 +235,7 @@ export default function AdminDashboardPage() {
                   </Pie>
                   <Tooltip
                     contentStyle={{ borderRadius: "8px", border: `1px solid ${CHART_THEME.tooltip.border}` }}
-                    formatter={(v, _, item: any) => [`${v} 次 (${totalStatus > 0 ? ((Number(v) / totalStatus) * 100).toFixed(1) : 0}%)`, item.payload.name]}
+                    formatter={(v, _, item) => [`${v} 次 (${totalStatus > 0 ? ((Number(v) / totalStatus) * 100).toFixed(1) : 0}%)`, item.payload.name]}
                   />
                 </PieChart>
               </ResponsiveContainer>
@@ -274,7 +274,7 @@ export default function AdminDashboardPage() {
                   <YAxis type="category" dataKey="name" tick={{ fontSize: 12 }} stroke={CHART_THEME.axis} width={50} />
                   <Tooltip
                     contentStyle={{ borderRadius: "8px", border: `1px solid ${CHART_THEME.tooltip.border}` }}
-                    formatter={(v, _, item: any) => [`${v} 次`, item.payload.fullName || item.payload.name]}
+                    formatter={(v, _, item) => [`${v} 次`, item.payload.fullName || item.payload.name]}
                   />
                   <Bar dataKey="consultations" radius={[0, 6, 6, 0]} fill="hsl(var(--primary))" fillOpacity={0.75} barSize={22} />
                 </BarChart>
@@ -302,7 +302,7 @@ export default function AdminDashboardPage() {
                   <YAxis type="category" dataKey="name" tick={{ fontSize: 12 }} stroke={CHART_THEME.axis} width={50} />
                   <Tooltip
                     contentStyle={{ borderRadius: "8px", border: `1px solid ${CHART_THEME.tooltip.border}` }}
-                    formatter={(v, _, item: any) => [`${v} 次`, item.payload.fullName || item.payload.name]}
+                    formatter={(v, _, item) => [`${v} 次`, item.payload.fullName || item.payload.name]}
                   />
                   <Bar dataKey="count" radius={[0, 6, 6, 0]} barSize={22}>
                     {herbData.map((_, i) => (

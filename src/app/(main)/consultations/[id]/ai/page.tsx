@@ -14,6 +14,10 @@ import { AIDisclaimer } from "@/components/shared/AIDisclaimer";
 import { VoiceInput } from "@/components/consultations/VoiceInput";
 import { toast } from "sonner";
 import { ArrowLeft, Brain, Loader2, CheckCircle, AlertTriangle } from "lucide-react";
+import {
+  getConsultationResumeHref,
+  hasConsultationEditedHistory,
+} from "@/lib/consultations/progress";
 
 export default function AIAssistancePage() {
   const params = useParams();
@@ -44,6 +48,8 @@ export default function AIAssistancePage() {
       const status = consultation.status as string;
       if (status === "FINALIZED" || status === "ARCHIVED") {
         router.replace(`/consultations/${consultationId}`);
+      } else if (!hasConsultationEditedHistory(consultation)) {
+        router.replace(getConsultationResumeHref(consultationId, consultation));
       }
     }
   }, [consultation, consultationId, router]);
@@ -249,6 +255,19 @@ export default function AIAssistancePage() {
       <div className="space-y-4">
         <Skeleton className="h-8 w-64" />
         <Skeleton className="h-96 w-full" />
+      </div>
+    );
+  }
+
+  if (
+    consultation &&
+    !["FINALIZED", "ARCHIVED"].includes((consultation.status as string) || "") &&
+    !hasConsultationEditedHistory(consultation)
+  ) {
+    return (
+      <div className="flex items-center justify-center p-12 text-muted-foreground">
+        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+        正在返回问诊流程...
       </div>
     );
   }
@@ -634,7 +653,7 @@ export default function AIAssistancePage() {
                 <CardTitle className="text-lg">确认最终辨证诊断</CardTitle>
               </div>
               <CardDescription>
-                请从四大体系辨证结果中选择最终诊断，或手动录入。该诊断将显示在处方笺"临床诊断"栏中。
+                请从四大体系辨证结果中选择最终诊断，或手动录入。该诊断将显示在处方笺“临床诊断”栏中。
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">

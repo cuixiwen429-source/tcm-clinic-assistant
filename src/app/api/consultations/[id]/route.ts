@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
 import { getSession } from "@/lib/auth/jwt";
+import { consultationAccessWhere } from "@/lib/auth/access";
 
 export async function GET(
   request: NextRequest,
@@ -11,8 +12,8 @@ export async function GET(
 
   const { id } = await params;
 
-  const consultation = await prisma.consultation.findUnique({
-    where: { id },
+  const consultation = await prisma.consultation.findFirst({
+    where: consultationAccessWhere(session, id),
     include: {
       patient: true,
       doctor: { select: { name: true } },
@@ -23,7 +24,7 @@ export async function GET(
   });
 
   if (!consultation) {
-    return NextResponse.json({ id, patient: null, doctor: null, prescriptions: [], riskPredictions: [], adviceItems: [] });
+    return NextResponse.json({ error: "就诊记录不存在" }, { status: 404 });
   }
 
   return NextResponse.json(consultation);
@@ -45,6 +46,7 @@ export async function PUT(
     "huXishuAnalysis", "zhangXichunAnalysis", "niHaixiaAnalysis", "liKeAnalysis",
     "doctorFinalPattern", "doctorFinalPathogenesis",
     "tongueImage", "faceImage", "tongueAnalysis", "faceAnalysis",
+    "rawTranscription",
   ];
 
   const data: Record<string, unknown> = {};
@@ -52,22 +54,15 @@ export async function PUT(
     if (body[key] !== undefined) data[key] = body[key];
   }
 
-  // Try update, create if missing (cold-start resilience)
-  try {
-    const consultation = await prisma.consultation.update({ where: { id }, data });
-    return NextResponse.json(consultation);
-  } catch {
-    const patientId = (typeof body.patientId === "string" && body.patientId) ? body.patientId : "unknown";
-    // Ensure patient exists (create stub if needed)
-    await prisma.patient.upsert({
-      where: { id: patientId },
-      update: {},
-      create: { id: patientId, name: "未知患者" },
-    }).catch(() => {});
-    // Create consultation
-    const consultation = await prisma.consultation.create({
-      data: { id, patientId, doctorId: session.userId, status: "DRAFT", ...data },
-    });
-    return NextResponse.json(consultation);
+  const existing = await prisma.consultation.findFirst({
+    where: consultationAccessWhere(session, id),
+    select: { id: true },
+  });
+
+  if (!existing) {
+    return NextResponse.json({ error: "就诊记录不存在" }, { status: 404 });
   }
+
+  const consultation = await prisma.consultation.update({ where: { id }, data });
+  return NextResponse.json(consultation);
 }

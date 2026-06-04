@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/jwt";
 import { prisma } from "@/lib/db/prisma";
+import { consultationAccessWhere } from "@/lib/auth/access";
 import { analyzeImage } from "@/lib/vision/doubao-vision";
 
 export const maxDuration = 60;
@@ -38,10 +39,13 @@ export async function POST(request: NextRequest) {
     // Fetch patient info for context
     let patientCtx = "";
     if (consultationId) {
-      const consultation = await prisma.consultation.findUnique({
-        where: { id: consultationId },
+      const consultation = await prisma.consultation.findFirst({
+        where: consultationAccessWhere(session, consultationId),
         include: { patient: { select: { name: true, gender: true, age: true, constitution: true, allergies: true, chronicDisease: true } } },
       });
+      if (!consultation) {
+        return NextResponse.json({ error: "就诊记录不存在" }, { status: 404 });
+      }
       if (consultation?.patient) {
         const p = consultation.patient;
         patientCtx = `\n\n【患者基本信息】姓名：${p.name || "未知"}，性别：${p.gender || "未知"}，年龄：${p.age ?? "未知"}岁，体质：${p.constitution || "未知"}，过敏史：${p.allergies || "无"}，慢性病史：${p.chronicDisease || "无"}`;

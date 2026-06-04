@@ -41,7 +41,9 @@ export async function middleware(request: NextRequest) {
     const role = payload.role;
 
     const isAdminPath = pathname.startsWith("/admin") || pathname.startsWith("/api/admin");
+    const isPharmacyPath = pathname.startsWith("/pharmacy") || pathname.startsWith("/api/pharmacy");
     const isSharedApi = pathname === "/api/auth/me" || pathname === "/api/auth/logout";
+    const isDoctorApi = pathname === "/api/doctors";
 
     // ADMIN users can only access admin paths and shared APIs
     if (role === "ADMIN" && !isAdminPath && !isSharedApi) {
@@ -49,6 +51,22 @@ export async function middleware(request: NextRequest) {
         return NextResponse.json({ error: "Forbidden" }, { status: 403 });
       }
       return NextResponse.redirect(new URL("/admin", request.url));
+    }
+
+    // PHARMACY users can only access pharmacy paths and shared APIs
+    if (role === "PHARMACY" && !isPharmacyPath && !isSharedApi && !isDoctorApi) {
+      if (pathname.startsWith("/api/")) {
+        return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      }
+      return NextResponse.redirect(new URL("/pharmacy/dashboard", request.url));
+    }
+
+    // DOCTOR users cannot access admin or pharmacy paths
+    if (role === "DOCTOR" && (isAdminPath || isPharmacyPath)) {
+      if (pathname.startsWith("/api/")) {
+        return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+      }
+      return NextResponse.redirect(new URL("/dashboard", request.url));
     }
 
     // Non-ADMIN users cannot access admin paths

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
 import { getSession } from "@/lib/auth/jwt";
+import { consultationAccessWhere } from "@/lib/auth/access";
 import { callDeepSeekJson } from "@/lib/ai/client";
 import { REFINE_SYMPTOM_PROMPT } from "@/lib/ai/prompts";
 import { z } from "zod";
@@ -9,6 +10,15 @@ const RefinedSymptomSchema = z.object({
   symptoms: z.array(z.string()),
   tongue_pulse: z.string(),
 });
+
+function safeJsonParse<T>(value: string | null | undefined, fallback: T): T {
+  if (!value) return fallback;
+  try {
+    return JSON.parse(value) as T;
+  } catch {
+    return fallback;
+  }
+}
 
 export async function GET(
   request: NextRequest,
@@ -19,8 +29,8 @@ export async function GET(
 
   const { id } = await params;
 
-  const consultation = await prisma.consultation.findUnique({
-    where: { id },
+  const consultation = await prisma.consultation.findFirst({
+    where: consultationAccessWhere(session, id),
     include: {
       patient: true,
       prescriptions: {
@@ -36,13 +46,7 @@ export async function GET(
   });
 
   if (!consultation) {
-    return NextResponse.json({
-      patient: { name: "", gender: null, age: null, phone: null, address: null, allergies: null, chronicDisease: null, notes: null },
-      diagnosis: { chiefComplaint: null, pattern: null, pathogenesis: null },
-      prescription: null,
-      advice: null,
-      refinedSymptoms: null,
-    });
+    return NextResponse.json({ error: "就诊记录不存在" }, { status: 404 });
   }
 
   const prescription = consultation.prescriptions[0];
@@ -93,7 +97,7 @@ export async function GET(
     prescription: prescription
       ? {
           formulaName: prescription.formulaName,
-          herbs: JSON.parse(prescription.herbs || "[]"),
+          herbs: safeJsonParse(prescription.herbs, [] as unknown[]),
           totalDoses: prescription.totalDoses,
           decoctionMethod: prescription.decoctionMethod,
           usageInstruction: prescription.usageInstruction,
@@ -102,7 +106,7 @@ export async function GET(
         }
       : null,
     advice: consultation.adviceItems[0]
-      ? JSON.parse(consultation.adviceItems[0].editedContent || consultation.adviceItems[0].adviceContent)
+      ? safeJsonParse(consultation.adviceItems[0].editedContent || consultation.adviceItems[0].adviceContent, null)
       : null,
     refinedSymptoms,
     costCalculation: null as Record<string, unknown> | null,
@@ -118,7 +122,7 @@ export async function GET(
       if (cost) {
         printData.costCalculation = {
           totalCost: cost.totalCost,
-          breakdown: JSON.parse(cost.breakdown || "{}"),
+          breakdown: safeJsonParse(cost.breakdown, {}),
         };
       }
     } catch { /* */ }

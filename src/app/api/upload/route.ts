@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/jwt";
 import fs from "fs";
 import path from "path";
+import crypto from "crypto";
 
 const MAX_SIZE = 5 * 1024 * 1024; // 5MB
 const ALLOWED = ["image/jpeg", "image/png", "image/webp"];
@@ -16,8 +17,9 @@ export async function POST(request: NextRequest) {
   if (!ALLOWED.includes(file.type)) return NextResponse.json({ error: "仅支持 JPG/PNG/WebP 图片" }, { status: 400 });
   if (file.size > MAX_SIZE) return NextResponse.json({ error: "图片不能超过 5MB" }, { status: 400 });
 
-  const ext = file.type.split("/")[1] || "jpg";
-  const name = `tongue_${Date.now()}.${ext}`;
+  const ext = file.type === "image/jpeg" ? "jpg" : file.type.split("/")[1] || "jpg";
+  const token = crypto.randomBytes(8).toString("hex");
+  const name = `${session.userId}_${Date.now()}_${token}.${ext}`;
   const dir = "/tmp/uploads";
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
   const buffer = Buffer.from(await file.arrayBuffer());
