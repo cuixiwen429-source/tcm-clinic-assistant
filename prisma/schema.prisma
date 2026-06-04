@@ -24,6 +24,8 @@ model User {
   auditLogs     AuditLog[]
   pharmacyBindings PharmacyBinding[] @relation("PharmacyBindings")
   doctorBindings   PharmacyBinding[] @relation("PharmacyDoctors")
+  pharmacyFeedbacks PrescriptionFeedback[] @relation("PharmacyFeedbacks")
+  doctorFeedbacks   PrescriptionFeedback[] @relation("DoctorFeedbacks")
 }
 
 model Patient {
@@ -105,6 +107,7 @@ model Prescription {
   editor           User?             @relation("PrescriptionEditor", fields: [editorId], references: [id])
   complianceChecks ComplianceCheck[]
   costCalculations CostCalculation[]
+  feedbacks       PrescriptionFeedback[]
 }
 
 model ComplianceCheck {
@@ -227,4 +230,19 @@ model PharmacyBinding {
   doctor     User @relation("PharmacyDoctors", fields: [doctorId], references: [id])
 
   @@unique([pharmacyId, doctorId])
+}
+
+model PrescriptionFeedback {
+  id             String   @id @default(cuid())
+  prescriptionId String
+  pharmacyId     String
+  doctorId       String
+  message        String
+  status         String   @default("PENDING")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  prescription   Prescription @relation(fields: [prescriptionId], references: [id], onDelete: Cascade)
+  pharmacy       User         @relation("PharmacyFeedbacks", fields: [pharmacyId], references: [id])
+  doctor         User         @relation("DoctorFeedbacks", fields: [doctorId], references: [id])
 }

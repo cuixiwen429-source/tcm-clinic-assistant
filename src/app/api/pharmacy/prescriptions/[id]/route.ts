@@ -49,10 +49,12 @@ export async function GET(
 
   const refMap = new Map(herbRefs.map((r) => [r.name, r]));
 
+  let totalCost = 0;
   const herbsWithInfo = herbs.map((h) => {
     const ref = refMap.get(h.name);
     const price = ref?.prices[0]?.retailPrice ?? null;
-    const subtotal = price != null ? price * h.dose * prescription.totalDoses : null;
+    const subtotal = price != null ? +(price * h.dose * prescription.totalDoses).toFixed(2) : null;
+    if (subtotal != null) totalCost += subtotal;
     return {
       name: h.name,
       dose: h.dose,
@@ -63,8 +65,38 @@ export async function GET(
       unit: ref?.unit || "g",
       subtotal,
       overdosed: ref?.pharmacopoeiaMax != null ? h.dose > ref.pharmacopoeiaMax : false,
+      toxicity: ref?.toxicity ?? null,
+      nature: ref?.nature ?? null,
+      taste: ref?.taste ?? null,
+      meridian: ref?.meridian ?? null,
     };
   });
+
+  totalCost = +totalCost.toFixed(2);
+
+  // Check compliance rules for herb-herb interactions
+  const complianceWarnings: Array<{ herbA: string; herbB: string; severity: string; description: string }> = [];
+  if (herbNames.length >= 2) {
+    const rules = await prisma.complianceRule.findMany({
+      where: {
+        herbA: { in: herbNames },
+        herbB: { in: herbNames },
+      },
+    });
+    for (const rule of rules) {
+      if (rule.herbB && herbNames.includes(rule.herbB)) {
+        complianceWarnings.push({
+          herbA: rule.herbA,
+          herbB: rule.herbB,
+          severity: rule.severity,
+          description: rule.description,
+        });
+      }
+    }
+  }
+
+  // Gather toxic herbs
+  const toxicHerbs = herbsWithInfo.filter((h) => h.toxicity && h.toxicity !== "无" && h.toxicity !== "无毒");
 
   return NextResponse.json({
     id: prescription.id,
@@ -79,6 +111,9 @@ export async function GET(
     usageInstruction: prescription.usageInstruction,
     precautions: prescription.precautions,
     herbs: herbsWithInfo,
+    totalCost,
+    toxicHerbs,
+    complianceWarnings,
     isConfirmed: prescription.isConfirmed,
     createdAt: prescription.createdAt.toISOString(),
   });

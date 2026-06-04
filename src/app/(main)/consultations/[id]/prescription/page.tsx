@@ -13,7 +13,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { ConfirmDialog } from "@/components/shared/ConfirmDialog";
 import { HerbSelector } from "@/components/consultations/HerbSelector";
 import { toast } from "sonner";
-import { ArrowLeft, Save, Printer, ShieldAlert, AlertTriangle, CheckCircle, History, Loader2, DollarSign, Sparkles, BookOpen, X, ChevronDown, ChevronUp } from "lucide-react";
+import { ArrowLeft, Save, Printer, ShieldAlert, AlertTriangle, CheckCircle, History, Loader2, DollarSign, Sparkles, BookOpen, X, ChevronDown, ChevronUp, MessageSquare, RotateCcw, Send } from "lucide-react";
 
 interface HerbItem { name: string; dose: number; note: string; }
 interface ComplianceItem { checkType: string; herbName: string; conflictWith?: string; severity: string; detail: string; }
@@ -62,6 +62,43 @@ export default function PrescriptionPage() {
   // Mobile tab state
   const [mobileTab, setMobileTab] = useState<MobileTab>("edit");
 
+  // Feedback
+  const [feedbacks, setFeedbacks] = useState<Array<{
+    id: string;
+    prescriptionId: string;
+    pharmacyName: string;
+    message: string;
+    status: string;
+    createdAt: string;
+  }>>([]);
+  const [feedbackLoading, setFeedbackLoading] = useState(false);
+
+  const fetchFeedback = async () => {
+    setFeedbackLoading(true);
+    try {
+      const res = await fetch("/api/doctor/feedback");
+      if (res.ok) {
+        const data = await res.json();
+        setFeedbacks((data.feedbacks || []).filter(
+          (f: { prescriptionId: string }) => f.prescriptionId === (currentVersion?.id as string)
+        ));
+      }
+    } catch { /* ignore */ }
+    finally { setFeedbackLoading(false); }
+  };
+
+  const handleResolveFeedback = async (feedbackId: string) => {
+    try {
+      const res = await fetch(`/api/doctor/feedback/${feedbackId}/resolve`, { method: "POST" });
+      if (res.ok) {
+        setFeedbacks((prev) =>
+          prev.map((f) => (f.id === feedbackId ? { ...f, status: "REVISED" } : f))
+        );
+        toast.success("已通知药房处方已修改");
+      }
+    } catch { toast.error("操作失败"); }
+  };
+
   useEffect(() => {
     setClinicName(localStorage.getItem("clinicName") || "");
     fetchData();
@@ -87,6 +124,8 @@ export default function PrescriptionPage() {
           setUsageInstruction((latest.usageInstruction as string) || "");
           setPrecautions((latest.precautions as string) || "");
           try { setHerbs(JSON.parse(latest.herbs as string) || []); } catch { setHerbs([]); }
+          // Fetch feedback after currentVersion is set
+          setTimeout(() => fetchFeedback(), 100);
         }
       }
     } catch { toast.error("加载失败"); }
@@ -607,6 +646,48 @@ export default function PrescriptionPage() {
         </div>
       </div>
 
+      {/* Pharmacy Feedback Alert */}
+      {feedbacks.length > 0 && (
+        <div className="space-y-2">
+          {feedbacks.filter((f) => f.status === "PENDING").map((f) => (
+            <div key={f.id} className="flex items-start gap-3 rounded-lg border border-red-200 bg-red-50 p-3">
+              <MessageSquare className="h-5 w-5 text-red-500 mt-0.5 shrink-0" />
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-sm font-medium text-red-700">{f.pharmacyName} 的反馈</span>
+                  <Badge variant="outline" className="text-[10px] border-red-300 text-red-600">待处理</Badge>
+                </div>
+                <p className="text-sm text-red-600">{f.message}</p>
+                <p className="text-xs text-red-400 mt-1">
+                  {new Date(f.createdAt).toLocaleString("zh-CN")}
+                </p>
+              </div>
+              <Button
+                size="sm"
+                variant="outline"
+                className="border-red-200 text-red-700 hover:bg-red-100 shrink-0"
+                onClick={() => handleResolveFeedback(f.id)}
+              >
+                <RotateCcw className="h-3.5 w-3.5 mr-1" />
+                处方已修改
+              </Button>
+            </div>
+          ))}
+          {feedbacks.filter((f) => f.status === "REVISED").map((f) => (
+            <div key={f.id} className="flex items-start gap-3 rounded-lg border border-blue-200 bg-blue-50 p-3">
+              <CheckCircle className="h-5 w-5 text-blue-500 mt-0.5 shrink-0" />
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-sm font-medium text-blue-700">{f.pharmacyName} 的反馈</span>
+                  <Badge variant="outline" className="text-[10px] border-blue-300 text-blue-600">已修改</Badge>
+                </div>
+                <p className="text-sm text-blue-600">{f.message}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
       {/* ==================== MOBILE LAYOUT ==================== */}
       <div className="pb-28 lg:hidden">
         {/* Tab bar */}
@@ -736,6 +817,58 @@ export default function PrescriptionPage() {
             </CardHeader>
             <CardContent>{versionPanel}</CardContent>
           </Card>
+
+          {/* Pharmacy Feedback Panel */}
+          {feedbacks.length > 0 && (
+            <Card className="border-red-200">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm flex items-center gap-2 text-red-700">
+                  <MessageSquare className="h-4 w-4" />
+                  药房反馈
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  {feedbacks.map((f) => (
+                    <div
+                      key={f.id}
+                      className={`rounded-md border p-2.5 text-xs ${
+                        f.status === "PENDING"
+                          ? "border-red-200 bg-red-50"
+                          : "border-blue-200 bg-blue-50"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="font-medium text-muted-foreground">{f.pharmacyName}</span>
+                        <Badge
+                          variant="outline"
+                          className={`text-[10px] ${
+                            f.status === "PENDING"
+                              ? "border-red-300 text-red-600"
+                              : "border-blue-300 text-blue-600"
+                          }`}
+                        >
+                          {f.status === "PENDING" ? "待处理" : "已修改"}
+                        </Badge>
+                      </div>
+                      <p className="text-muted-foreground">{f.message}</p>
+                      {f.status === "PENDING" && (
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="mt-2 w-full text-xs h-7 border-red-200 text-red-700 hover:bg-red-50"
+                          onClick={() => handleResolveFeedback(f.id)}
+                        >
+                          <RotateCcw className="h-3 w-3 mr-1" />
+                          标记为已修改
+                        </Button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
         </div>
       </div>
 

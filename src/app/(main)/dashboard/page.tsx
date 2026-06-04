@@ -10,6 +10,7 @@ import { useAuthStore } from "@/stores/auth-store";
 import {
   Users, Stethoscope, FileText, TrendingUp,
   Activity, Pill, ChevronRight, Calendar,
+  MessageSquare, AlertTriangle,
 } from "lucide-react";
 import { format } from "date-fns";
 import { zhCN } from "date-fns/locale";
@@ -214,12 +215,25 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [d, setD] = useState<DashboardData | null>(null);
   const [activeTab, setActiveTab] = useState<VizTab>("trend");
+  const [pendingFeedbackCount, setPendingFeedbackCount] = useState(0);
 
   useEffect(() => {
     fetch("/api/dashboard/stats")
       .then((r) => r.ok ? r.json() : null)
       .then((data) => { if (data) setD(data); })
       .finally(() => setLoading(false));
+
+    fetch("/api/doctor/feedback")
+      .then((r) => r.ok ? r.json() : null)
+      .then((data) => {
+        if (data) {
+          const pending = data.feedbacks.filter(
+            (f: { status: string }) => f.status === "PENDING"
+          );
+          setPendingFeedbackCount(pending.length);
+        }
+      })
+      .catch(() => {});
   }, []);
 
   if (loading) {
@@ -277,6 +291,30 @@ export default function DashboardPage() {
           </Button>
         </div>
       </div>
+
+      {/* Pharmacy Feedback Alert */}
+      {pendingFeedbackCount > 0 && (
+        <div
+          className="flex items-center gap-3 rounded-lg border border-red-200 bg-red-50 p-3 cursor-pointer hover:bg-red-100/50 transition-colors"
+          onClick={() => router.push("/consultations?tab=feedback")}
+        >
+          <div className="rounded-full bg-red-100 p-2">
+            <MessageSquare className="h-5 w-5 text-red-600" />
+          </div>
+          <div className="flex-1">
+            <p className="text-sm font-medium text-red-700">
+              药房反馈通知
+            </p>
+            <p className="text-xs text-red-500">
+              您有 {pendingFeedbackCount} 条待处理的药房反馈，请及时查看处方
+            </p>
+          </div>
+          <Badge variant="outline" className="border-red-300 text-red-600 bg-red-100">
+            {pendingFeedbackCount}条
+          </Badge>
+          <ChevronRight className="h-4 w-4 text-red-400" />
+        </div>
+      )}
 
       {/* ==================== Stats Cards Row ==================== */}
       <div className="grid gap-2.5 grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 max-[380px]:grid-cols-1">
