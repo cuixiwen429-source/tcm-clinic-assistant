@@ -12,7 +12,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { LogOut, Menu, User } from "lucide-react";
+import { Eye, EyeOff, LogOut, Menu, User } from "lucide-react";
+import { useUIStore } from "@/stores/ui-store";
 
 const ROLE_LABELS: Record<string, string> = {
   ADMIN: "管理员",
@@ -26,6 +27,7 @@ interface TopBarProps {
 
 export function TopBar({ onMenuClick }: TopBarProps) {
   const { user, logout } = useAuthStore();
+  const { elderlyMode, toggleElderlyMode } = useUIStore();
   const router = useRouter();
 
   if (!user) return null;
@@ -56,6 +58,24 @@ export function TopBar({ onMenuClick }: TopBarProps) {
         </span>
       </div>
       <div className="flex-1 md:hidden" />
+
+      {/* Elderly mode toggle */}
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={toggleElderlyMode}
+        className="flex items-center gap-1.5 hover:bg-muted text-muted-foreground hover:text-foreground mr-1"
+        title={elderlyMode ? "切换标准模式" : "切换老花模式"}
+      >
+        {elderlyMode ? (
+          <EyeOff className="h-4 w-4" />
+        ) : (
+          <Eye className="h-4 w-4" />
+        )}
+        <span className="hidden sm:inline text-xs">
+          {elderlyMode ? "标准" : "老花"}
+        </span>
+      </Button>
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>

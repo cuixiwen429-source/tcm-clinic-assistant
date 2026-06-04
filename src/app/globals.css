@@ -570,3 +570,75 @@
     font-size: 0.75rem !important;
   }
 }
+
+/* ===== Elderly/Presbyopia Mode ===== */
+.elderly {
+  font-size: 20px;
+
+  /* Higher contrast warm color overrides */
+  --background: 36 30% 96%;
+  --foreground: 30 15% 5%;
+  --muted-foreground: 30 10% 25%;
+  --border: 32 12% 65%;
+  --input: 32 12% 65%;
+  --primary: 3 75% 38%;
+  --primary-foreground: 0 0% 100%;
+  --ring: 3 75% 38%;
+  --accent-foreground: 140 25% 22%;
+  --card: 36 28% 99%;
+  --card-foreground: 30 15% 5%;
+  --secondary: 36 25% 88%;
+  --secondary-foreground: 30 12% 12%;
+}
+
+/* Reduce transparency/blur for better clarity */
+.elderly .bg-card\/80 {
+  background-color: hsl(var(--card));
+}
+.elderly .backdrop-blur-md {
+  backdrop-filter: none;
+}
+
+/* Minimum touch target sizing */
+.elderly button:not([class*="h-7"]):not([class*="h-8"]):not([class*="h-9"]),
+.elderly [role="button"],
+.elderly .btn,
+.elderly input:not([type="checkbox"]):not([type="radio"]),
+.elderly select,
+.elderly textarea {
+  min-height: 48px;
+}
+
+/* Small icon buttons: keep compact height but widen touch area */
+.elderly button[class*="h-7"],
+.elderly button[class*="h-8"],
+.elderly button[class*="h-9"] {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Nav menu items: more vertical breathing room */
+.elderly nav a {
+  padding-top: 0.875rem;
+  padding-bottom: 0.875rem;
+}
+
+/* Larger touch-friendly spacing for card content, form groups */
+.elderly .card-mobile {
+  padding: 1rem !important;
+}
+.elderly .space-y-4 {
+  --tw-space-y-reverse: 0;
+  margin-top: calc(1.25rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(1.25rem * var(--tw-space-y-reverse));
+}
+
+/* Reduce sidebar width slightly on mobile so content has room at 20px base */
+@media (max-width: 767px) {
+  .elderly [class*="w-56"] {
+    width: 13rem;
+  }
+  .elderly .md\:ml-56 {
+    margin-left: 13rem;
+  }
+}

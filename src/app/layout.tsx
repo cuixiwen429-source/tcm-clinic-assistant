@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Toaster } from "@/components/ui/sonner";
+import { ElderlyModeProvider } from "@/components/layout/ElderlyModeProvider";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -23,7 +24,9 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen bg-background">
-        {children}
+        <ElderlyModeProvider>
+          {children}
+        </ElderlyModeProvider>
         <Toaster position="top-right" richColors />
       </body>
     </html>
